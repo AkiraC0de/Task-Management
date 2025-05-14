@@ -1,6 +1,7 @@
 const User = require('../models/User');
-const jwt = require('json-web-token');
-const bcryptjs = require('bcryptjs')
+const jwt = require('jsonwebtoken');
+const bcryptjs = require('bcryptjs');
+
 
 const signUp = async (req, res) => {
     try {
@@ -41,14 +42,28 @@ const logIn = async (req, res) => {
         if(!email || !password) return res.status(400).json({success: false, message: 'Missing data'});
 
         // Find the Email in the database
-        const user = await User.findOne({email});
+        const user = await User.findOne({email}).select('+password');
 
         // Verify if the email does exist in the database
         if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet'});
-
-        // Validate if the passoword matched
-        const isMatched = await bcryptjs.compare(user.password, password)
+   
+        // Validate if the passoword matched    
+        const isMatched = await bcryptjs.compare(password, user.password);
         if(!isMatched) return res.status(404).json({success: false, message: 'Incorrect passowrd'});
+
+        // Generate JWT token
+        const accessToken = jwt.sign({
+            _id: user._id,
+            role: user.role
+        }, 
+        process.env.JWT_ACCESSTOKEN,
+        {
+            expiresIn: '15m'
+        })
+        
+        // Send the access token through cookie
+        // to avoid access of javascript add security
+        res.cookie('accessToken', accessToken, { httpOnly: true})
 
         res.status(200).json({
             success: true, 
