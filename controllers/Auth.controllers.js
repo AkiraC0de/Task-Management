@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const jwt = require('json-web-token');
+const bcryptjs = require('bcryptjs')
 
 const signUp = async (req, res) => {
     try {
@@ -23,10 +25,48 @@ const signUp = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({success: false, message: `Server Error`});
-        console.log(error.message)
+        console.log(error.message) // Should have an error handler
+    }
+}
+
+const logIn = async (req, res) => {
+    try {
+        // Validate if the request body has content
+        if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
+
+        // Extact the only field needed in req.body
+        const { email, password} = req.body;
+
+        // Verify the datas if complete
+        if(!email || !password) return res.status(400).json({success: false, message: 'Missing data'});
+
+        // Find the Email in the database
+        const user = await User.findOne({email});
+
+        // Verify if the email does exist in the database
+        if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet'});
+
+        // Validate if the passoword matched
+        const isMatched = await bcryptjs.compare(user.password, password)
+        if(!isMatched) return res.status(404).json({success: false, message: 'Incorrect passowrd'});
+
+        res.status(200).json({
+            success: true, 
+            message: 'Success Login', 
+            data: {
+                name: user.name,
+                email: user.email,
+                profileImage: user.profileImage
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({success: false, message: `Server Error`});
+        console.log(error.message) // Should have an error handler
     }
 }
 
 module.exports = {
-    signUp
+    signUp,
+    logIn
 }
