@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcryptjs = require('bcryptjs')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -23,7 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user, admin'],
+        enum: ['user', 'admin'],
         default: 'user'
     },
     profileImage: {
@@ -37,6 +38,15 @@ const userSchema = new mongoose.Schema({
 }, { 
     timestamps: true
 });
+
+// Security feature: 
+// Middleware to hash the password
+// before saving to the database
+userSchema.pre('save', async function(next) {
+    const password = String(this.password)
+    this.password = await bcryptjs.hash(password, 10);
+    next();
+})
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
