@@ -23,7 +23,8 @@ const taskSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        index: true
     }
 }, { timestamps: true });
 
