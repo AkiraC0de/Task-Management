@@ -13,7 +13,7 @@ const signUp = async (req, res) => {
         if(!email || !password || !name) return res.status(400).json({success: false, message: 'Missing data'});
 
         // Validate the email format
-        const emailRegex = '/^[^\s@]+@[^\s@]+\.[^\s@]+$/';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)) return res.status(400).json({success: false, message: `Invalid email format: ${email}`});
 
 
