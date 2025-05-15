@@ -4,11 +4,13 @@ const connectToDB = require('./db/connect');
 const app = express();
 
 // routes
-const authRoute = require('./routes/Auth.routes')
+const authRoute = require('./routes/Auth.routes');
+const taskRoute = require('./routes/Task.routes')
 
 app.use(express.json());
 
 app.use('/api/auth', authRoute);
+app.use('/api/task', taskRoute);
 
 app.listen(process.env.PORT, () => {
     connectToDB();
