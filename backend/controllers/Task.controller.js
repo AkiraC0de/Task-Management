@@ -28,28 +28,35 @@ const createTask = async (req, res) => {
 } 
 
 const updateTask = async (req, res) => {
-    const user = req.user
-    const taskId = req.params.id;
-    const { title, description, deadline, status } = req.body;
+    try {
+        const user = req.user
+        const taskId = req.params.id;
+        const updates = req.body;
 
-    // Validate the ID paramter if it has content
-    if(!taskId) res.status(400).json({success: false, message: 'Undefined Task ID parameter'});
+        // Validate the ID paramter if it has content
+        if(!taskId) return res.status(400).json({success: false, message: 'Undefined Task ID parameter'});
 
-    const task = await Task.findById(taskId);
-    if(!task) res.status(400).json({success: false, message: `Task (${taskId} does not exist`});
+        const task = await Task.findById(taskId);
+        if(!task) return res.status(400).json({success: false, message: `Task (${taskId} does not exist`});
 
-    // Verify if the request sender was the owner of the Task
-    const isOwner = String(task.createdBy) === String(user._id);
-    const isAdmin = String(task.createdBy) === String(user._id);
+        // Verify if the request sender was the owner of the Task
+        const isOwner = String(task.createdBy) === String(user._id);
+        const isAdmin = String(user.role) === "admin";
 
-    if(!isOwner && isAdmin || !isAdmin) res.status(401).json({success: false, message: 'You are not authorized to update this task'});
+        if(!isOwner && !isAdmin) return res.status(401).json({success: false, message: 'You are not authorized to update this task'});
 
-    if(title) task.title = title;
-    if(description) task.description = description;
-    if(deadline) task.deadline = deadline;
-    if(status) task.status = status;
+        const updatedTask = await Task.findByIdAndUpdate(
+            id, 
+            updates,
+            { new: true, runValidators: true }
+        );
 
-    await task.save();
+        res.status(200).json({ success: true, data: updatedTask})
+
+        await task.save();
+    } catch (error) {
+        
+    }
 }
 
 module.exports = { createTask, updateTask }
