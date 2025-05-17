@@ -9,6 +9,7 @@ const createTask = async (req, res) => {
         const { title, description, deadline } = req.body;
 
         // Verify if there are missing field
+        // SHOULD HAVE A DEADLINE VALIDATION
         if(!title || !description || !deadline || !req.user._id){
             return res.status(400).json({success: false, message: 'Incomplete data'})
         }
@@ -24,14 +25,18 @@ const createTask = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({success: true, message: 'Server Error'})
     }
 } 
 
 const updateTask = async (req, res) => {
     try {
         const user = req.user
-        const taskId = req.params.id;
+        const taskId = req.params.taskId;
         const updates = req.body;
+
+        // Verify if the request body has content
+        if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
 
         // Validate the ID paramter if it has content
         if(!taskId) return res.status(400).json({success: false, message: 'Undefined Task ID parameter'});
@@ -45,8 +50,10 @@ const updateTask = async (req, res) => {
 
         if(!isOwner && !isAdmin) return res.status(401).json({success: false, message: 'You are not authorized to update this task'});
 
+        console.log(task)
+
         const updatedTask = await Task.findByIdAndUpdate(
-            id, 
+            taskId, 
             updates,
             { new: true, runValidators: true }
         );
@@ -55,7 +62,8 @@ const updateTask = async (req, res) => {
 
         await task.save();
     } catch (error) {
-        
+        console.log(error.message);
+        res.status(500).json({ success: true, message: error.message})
     }
 }
 

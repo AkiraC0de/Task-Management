@@ -6,9 +6,12 @@ const taskRoute = express.Router();
 const verifyAuth = require('../middlewares/verifyAuth')
 
 // Controllers
-const { createTask } = require('../controllers/Task.controller')
+const { createTask, updateTask } = require('../controllers/Task.controller')
 
 // Create Task Route
-taskRoute.post('/', verifyAuth, createTask)
+taskRoute.post('/', verifyAuth, createTask);
+
+// Update Task Route
+taskRoute.put('/:taskId', verifyAuth, updateTask);
 
 module.exports = taskRoute;
