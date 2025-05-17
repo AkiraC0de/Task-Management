@@ -59,7 +59,10 @@ const logIn = async (req, res) => {
         
         // Send the access token through cookie
         // to avoid access of javascript add security
-        res.cookie('jwt', refreshToken, { httpOnly: true})
+        res.cookie('jwt', refreshToken, { 
+            httpOnly: true,
+            maxAge: 15 * 24 * 60 * 60 * 1000 // 15 days
+        })
 
         res.status(200).json({
             success: true, 
@@ -90,7 +93,7 @@ const logout = async (req, res) => {
 
 const refresh = (req, res) => {
     const cookie = req.cookies;
-    if(!cookie) return res.status(400).json({success: false, message: 'Unathorized'});
+    if(!cookie) return res.status(401).json({success: false, message: 'Unathorized'});
 
     const refreshCookie = cookie.jwt;
     jwt.verify(refreshCookie, process.env.JWT_ACCESSTOKEN, async (err, decoded) => {
@@ -103,7 +106,10 @@ const refresh = (req, res) => {
         const accessToken = generateAccessToken(user);
 
         // Update the Refresh Token
-        res.cookie('jwt', generatedRefreshToken, { httpOnly: true})
+        res.cookie('jwt', generatedRefreshToken, {
+            httpOnly: true,
+            maxAge: 15 * 24 * 60 * 60 * 1000 // 15 days
+        });  
 
         // Send a new access Token
         res.status(200).json({
@@ -122,5 +128,6 @@ const refresh = (req, res) => {
 module.exports = {
     signUp,
     logIn,
-    logout
+    logout,
+    refresh
 }

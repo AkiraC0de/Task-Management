@@ -3,11 +3,19 @@ const jwt = require('jsonwebtoken');
 const verifyAuth = (req, res, next) => {
     try {
         // Verify if the accessToken exist in the request header
-        const accessToken = req.cookies.accessToken;
-        if(!accessToken) return res.status(401).json({success: false, message: 'You are not authorized to access this!'});
+        
+        const authorization = req.headers.authorization || req.headers.Authorization;
+        console.log(authorization)
+        if(!authorization) return res.status(401).json({success: false, message: 'You are not authorized to access this!'});
+        
+        // Verify the authorization format
+        if(!authorization.startsWith('Bearer ')) return res.status(401).json({success: false, message: 'You are not authorized to access this!'});
+
+        // Extract the token from authorization
+        const token = authorization.split(' ')[1];
 
         // Validate the token
-        jwt.verify(accessToken, process.env.JWT_ACCESSTOKEN, (err, user) => {
+        jwt.verify(token, process.env.JWT_ACCESSTOKEN, (err, user) => {
             if(err) return res.status(404).json({success: false, message: 'Invalid Token'});
 
             req.user = user;
