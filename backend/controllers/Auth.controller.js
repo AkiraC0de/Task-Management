@@ -83,7 +83,7 @@ const logIn = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        res.clearCookie('accessToken');
+        res.clearCookie('jwt');
         res.status(200).json({success: true, message: `Logout`});
     } catch (error) {
         res.status(500).json({success: false, message: `Server Error`});
