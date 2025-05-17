@@ -19,5 +19,6 @@ This is my first attempt to establish a Full Stack Web App, **Task Management**.
 | ------ | --------------------    | -------------------------------------------- |
 | POST   | `/api/auth/signup`      | Register a new user                          |
 | POST   | `/api/auth/login`       | Login and receive JWT access token           |
+| POST   | `/api/auth/logout`      | Logout and delete JWT access token           |
 
 
