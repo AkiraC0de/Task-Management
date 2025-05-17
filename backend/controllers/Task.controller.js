@@ -44,13 +44,11 @@ const updateTask = async (req, res) => {
         const task = await Task.findById(taskId);
         if(!task) return res.status(400).json({success: false, message: `Task (${taskId} does not exist`});
 
-        // Verify if the request sender was the owner of the Task
+        // Verify if the request sender was the owner of the Task or an Admin
         const isOwner = String(task.createdBy) === String(user._id);
         const isAdmin = String(user.role) === "admin";
 
         if(!isOwner && !isAdmin) return res.status(401).json({success: false, message: 'You are not authorized to update this task'});
-
-        console.log(task)
 
         const updatedTask = await Task.findByIdAndUpdate(
             taskId, 

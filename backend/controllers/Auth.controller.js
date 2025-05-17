@@ -81,7 +81,18 @@ const logIn = async (req, res) => {
     }
 }
 
+const logout = async (req, res) => {
+    try {
+        res.clearCookie('accessToken');
+        res.status(200).json({success: true, message: `Logout`});
+    } catch (error) {
+        res.status(500).json({success: false, message: `Server Error`});
+        console.log(error.message) // Should have an error handler
+    }
+}
+
 module.exports = {
     signUp,
-    logIn
+    logIn,
+    logout
 }
