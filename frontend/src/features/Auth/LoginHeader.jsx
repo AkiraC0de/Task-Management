@@ -1,4 +1,4 @@
-import loginHeaderLight from '../assets/login_header_light.webp'
+import loginHeaderLight from '../../assets/login_header_light.webp'
 
 const LoginHeader = () => {
   return (

@@ -1,12 +1,14 @@
-import LoginHeader from "../LoginHeader"
+import LoginHeader from "./LoginHeader"
 import LoginInputs from "./LoginInputs"
 import InputField from "../../components/InputField"
 import ForgotPassword from "./ForgotPassword"
+import PrimaryButton from "../../components/PrimaryButton"
+import SwitchMessage from "./SwitchMessage"
 import { Mail, Lock } from 'lucide-react'
 
 const Login = () => {
   return (
-    <div className='w-full p-5'>
+    <form className='w-full p-6'>
       <LoginHeader/>
 
       <LoginInputs>
@@ -25,7 +27,11 @@ const Login = () => {
         />
       </LoginInputs>
       <ForgotPassword/>
-    </div>
+      <PrimaryButton className='my-5'>
+        Login
+      </PrimaryButton>
+      <SwitchMessage/>
+    </form>
   )
 }
 
