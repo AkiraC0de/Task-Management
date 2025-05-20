@@ -1,9 +1,16 @@
-import { Mail, Lock } from 'lucide-react'
+import { Mail, Lock, UserPen } from 'lucide-react'
 import InputField from '../../components/InputField'
 
-const LoginInputs = ({children}) => {
+const SignupInputs = ({children}) => {
   return (
     <div className="mt-10 flex flex-col">
+        <InputField 
+          header='Fullname' 
+          icon={<UserPen/>} 
+          type='email'
+          placeholder='Input yoor full name'
+        />
+
         <InputField 
           header='Email' 
           icon={<Mail/>} 
@@ -21,4 +28,4 @@ const LoginInputs = ({children}) => {
   )
 }
 
-export default LoginInputs
+export default SignupInputs

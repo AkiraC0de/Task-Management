@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom"
-import Login from "../features/Auth/Login";
-import Signup from "../features/Auth/Signup";
+import Login from "../pages/Login";
+import Signup from "../pages/Signup";
 
 const AppRoutes = () => {
   return (
