@@ -6,7 +6,6 @@ import SwitchMessage from "../features/Auth/SwitchMessage"
 
 const Login = () => {
   
-
   return (
     <form className='w-full p-6'>
       <AuthHeader state='login'/>
