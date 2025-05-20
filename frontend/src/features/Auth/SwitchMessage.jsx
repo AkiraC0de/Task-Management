@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 
 const SwitchMessage = ({ state = 'login' }) => {
@@ -22,4 +23,4 @@ const SwitchMessage = ({ state = 'login' }) => {
   );
 };
 
-export default SwitchMessage;
+export default memo(SwitchMessage);
