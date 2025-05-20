@@ -4,8 +4,9 @@ import ForgotPassword from "../features/Auth/ForgotPassword"
 import PrimaryButton from "../components/PrimaryButton"
 import SwitchMessage from "../features/Auth/SwitchMessage"
 
+import useAuth from "../hooks/useAuth"
+
 const Login = () => {
-  
   return (
     <form className='w-full p-6'>
       <AuthHeader state='login'/>
