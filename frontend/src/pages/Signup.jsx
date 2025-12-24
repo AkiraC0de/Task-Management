@@ -14,11 +14,11 @@ const Signup = () => {
   })
 
   const onSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const response = await signupUser(signUpData);
 
-      console.log(response)
+      console.log("Success:", response.data);
 
     } catch (error) {
       console.log("Sign up Error", error.response);

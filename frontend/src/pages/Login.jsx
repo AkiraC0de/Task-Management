@@ -8,6 +8,7 @@ import useAuth from "../hooks/useAuth"
 import { useCallback, useState } from "react"
 import { loginUser } from "../features/Auth/service"
 import { useNavigate } from "react-router-dom"
+import { getErrorMessage } from "../utils/errorHandler"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,22 +19,17 @@ const Login = () => {
     password: ''
   });
 
-  const loginDataHandler = (value) => {
-    setLoginData(value)
-  }
-
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
     try {
       const response = await loginUser(loginData);
-      
-      if(response.request.status === 200){
-        handleUser(response.data);
-        handleIsLogin(true);
-        navigate('/')
-      }
+
+      handleUser(response.data);
+      handleIsLogin(true);
+      navigate('/')
     } catch (error) {
-      console.log(error?.response?.data?.message)
+      const message = getErrorMessage(error);
+      console.error(message);
     }
     
   }, [loginData])
@@ -44,7 +40,7 @@ const Login = () => {
     className='w-full p-6'>
       <AuthHeader state='login'/>
 
-      <LoginInputs loginData={loginData} loginDataHandler={loginDataHandler}/>
+      <LoginInputs loginData={loginData} loginDataHandler={setLoginData}/>
 
       <ForgotPassword/>
       <PrimaryButton 
