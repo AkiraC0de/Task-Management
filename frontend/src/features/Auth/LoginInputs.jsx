@@ -16,9 +16,9 @@ const LoginInputs = ({loginData, loginDataHandler}) => {
   }, [])
 
   return (
-    <div className="mt-10 flex flex-col">
+    <div className="mt-10 flex flex-col gap-3">
         <InputField 
-          header='email' 
+          header='Email' 
           icon={<Mail/>} 
           type='email'
           value={loginData.email}

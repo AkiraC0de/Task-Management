@@ -5,7 +5,7 @@ export const loginUser = (credentials) => {
 }
 
 export const signupUser = (credentials) => {
-    return api.post('/auth/signin', credentials);
+    return api.post('/api/auth/signup', credentials);
 }
 
 export const logoutUser = (credentials) => {

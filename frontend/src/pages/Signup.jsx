@@ -2,17 +2,43 @@ import AuthHeader from "../features/Auth/AuthHeader"
 import PrimaryButton from "../components/PrimaryButton"
 import SwitchMessage from "../features/Auth/SwitchMessage"
 import SignupInputs from "../features/Auth/SignupInputs"
+import { useState } from "react"
+import { signupUser } from "../features/Auth/service"
 
 const Signup = () => {
 
+  const [signUpData, setSignUpData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  })
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await signupUser(signUpData);
+
+      console.log(response)
+
+    } catch (error) {
+      console.log("Sign up Error", error.response);
+    }
+  }
+
   return (
-    <form className='w-full p-6'>
+    <form
+    onSubmit={onSubmit} 
+    className='w-full p-6'
+    >
       <AuthHeader state='signup'/>
 
-      <SignupInputs/>
+      <SignupInputs signUpData={signUpData} setSignUpData={setSignUpData} />
       
-      <PrimaryButton className='my-5'>
-        Verify
+      <PrimaryButton
+        type="submit"  
+        className='my-5'
+      >
+       Sign Up
       </PrimaryButton>
       <SwitchMessage state='signup'/>
     </form>

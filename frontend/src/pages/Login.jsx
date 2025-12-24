@@ -18,12 +18,11 @@ const Login = () => {
     password: ''
   });
 
-  const loginDataHandler = useCallback((value) => {
+  const loginDataHandler = (value) => {
     setLoginData(value)
-  }, [loginData])
+  }
 
   const onSubmit = useCallback(async (e) => {
-    
     e.preventDefault();
     try {
       const response = await loginUser(loginData);
