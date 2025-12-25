@@ -1,7 +1,8 @@
 const ForgotPassword = () => {
   return (
     <div className='text-right my-2'>
-        <button 
+        <button
+            type="button" 
             className=' text-blue-500  cursor-pointer'>
                 Forgot Passoword?
         </button>
