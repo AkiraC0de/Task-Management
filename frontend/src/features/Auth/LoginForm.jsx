@@ -7,12 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../utils/errorHandler";
 import { loginUser } from "./service";
 import LoadingOverlay from "../../components/LoadingOverlay";
+import { validateFields } from "../../utils/formValidation";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const { handleUser, handleIsLogin } = useAuth();
 
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ errors, setErrors] = useState({})
   const [ loginData, setLoginData ] = useState({
     email: '',
     password: ''
@@ -20,6 +22,14 @@ const LoginForm = () => {
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
+    setErrors({});
+
+    const validation = validateFields(loginData);
+    if(!validation.isValid){
+      setErrors(validation.errors)
+      return;
+    } 
+
     setIsLoading(true);
     try {
       const response = await loginUser(loginData);
@@ -29,7 +39,7 @@ const LoginForm = () => {
       navigate('/')
     } catch (error) {
       const message = getErrorMessage(error);
-      console.error(message);
+      setErrors({ server: message });
     } finally {
       setIsLoading(false);
     }
@@ -38,8 +48,11 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       { isLoading && <LoadingOverlay/>}
-      <LoginInputs loginData={loginData} loginDataHandler={setLoginData}/>
-
+      <LoginInputs 
+        loginData={loginData} 
+        loginDataHandler={setLoginData}
+        errors={errors}
+      />
       <ForgotPassword/>
       <PrimaryButton 
         type='submit'
