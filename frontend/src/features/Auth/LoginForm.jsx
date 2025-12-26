@@ -52,6 +52,7 @@ const LoginForm = () => {
         loginData={loginData} 
         loginDataHandler={setLoginData}
         errors={errors}
+        errorsHandler={setErrors}
       />
       <ForgotPassword/>
       <PrimaryButton 

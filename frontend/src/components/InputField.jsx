@@ -15,11 +15,7 @@ const TogglePasswordButton = ({showPassword, toggle}) => {
   )
 }
 
-<<<<<<< HEAD
 const InputField = ({type = 'text', label, icon, error, ...props}) => {
-=======
-const InputField = ({type = 'text', label, icon, placeholder = '', onChange = () => {}, value, name = ""}) => {
->>>>>>> 07c33d55d52cde7299860dbf45e8a902e984904c
   const [showPassword, setShowPassword] = useState(false);
   const isPasswordType = type == "password";
   // @desk add the ability to toggle between "text" and "password" input type if the type params is set as "password"
@@ -27,8 +23,8 @@ const InputField = ({type = 'text', label, icon, placeholder = '', onChange = ()
   
   return (
       <div>
-        {label && <label className='ml-2 font-semibold text-md mb-2'>{label}</label>}
-        <div className="flex items-center border border-gray-300 rounded-xl px-3 py-4 shadow-sm focus-within:ring-2 focus-within:ring-blue-400 gap-2">
+        {label && <label className='ml-2 font-semibold text-md mb-2.5'>{label}</label>}
+        <div className={`${error ? "ring-2 ring-red-400" : "focus-within:ring-2 focus-within:ring-blue-400"} flex items-center border border-gray-300 rounded-xl px-3 py-4 shadow-sm gap-2`}>
           <span className="text-gray-500">{icon}</span>
           <input
             type={inputType}
@@ -41,7 +37,7 @@ const InputField = ({type = 'text', label, icon, placeholder = '', onChange = ()
               showPassword={showPassword} 
               toggle={() => setShowPassword(prev => !prev)}
             /> 
-          }
+          }   
         </div>
         {error && <span className='text-red-500 text-xs italic'>{error}</span>}
       </div>
