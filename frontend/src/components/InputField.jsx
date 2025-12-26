@@ -15,7 +15,7 @@ const TogglePasswordButton = ({showPassword, toggle}) => {
   )
 }
 
-const InputField = ({type = 'text', header, icon, placeholder = '', onChange, value, name}) => {
+const InputField = ({type = 'text', label, icon, placeholder = '', onChange, value, name}) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPasswordType = type == "password";
   // @desk add the ability to toggle between "text" and "password" input type if the type params is set as "password"
@@ -23,7 +23,7 @@ const InputField = ({type = 'text', header, icon, placeholder = '', onChange, va
   
   return (
       <div>
-        {header && <label className='ml-2 font-semibold text-md mb-2'>{header}</label>}
+        {label && <label className='ml-2 font-semibold text-md mb-2'>{label}</label>}
         <div className="flex items-center border border-gray-300 rounded-xl px-3 py-4 shadow-sm focus-within:ring-2 focus-within:ring-blue-400 gap-2">
           <span className="text-gray-500">{icon}</span>
           <input

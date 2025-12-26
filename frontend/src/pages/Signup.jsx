@@ -10,7 +10,8 @@ const Signup = () => {
   const [signUpData, setSignUpData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ""
   })
 
   const onSubmit = async (e) => {

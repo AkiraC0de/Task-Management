@@ -1,37 +1,25 @@
 import { Mail, Lock } from 'lucide-react'
 import InputField from '../../components/InputField'
-import { useCallback } from 'react'
+import { handleChangeObject } from '../../utils/handler'
 
 const LoginInputs = ({loginData, loginDataHandler}) => {
-  //@desc On Change Handler for Input Field
-  //@req the name must be set for the input that will be handled by this
-  const onChange = useCallback((e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    loginDataHandler(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }, [])
-
   return (
     <div className="mt-10 flex flex-col gap-3">
         <InputField 
-          header='Email' 
+          label='Email' 
           icon={<Mail/>} 
           type='email'
           value={loginData.email}
           name='email'
-          onChange={onChange}
+          onChange={(e) => handleChangeObject(e, loginDataHandler)}
           placeholder='Input your email'
         />
 
         <InputField 
-          header='Password' 
+          label='Password' 
           icon={<Lock/>} 
           value={loginData.password}
-          onChange={onChange}
+          onChange={(e) => handleChangeObject(e, loginDataHandler)}
           name='password'
           type='password'
           placeholder='Input your password'
