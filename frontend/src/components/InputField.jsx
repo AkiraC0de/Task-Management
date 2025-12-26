@@ -15,7 +15,11 @@ const TogglePasswordButton = ({showPassword, toggle}) => {
   )
 }
 
+<<<<<<< HEAD
 const InputField = ({type = 'text', label, icon, error, ...props}) => {
+=======
+const InputField = ({type = 'text', label, icon, placeholder = '', onChange = () => {}, value, name = ""}) => {
+>>>>>>> 07c33d55d52cde7299860dbf45e8a902e984904c
   const [showPassword, setShowPassword] = useState(false);
   const isPasswordType = type == "password";
   // @desk add the ability to toggle between "text" and "password" input type if the type params is set as "password"
