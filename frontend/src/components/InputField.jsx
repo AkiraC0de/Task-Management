@@ -23,7 +23,7 @@ const InputField = ({type = 'text', label, icon, error, ...props}) => {
   
   return (
       <div>
-        {label && <label className='ml-2 font-semibold text-md mb-2.5'>{label}</label>}
+        {label && <label className='ml-2 font-semibold text-md'>{label}</label>}
         <div className={`${error ? "ring-2 ring-red-400" : "focus-within:ring-2 focus-within:ring-blue-400"} flex items-center border border-gray-300 rounded-xl px-3 py-4 shadow-sm gap-2`}>
           <span className="text-gray-500">{icon}</span>
           <input

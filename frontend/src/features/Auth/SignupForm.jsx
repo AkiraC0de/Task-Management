@@ -1,69 +1,75 @@
 import { useState, useCallback } from "react";
-import LoginInputs from "./LoginInputs";
+import SignupInputs from "./SignupInputs";
 import PrimaryButton from "../../components/PrimaryButton";
 import ForgotPassword from "./ForgotPassword";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../utils/errorHandler";
-import { loginUser } from "./service";
+import { loginUser, signupUser } from "./service";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { validateFields } from "../../utils/formValidation";
 
-const LoginForm = () => {
+const SignupForm = () => {
   const navigate = useNavigate();
-  const { handleUser, handleIsLogin } = useAuth();
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [ errors, setErrors] = useState({})
-  const [ loginData, setLoginData ] = useState({
+  const [signUpData, setSignUpData] = useState({
+    name: '',
     email: '',
-    password: ''
-  });
+    password: '',
+    confirmPassword: ""
+  })
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setErrors({});
 
-    const validation = validateFields(loginData);
+    const validation = validateFields(signUpData);
     if(!validation.isValid){
       setErrors(validation.errors)
       return;
     } 
 
+    // Validate if the password matched confirmPassword
+    if(signUpData.confirmPassword !== signUpData.password){
+      setErrors({confirmPassword : "Confirm password does not match."})
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const {data} = await loginUser(loginData);
-
-      handleUser(data.data);
-      handleIsLogin(true);
-      navigate('/')
+      const {data} = await signupUser(signUpData);
+      console.log(data)
+      
     } catch (error) {
       const message = getErrorMessage(error);
       setErrors({ server: message });
     } finally {
       setIsLoading(false);
     }
-  }, [loginData])
+  }, [signUpData])
 
   return (
     <form onSubmit={handleSubmit}>
       { isLoading && <LoadingOverlay/>}
-      <LoginInputs 
-        loginData={loginData} 
-        loginDataHandler={setLoginData}
+      
+      <SignupInputs
+        signUpData={signUpData}
+        signUpDataHandler={setSignUpData}
         errors={errors}
-        errorsHandler={setErrors}
       />
+
       <ForgotPassword/>
       <PrimaryButton 
         type='submit'
         className='my-5'
         disabled={isLoading}
       >
-        {isLoading ? "Processing..." : "Login"}
+        {isLoading ? "Processing..." : "Sign Up"}
       </PrimaryButton>
     </form>
   )
 }
 
-export default LoginForm
+export default SignupForm
