@@ -16,12 +16,12 @@ const signUp = async (req, res) => {
 
         // Validate the email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!emailRegex.test(email)) return res.status(400).json({success: false, message: `Invalid email format: ${email}`});
+        if(!emailRegex.test(email)) return res.status(400).json({success: false, message: `Invalid email format: ${email}`, errorAt: 'email'});
 
 
         // Verify if the email has not been registered
         const isRegistered = await User.findOne({email});
-        if(isRegistered) return res.status(400).json({success: false, message: 'The email has already been registred '});
+        if(isRegistered) return res.status(400).json({success: false, message: 'The email has already been registred' , errorAt: 'email '});
 
         await User.create({ name, email, password, profileImage });
         res.status(201).json({success: true, message: `The account (${email}) have successfully registerd`});
@@ -47,11 +47,11 @@ const logIn = async (req, res) => {
         const user = await User.findOne({email}).select('+password');
 
         // Verify if the email does exist in the database
-        if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet'});
+        if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet.', errorAt: "email"});
    
         // Validate if the passoword matched    
         const isMatched = await bcryptjs.compare(password, user.password);
-        if(!isMatched) return res.status(404).json({success: false, message: 'Incorrect passowrd'});
+        if(!isMatched) return res.status(404).json({success: false, message: 'Incorrect password.', errorAt: "password"});
 
         // Generate JWT token
         const refreshToken = generateRefreshToken(user);

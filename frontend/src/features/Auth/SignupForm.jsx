@@ -2,10 +2,8 @@ import { useState, useCallback } from "react";
 import SignupInputs from "./SignupInputs";
 import PrimaryButton from "../../components/PrimaryButton";
 import ForgotPassword from "./ForgotPassword";
-import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../utils/errorHandler";
-import { loginUser, signupUser } from "./service";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { validateFields } from "../../utils/formValidation";
 
@@ -43,8 +41,14 @@ const SignupForm = () => {
       console.log(data)
       
     } catch (error) {
+      const errorAt = error.response?.data?.errorAt;
       const message = getErrorMessage(error);
-      setErrors({ server: message });
+
+      if(errorAt){
+        setErrors({ [errorAt] : message });
+      } else {
+        setErrors({ server : message });
+      }
     } finally {
       setIsLoading(false);
     }

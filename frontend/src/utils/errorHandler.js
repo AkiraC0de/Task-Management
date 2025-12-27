@@ -1,6 +1,6 @@
 export const getErrorMessage = (error) => {
     if(error.response){
-      return `Error ${error.response.status} : ${error.response.data?.message}`;
+      return error.response.data?.message || "Something went wrong with the request."
     } else if(error.request){
       return "Network Error: Please check your connection.";
     } else {

@@ -38,8 +38,14 @@ const LoginForm = () => {
       handleIsLogin(true);
       navigate('/')
     } catch (error) {
+      const errorAt = error.response?.data?.errorAt;
       const message = getErrorMessage(error);
-      setErrors({ server: message });
+
+      if(errorAt){
+        setErrors({ [errorAt] : message });
+      } else {
+        setErrors({ server : message });
+      }
     } finally {
       setIsLoading(false);
     }
