@@ -27,7 +27,7 @@ const Login = () => {
         <div className='p-6 w-100'>
           <AuthHeader state='login'/>
           <LoginForm/>
-          {/* <SwitchMessage state='login'/> */}
+          <SwitchMessage state='login'/>
         </div>
       </div>
 
