@@ -8,26 +8,24 @@ const LoginInputs = ({loginData, loginDataHandler, errors, errorsHandler}) => {
     onChangeRemoveError(e, errors, errorsHandler);
   }
   return (
-    <div className="mt-10 flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
         <InputField 
-          label='Email' 
           icon={<Mail/>} 
           type='email'
           value={loginData.email}
           name='email'
           onChange={handleChange}
-          placeholder='Input your email'
+          placeholder='Email'
           error={errors?.email}
         />
 
         <InputField 
-          label='Password' 
           icon={<Lock/>} 
           value={loginData.password}
           onChange={handleChange}
           name='password'
           type='password'
-          placeholder='Input your password'
+          placeholder='Password'
           error={errors?.password}
         />
     </div>

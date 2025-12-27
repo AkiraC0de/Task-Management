@@ -2,7 +2,7 @@ import { Mail, Lock, UserPen } from 'lucide-react'
 import InputField from '../../components/InputField'
 import { handleChangeObject } from '../../utils/handler'
 
-const SignupInputs = ({children, signUpData, setSignUpData}) => {
+const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
   return (
     <div className="mt-10 flex flex-col gap-3">
         <InputField 
@@ -10,7 +10,8 @@ const SignupInputs = ({children, signUpData, setSignUpData}) => {
           icon={<UserPen/>} 
           name="name"
           value={signUpData.name}
-          onChange={(e) => handleChangeObject(e, setSignUpData)}
+          error={errors?.name}
+          onChange={(e) => handleChangeObject(e, signUpDataHandler)}
           type='text'
           placeholder='Input your full name'
         />
@@ -20,7 +21,8 @@ const SignupInputs = ({children, signUpData, setSignUpData}) => {
           icon={<Mail/>}
           name="email" 
           value={signUpData.email}
-          onChange={(e) => handleChangeObject(e, setSignUpData)}
+          error={errors?.email}
+          onChange={(e) => handleChangeObject(e, signUpDataHandler)}
           type='email'
           placeholder='Input your email'
         />
@@ -30,7 +32,8 @@ const SignupInputs = ({children, signUpData, setSignUpData}) => {
           icon={<Lock/>} 
           name="password" 
           value={signUpData.password}
-          onChange={(e) => handleChangeObject(e, setSignUpData)}
+          error={errors?.password}
+          onChange={(e) => handleChangeObject(e, signUpDataHandler)}
           type='password'
           placeholder='Input your password'
         />
@@ -39,8 +42,9 @@ const SignupInputs = ({children, signUpData, setSignUpData}) => {
           label='Confirm Password' 
           icon={<Lock/>} 
           name="confirmPassword" 
+          error={errors?.confirmPassword}
           value={signUpData.confirmPassword}
-          onChange={(e) => handleChangeObject(e, setSignUpData)}
+          onChange={(e) => handleChangeObject(e, signUpDataHandler)}
           type='password'
           placeholder='Confirm your password'
         />
