@@ -3,21 +3,17 @@ import SignupInputs from "./SignupInputs";
 import PrimaryButton from "../../components/PrimaryButton";
 import ForgotPassword from "./ForgotPassword";
 import { useNavigate } from "react-router-dom";
-import { getErrorMessage } from "../../utils/errorHandler";
+import { getErrorMessage, getErrorSource } from "../../utils/errorHandler";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { validateFields } from "../../utils/formValidation";
+import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
 
 const SignupForm = () => {
   const navigate = useNavigate();
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [ errors, setErrors] = useState({})
-  const [signUpData, setSignUpData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ""
-  })
+  const [signUpData, setSignUpData] = useState(SIGNUP_DATA_DEFAULT)
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -38,10 +34,11 @@ const SignupForm = () => {
     setIsLoading(true);
     try {
       const {data} = await signupUser(signUpData);
-      console.log(data)
+      setSignUpData(SIGNUP_DATA_DEFAULT);
+      // THIS REQUIRE FUTURE UPDATES TO HANDLE EMAIL VERIFICATION
       
     } catch (error) {
-      const errorAt = error.response?.data?.errorAt;
+      const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);
 
       if(errorAt){
@@ -55,7 +52,7 @@ const SignupForm = () => {
   }, [signUpData])
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} novalidate>
       { isLoading && <LoadingOverlay/>}
       
       <SignupInputs

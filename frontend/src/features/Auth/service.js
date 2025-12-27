@@ -1,7 +1,7 @@
 import api from '../../api/server'
 
 export const loginUser = (credentials) => {
-    return api.post('/api/auth/login', credentials);
+    return api.post('/api/auth/login', credentials); 
 }
 
 export const signupUser = (credentials) => {

@@ -7,3 +7,7 @@ export const getErrorMessage = (error) => {
       return `Error: ${error.message}`
     }
 }
+
+export const getErrorSource = (error) => {
+  return error.response?.data?.errorAt || null
+}
