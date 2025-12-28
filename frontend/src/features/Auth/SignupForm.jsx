@@ -60,11 +60,9 @@ const SignupForm = () => {
         signUpDataHandler={setSignUpData}
         errors={errors}
       />
-
-      <ForgotPassword/>
       <PrimaryButton 
         type='submit'
-        className='my-5'
+        className='my-5 w-full'
         disabled={isLoading}
       >
         {isLoading ? "Processing..." : "Sign Up"}
