@@ -5,10 +5,12 @@ import SignupForm from "../features/Auth/SignupForm"
 const Signup = () => {
 
   return (
-    <div className='w-full p-6'>
-      <AuthHeader state='signup'/>
-      <SignupForm/>
-      <SwitchMessage state='signup'/>
+    <div className="flex flex-col md:flex-row">
+      <div className='w-full p-6'>
+        <AuthHeader state='signup'/>
+        <SignupForm/>
+        <SwitchMessage state='signup'/>
+      </div>
     </div>
   )
 }
