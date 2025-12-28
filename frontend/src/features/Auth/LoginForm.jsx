@@ -50,7 +50,7 @@ const LoginForm = () => {
   }, [loginData])
 
   return (
-    <form onSubmit={handleSubmit} novalidate>
+    <form onSubmit={handleSubmit} noValidate>
       { isLoading && <LoadingOverlay/>}
       <LoginInputs 
         loginData={loginData} 
