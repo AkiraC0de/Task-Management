@@ -1,17 +1,19 @@
 import AuthHeader from "../features/Auth/AuthHeader"
 import LoginForm from "../features/Auth/LoginForm"
-import AuthHero from "../features/Auth/AuthHero"
+import Hero from "../features/Auth/Hero"
+import SwitchForm from "../features/Auth/SwitchForm";
 
 const PAGE_STATE = "login";
 
 const Login = () => {
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
-      <AuthHero state={PAGE_STATE}/>
-      <div className="flex-6 md:flex-1 flex justify-center items-center w-full">
-        <div className='p-6 anim-fade-up max-w-120'>
+    <div className="grid grid-cols-1 lg:grid-cols-2 md:flex-row flex-1">
+      <Hero state={PAGE_STATE}/>
+      <div className="flex justify-center items-center">
+        <div className='p-6 anim-fade-up w-full max-w-100'>
           <AuthHeader state={PAGE_STATE}/>
           <LoginForm/>
+          <SwitchForm state={PAGE_STATE}/>
         </div>
       </div>
     </div>

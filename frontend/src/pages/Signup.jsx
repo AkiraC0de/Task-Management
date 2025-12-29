@@ -1,19 +1,19 @@
 import AuthHeader from "../features/Auth/AuthHeader"
 import SignupForm from "../features/Auth/SignupForm"
-import AuthHero from "../features/Auth/AuthHero"
+import Hero from "../features/Auth/Hero"
 
 const PAGE_STATE = "signup"
 
 const Signup = () => {
   return (
-    <div className="flex flex-col-reverse md:flex-row min-h-screen">
-      <div className="flex-6 md:flex-1 flex items-center">
-        <div className='anim-fade-up w-full p-6 flex flex-col justify-center items-center'>
+    <div className="grid grid-cols-1 lg:grid-cols-2 md:flex-row flex-1">
+      <Hero/>
+      <div className="flex items-center justify-center">
+        <div className='anim-fade-up w-full max-w-110 p-6 flex flex-col justify-center items-center'>
           <AuthHeader state={PAGE_STATE}/>
           <SignupForm/>
         </div>
       </div>
-      <AuthHero state={PAGE_STATE}/>
     </div>
   )
 }

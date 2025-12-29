@@ -3,7 +3,7 @@ import { memo } from "react"
 const PrimaryButton = ({className, onClick,  type = 'button', disabled = false, children}) => {
   return (
     <button 
-        className={`font-medium tracking-widest px-8 py-3 rounded-xl cursor-pointer bg-[#42bdec] text-white  ${className}`}
+        className={`font-medium tracking-widest rounded-lg py-2 cursor-pointer bg-primary text-white hover:scale-103 transition-all duration-300 ${className}`}
         onClick={onClick || function(){}}
         type={type}
         disabled={disabled}

@@ -24,8 +24,8 @@ const InputField = ({type = 'text', label, icon, error, ...props}) => {
   return (
       <div>
         {label && <label className='mb-2 ml-2 font-medium text-sm text-primary-text'>{label}</label>}
-        <div className={`${error ? "ring-2 ring-red-400" : "focus-within:ring-2 focus-within:ring-primary"} flex items-center border border-gray-300 rounded-xl p-3 shadow-sm gap-2`}>
-          <span className="text-secondary-text/50">{icon}</span>
+        <div className={`${error ? "ring-2 ring-red-400" : "focus-within:ring-2 focus-within:ring-primary"} flex items-center border border-secondary-text rounded-xl p-3 shadow-sm gap-2`}>
+          {icon && <span className="text-secondary-text/50">{icon}</span>}
           <input
             type={inputType}
             {...props}

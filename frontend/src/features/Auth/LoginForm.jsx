@@ -52,7 +52,7 @@ const LoginForm = () => {
   }, [loginData])
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form className="w-full" onSubmit={handleSubmit} noValidate>
       { isLoading && <LoadingOverlay/>}
       <LoginInputs 
         loginData={loginData} 
@@ -60,7 +60,7 @@ const LoginForm = () => {
         errors={errors}
         errorsHandler={setErrors}
       />
-      <div className="flex justify-between my-2">
+      <div className="flex justify-between mt-2 mb-4">
         <KeepLoginInput
           value={loginData.keepMeLogin}
           onChange={(e) => setLoginData(prev => ({...prev, keepMeLogin: e.target.value }))}

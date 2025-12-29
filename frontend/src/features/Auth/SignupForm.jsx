@@ -52,7 +52,7 @@ const SignupForm = () => {
   }, [signUpData])
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form className="w-full" onSubmit={handleSubmit} noValidate>
       { isLoading && <LoadingOverlay/>}
       
       <SignupInputs
