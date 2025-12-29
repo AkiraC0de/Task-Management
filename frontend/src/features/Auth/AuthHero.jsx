@@ -3,7 +3,7 @@ import AuthIllustration from "../../components/illustrations/AuthIllustration"
 import SecondaryButton from "../../components/SecondaryButton"
 
 const AuthBlobBackground = ({state = "login"}) => {
-  const blobClasses = "bg-[#42bded] rounded-4xl max-md:bottom-0 md:-bottom-40 max-md:translate-x-1/2 absolute -z-10 max-md:right-1/2 max-md:w-full md:w-400 h-400  md:rounded-full"
+  const blobClasses = "bg-[#42bded] rounded-4xl max-md:bottom-0 md:-bottom-40 max-md:translate-x-1/2 absolute -z-10 max-md:right-1/2 max-md:w-full md:w-[400%]  md:rounded-full"
   const blobPositionClasses = state == "login" ? "md:right-0 " : "md:left-0"
   return (
     <div className={`${blobClasses} ${blobPositionClasses}`}></div>
@@ -32,7 +32,7 @@ const AuthHero = ({state = "login"}) => {
         </SecondaryButton>
       </div>
       <AuthIllustration className="w-90 md:w-100 md:flex hidden "/>
-      <AuthBlobBackground state={state} />
+      {/* <AuthBlobBackground state={state} /> */}
     </div>
   )
 }

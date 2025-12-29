@@ -12,20 +12,22 @@ const LoginInputs = ({loginData, loginDataHandler, errors, errorsHandler}) => {
         <InputField 
           icon={<Mail/>} 
           type='email'
+          label="Email"
           value={loginData.email}
           name='email'
           onChange={handleChange}
-          placeholder='Email'
+          placeholder='john@example.com'
           error={errors?.email}
         />
 
         <InputField 
+          label="Password"
           icon={<Lock/>} 
           value={loginData.password}
           onChange={handleChange}
           name='password'
           type='password'
-          placeholder='Password'
+          placeholder='••••••••'
           error={errors?.password}
         />
     </div>

@@ -9,6 +9,7 @@ import { loginUser } from "./service";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import { validateFields } from "../../utils/formValidation";
 import { LOGIN_DATA_DEFAULT } from "../../constants/authConstant";
+import KeepLoginInput from "./KeepLoginInput";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const LoginForm = () => {
 
     const validation = validateFields(loginData);
     if(!validation.isValid){
+      console.log(validation)
       setErrors(validation.errors)
       return;
     } 
@@ -58,7 +60,13 @@ const LoginForm = () => {
         errors={errors}
         errorsHandler={setErrors}
       />
-      <ForgotPassword/>
+      <div className="flex justify-between my-2">
+        <KeepLoginInput
+          value={loginData.keepMeLogin}
+          onChange={(e) => setLoginData(prev => ({...prev, keepMeLogin: e.target.value }))}
+        />
+        <ForgotPassword/>
+      </div>
       <div className="text-center my-2">
         <PrimaryButton 
           type='submit'

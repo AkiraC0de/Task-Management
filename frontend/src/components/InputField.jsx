@@ -7,7 +7,7 @@ const TogglePasswordButton = ({showPassword, toggle}) => {
   return(
     <button 
       type='button'
-      className='cursor-pointer text-gray-400'
+      className='cursor-pointer text-secondary-text'
       onClick={toggle}
     > 
       {showPassword ? <EyeOff/> : <EyeIcon/>}
@@ -23,13 +23,13 @@ const InputField = ({type = 'text', label, icon, error, ...props}) => {
   
   return (
       <div>
-        {label && <label className='ml-2 font-semibold text-md'>{label}</label>}
-        <div className={`${error ? "ring-2 ring-red-400" : "focus-within:ring-2 focus-within:ring-blue-400"} flex items-center border border-gray-300 rounded-4xl p-4 shadow-sm gap-2`}>
-          <span className="text-gray-400">{icon}</span>
+        {label && <label className='mb-2 ml-2 font-medium text-sm text-primary-text'>{label}</label>}
+        <div className={`${error ? "ring-2 ring-red-400" : "focus-within:ring-2 focus-within:ring-primary"} flex items-center border border-gray-300 rounded-xl p-3 shadow-sm gap-2`}>
+          <span className="text-secondary-text/50">{icon}</span>
           <input
             type={inputType}
             {...props}
-            className="outline-none w-full bg-transparent text-md font-semibold text-gray-500 placeholder:text-gray-400"
+            className="outline-none w-full bg-transparent text-sm text-primary-text placeholder:text-secondary-text"
           />
           { 
             isPasswordType && 
