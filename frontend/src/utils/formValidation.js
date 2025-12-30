@@ -21,6 +21,12 @@ export const isEmailValid = (email) => {
   return emailRegex.test(email.toString().trim());
 };
 
+export const isPasswordValid = (password) => {
+  // This pattern requires: at least one uppercase letter, one lowercase letter, one number, and a minimum of 8 characters.
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+  return passwordRegex.test(password)
+}
+
 export const validateSignUpForm = (formData) => {
   let errors = {}
   
@@ -30,14 +36,9 @@ export const validateSignUpForm = (formData) => {
     errors = {...errors, ...fieldValidation.errors}
   }
 
-  // Validate the email format only if the email data is NOT empty string
-  if(!fieldValidation.errors?.email && !isEmailValid(formData?.email)){
-    errors = {...errors, email : "Invalid email format."}
-  }
-
-  // Validate the password length only if the password data is NOT empty string
-  if(!fieldValidation.errors?.password && formData?.password.length < 8 ){
-    errors = {...errors, password : "Password must be 8 characters long."}
+  // Validate the password only if it has not had an errro with fieldValidation
+  if(!fieldValidation.errors?.password && !isPasswordValid(formData?.password)){
+    errors = {...errors, password : "Password requires a minimum length of 8 characters, with at least one uppercase letter, one lowercase letter, and one digit."}
   }
 
   // Validate if the password matched confirmPassword
