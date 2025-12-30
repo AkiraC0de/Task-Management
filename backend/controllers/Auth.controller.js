@@ -1,9 +1,9 @@
 const User = require('../models/User');
+const Token = require('../models/Token');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 
-const  { generateAccessToken, generateRefreshToken} = require('../utils/tokenJWT')
-
+const  { generateAccessToken, generateRefreshToken} = require('../utils/tokenJWT');
 
 const signUp = async (req, res) => {
     try {
@@ -125,9 +125,33 @@ const refresh = (req, res) => {
     });
 }
 
+const verifyEmail = async (req, res) => {
+    try {
+        // Validate if the request body has content
+        if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
+
+        const {userId, token} = req.body;
+
+        // Validate if there are missing data
+        if(!userId || !token) return res.status(400).json({success: false, message: 'Missing required data'});
+
+        const validToken = await Token.findOne({userId, token});
+
+        if(!validToken) return res.status(400).json({success: false, message: 'Code Expired or Invalid'});
+        
+        // Update the user data to verified and delete the token from the
+        await User.findByIdAndUpdate(req.body.userId, { isVerified: true });
+        await validToken.deleteOne();
+    } catch (error) {
+        res.status(500).json({success: false, message: `Server Error`});
+        console.log(error.message) // Should have an error handler
+    }
+}
+
 module.exports = {
     signUp,
     logIn,
     logout,
-    refresh
+    refresh,
+    verifyEmail
 }
