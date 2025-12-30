@@ -10,7 +10,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingLayout/>}>
-        <Route index element={<Login/>}/>
+        <Route index element={<Home/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="signup" element={<Signup/>}/>
       </Route>
