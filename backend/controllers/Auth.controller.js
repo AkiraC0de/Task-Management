@@ -21,10 +21,21 @@ const signUp = async (req, res) => {
 
         // Verify if the email has not been registered
         const isRegistered = await User.findOne({email});
-        if(isRegistered) return res.status(400).json({success: false, message: 'The email has already been registred' , errorAt: 'email '});
+        if(isRegistered) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email '});
 
-        await User.create({ name, email, password, profileImage });
-        res.status(201).json({success: true, message: `The account (${email}) have successfully registerd`});
+        // Create the unverified account
+        const newUser = await User.create({ name, email, password, profileImage });
+        const code = Math.floor(100000 + Math.random() * 900000);
+
+        await Token.create({ userId : newUser._id, code })
+
+        res.status(201).json({
+            success: true, 
+            message: `The account (${email}) have successfully registered`,
+            data: {
+                userId : newUser._id
+            }
+        });
 
     } catch (error) {
         res.status(500).json({success: false, message: `Server Error`});
