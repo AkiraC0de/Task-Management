@@ -1,12 +1,12 @@
 import { useState, useCallback } from "react";
 import SignupInputs from "./SignupInputs";
 import PrimaryButton from "../../components/PrimaryButton";
-import ForgotPassword from "./ForgotPassword";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage, getErrorSource } from "../../utils/errorHandler";
 import LoadingOverlay from "../../components/LoadingOverlay";
-import { validateFields } from "../../utils/formValidation";
+import { validateSignUpForm } from "../../utils/formValidation";
 import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
+import { signupUser } from "./service";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -19,15 +19,9 @@ const SignupForm = () => {
     e.preventDefault();
     setErrors({});
 
-    const validation = validateFields(signUpData);
-    if(!validation.isValid){
-      setErrors(validation.errors)
-      return;
-    } 
-
-    // Validate if the password matched confirmPassword
-    if(signUpData.confirmPassword !== signUpData.password){
-      setErrors({confirmPassword : "Confirm password does not match."})
+    const formValidation = validateSignUpForm(signUpData);
+    if(!formValidation.isValid){
+      setErrors(formValidation.errors)
       return;
     }
 
@@ -40,6 +34,8 @@ const SignupForm = () => {
     } catch (error) {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);
+
+      console.log(error)
 
       if(errorAt){
         setErrors({ [errorAt] : message });

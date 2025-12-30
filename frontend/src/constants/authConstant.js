@@ -9,5 +9,6 @@ export const SIGNUP_DATA_DEFAULT = {
   firstname: '',
   lastname: '',
   password: '',
-  confirmPassword: ""
+  confirmPassword: "",
+  agreedToTerms: false,
 }

@@ -1,8 +1,11 @@
+
+// @desc This func validate the input fields data if there are empty string within the data.
+// Drawbacks : this cannot validate if the data type is a boolean.
 export const validateFields = (data) => {
   const errors = {};
 
   Object.keys(data).forEach((key) => {
-    if (!data[key] || data[key].trim() === '') {
+    if (String(data[key]).trim() === '') {
       errors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required.`;
     }
   });
@@ -12,3 +15,39 @@ export const validateFields = (data) => {
     errors // sample return { name : "name is required", password : "password is required." }
   };
 };
+
+export const isEmailValid = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email.toString().trim());
+};
+
+export const validateSignUpForm = (formData) => {
+  let errors = {}
+  
+  // Validate if the are empty input field
+  const fieldValidation = validateFields(formData);
+  if(!fieldValidation.isValid){
+    errors = {...errors, ...fieldValidation.errors}
+  }
+
+  // Validate the email format only if the email data is NOT empty string
+  if(!fieldValidation.errors?.email && !isEmailValid(formData?.email)){
+    errors = {...errors, email : "Invalid email format."}
+  }
+
+  // Validate the password length only if the password data is NOT empty string
+  if(!fieldValidation.errors?.password && formData?.password.length < 8 ){
+    errors = {...errors, password : "Password must be 8 characters long."}
+  }
+
+  // Validate if the password matched confirmPassword
+  const isPasswordMatched = formData?.confirmPassword === formData?.password;
+  if(!fieldValidation.errors?.confirmPassword && !isPasswordMatched){
+    errors = {...errors, confirmPassword : "Password does not match."}
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors // sample return { name : "name is required", password : "password is required." }
+  };
+}

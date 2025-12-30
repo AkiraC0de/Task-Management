@@ -10,16 +10,16 @@ const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
             label="First Name"
             name="firstname"
             value={signUpData.firstname}
-            error={errors?.name}
+            error={errors?.firstname}
             onChange={(e) => handleChangeObject(e, signUpDataHandler)}
             type='text'
             placeholder='John'
           />
           <InputField 
-            label="last Name"
+            label="Last Name"
             name="lastname"
             value={signUpData.lastname}
-            error={errors?.name}
+            error={errors?.lastname}
             onChange={(e) => handleChangeObject(e, signUpDataHandler)}
             type='text'
             placeholder='Dela Cruz'
