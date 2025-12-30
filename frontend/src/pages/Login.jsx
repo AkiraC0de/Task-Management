@@ -9,7 +9,7 @@ const Login = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 md:flex-row flex-1">
       <Hero state={PAGE_STATE}/>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-start">
         <div className='p-6 anim-fade-up w-full max-w-100'>
           <AuthHeader state={PAGE_STATE}/>
           <LoginForm/>
