@@ -1,12 +1,7 @@
 import { Mail, Lock } from 'lucide-react'
 import InputField from '../../components/InputField'
-import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
 
-const LoginInputs = ({loginData, loginDataHandler, errors, errorsHandler}) => {
-  const handleChange = (e) => {
-    handleChangeObject(e, loginDataHandler);
-    onChangeRemoveError(e, errors, errorsHandler);
-  }
+const LoginInputs = ({loginData, errors, InputOnchangeHandler}) => {
   return (
     <div className="flex flex-col gap-4">
         <InputField 
@@ -15,7 +10,7 @@ const LoginInputs = ({loginData, loginDataHandler, errors, errorsHandler}) => {
           label="Email"
           value={loginData.email}
           name='email'
-          onChange={handleChange}
+          onChange={InputOnchangeHandler}
           placeholder='john@example.com'
           error={errors?.email}
         />
@@ -24,7 +19,7 @@ const LoginInputs = ({loginData, loginDataHandler, errors, errorsHandler}) => {
           label="Password"
           icon={<Lock/>} 
           value={loginData.password}
-          onChange={handleChange}
+          onChange={InputOnchangeHandler}
           name='password'
           type='password'
           placeholder='••••••••'

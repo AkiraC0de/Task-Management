@@ -36,6 +36,11 @@ export const validateSignUpForm = (formData) => {
     errors = {...errors, ...fieldValidation.errors}
   }
 
+  // Validate the email format only if the email data is NOT empty string
+  if(!fieldValidation.errors?.email && !isEmailValid(formData?.email)){
+    errors = {...errors, email : "Invalid email format."}
+  }
+
   // Validate the password only if it has not had an errro with fieldValidation
   if(!fieldValidation.errors?.password && !isPasswordValid(formData?.password)){
     errors = {...errors, password : "Password requires a minimum length of 8 characters, with at least one uppercase letter, one lowercase letter, and one digit."}

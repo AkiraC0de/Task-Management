@@ -7,6 +7,7 @@ import LoadingOverlay from "../../components/LoadingOverlay";
 import { validateSignUpForm } from "../../utils/formValidation";
 import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
 import { signupUser } from "./service";
+import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -14,6 +15,11 @@ const SignupForm = () => {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ errors, setErrors] = useState({})
   const [signUpData, setSignUpData] = useState(SIGNUP_DATA_DEFAULT)
+
+  const handleInputsOnChance = (e) => {
+    handleChangeObject(e, setSignUpData);
+    onChangeRemoveError(e, errors, setErrors);
+  }
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -53,7 +59,7 @@ const SignupForm = () => {
       
       <SignupInputs
         signUpData={signUpData}
-        signUpDataHandler={setSignUpData}
+        InputOnchangeHandler={handleInputsOnChance}
         errors={errors}
       />
       <PrimaryButton 

@@ -2,7 +2,7 @@ import { Mail, Lock, UserPen } from 'lucide-react'
 import InputField from '../../components/InputField'
 import { handleChangeObject } from '../../utils/handler'
 
-const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
+const SignupInputs = ({signUpData, InputOnchangeHandler, errors}) => {
   return (
     <div className=" flex flex-col gap-3">
         <div className='flex gap-3'>
@@ -11,7 +11,7 @@ const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
             name="firstname"
             value={signUpData.firstname}
             error={errors?.firstname}
-            onChange={(e) => handleChangeObject(e, signUpDataHandler)}
+            onChange={InputOnchangeHandler}
             type='text'
             placeholder='John'
           />
@@ -20,7 +20,7 @@ const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
             name="lastname"
             value={signUpData.lastname}
             error={errors?.lastname}
-            onChange={(e) => handleChangeObject(e, signUpDataHandler)}
+            onChange={InputOnchangeHandler}
             type='text'
             placeholder='Dela Cruz'
           />
@@ -32,7 +32,7 @@ const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
           name="email" 
           value={signUpData.email}
           error={errors?.email}
-          onChange={(e) => handleChangeObject(e, signUpDataHandler)}
+          onChange={InputOnchangeHandler}
           type='email'
           placeholder='john@example.com'
         />
@@ -43,7 +43,7 @@ const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
           name="password" 
           value={signUpData.password}
           error={errors?.password}
-          onChange={(e) => handleChangeObject(e, signUpDataHandler)}
+          onChange={InputOnchangeHandler}
           type='password'
           placeholder='••••••••'
         />
@@ -54,7 +54,7 @@ const SignupInputs = ({children, signUpData, signUpDataHandler, errors}) => {
           name="confirmPassword" 
           error={errors?.confirmPassword}
           value={signUpData.confirmPassword}
-          onChange={(e) => handleChangeObject(e, signUpDataHandler)}
+          onChange={InputOnchangeHandler}
           type='password'
           placeholder='Confirm your password'
         />

@@ -10,6 +10,7 @@ import LoadingOverlay from "../../components/LoadingOverlay";
 import { validateFields } from "../../utils/formValidation";
 import { LOGIN_DATA_DEFAULT } from "../../constants/authConstant";
 import KeepLoginInput from "./KeepLoginInput";
+import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -18,6 +19,11 @@ const LoginForm = () => {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ errors, setErrors] = useState({})
   const [ loginData, setLoginData ] = useState(LOGIN_DATA_DEFAULT);
+
+  const handleInputsOnChance = (e) => {
+    handleChangeObject(e, setLoginData);
+    onChangeRemoveError(e, errors, setErrors);
+  }
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -56,9 +62,8 @@ const LoginForm = () => {
       { isLoading && <LoadingOverlay/>}
       <LoginInputs 
         loginData={loginData} 
-        loginDataHandler={setLoginData}
+        InputOnchangeHandler={handleInputsOnChance}
         errors={errors}
-        errorsHandler={setErrors}
       />
       <div className="flex justify-between mt-2 mb-4">
         <KeepLoginInput
