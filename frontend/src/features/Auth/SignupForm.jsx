@@ -62,7 +62,7 @@ const SignupForm = () => {
       />
       <PrimaryButton 
         type='submit'
-        className='my-5 w-full'
+        className='w-full mt-4'
         disabled={isLoading}
       >
         {isLoading ? "Processing..." : "Sign Up"}
