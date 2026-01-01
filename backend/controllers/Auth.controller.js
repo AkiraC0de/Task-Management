@@ -34,7 +34,8 @@ const signUp = async (req, res) => {
             success: true, 
             message: `The account (${email}) have successfully registered`,
             data: {
-                userId : newUser._id
+                userId : newUser._id,
+                email: newUser.email
             }
         });
 
