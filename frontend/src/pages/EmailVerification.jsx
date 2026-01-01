@@ -3,7 +3,7 @@ import useAuth from "../hooks/useAuth"
 import { HOME_PAGE_LINK } from "../constants/pageLinkConstant";
 import { useEffect} from "react";
 import VerificationHeader from "../features/Auth/VerificationHeader";
-import VerificationInputs from "../features/Auth/VerificationInputs";
+import VerificationForm from "../features/Auth/VerificationForm";
 
 const useWarningLeave = () => {
   useEffect(() => {
@@ -31,9 +31,9 @@ const EmailVerification = () => {
 
   return (
     <main className="min-w-screen flex justify-center">
-      <div className="max-w-120 p-4 mt-14">
+      <div className="max-w-100 p-4 mt-14">
         <VerificationHeader email={user.email}/>
-        <VerificationInputs/>
+        <VerificationForm/>
       </div>
     </main>
   )

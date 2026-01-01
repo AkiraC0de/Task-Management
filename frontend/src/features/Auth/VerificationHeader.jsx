@@ -5,13 +5,9 @@ const VerificationHeader = ({email}) => {
         Verify your email
       </h1>
       <p className='text-center text-sm mx-2 text-primary-text'>
-        {email 
-        ? <>
-            We've sent a 6-digit verification code to your email address{" "}
-            <strong>{email}</strong>. 
-            Please enter the code below to confirm your identity.
-          </>
-        : "Unexpected Error. Please try again later."}
+        We've sent a 6-digit verification code to your email address 
+        <strong> {email} </strong>. 
+        Please enter the code below to confirm your identity.
       </p>
     </div>
   )
