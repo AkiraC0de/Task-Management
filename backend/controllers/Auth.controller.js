@@ -11,8 +11,8 @@ const signUp = async (req, res) => {
         if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
 
         // Verify the datas if complete
-        const { name, email, password, profileImage } = req.body;
-        if(!email || !password || !name) return res.status(400).json({success: false, message: 'Missing data'});
+        const { firstName, lastName, email, password, profileImage } = req.body;
+        if(!email || !password || !firstName || !lastName) return res.status(400).json({success: false, message: 'Missing data', data: req.body});
 
         // Validate the email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,10 +24,11 @@ const signUp = async (req, res) => {
         if(isRegistered) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email '});
 
         // Create the unverified account
-        const newUser = await User.create({ name, email, password, profileImage });
+        const newUser = await User.create({firstName, lastName, email, password, profileImage });
         const code = Math.floor(100000 + Math.random() * 900000);
 
-        await Token.create({ userId : newUser._id, code })
+        // Generate the token for email validation
+        await Token.create({ userId : newUser._id, token: code })
 
         res.status(201).json({
             success: true, 

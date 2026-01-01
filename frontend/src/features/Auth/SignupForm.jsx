@@ -64,7 +64,7 @@ const SignupForm = () => {
       />
       <PrimaryButton 
         type='submit'
-        className='w-full mt-4'
+        className='w-full mt-4 flex justify-center items-center'
         disabled={isLoading}
       >
         {isLoading ? <Spinner/> : "Sign Up"}

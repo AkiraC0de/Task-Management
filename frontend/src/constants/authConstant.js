@@ -6,8 +6,8 @@ export const LOGIN_DATA_DEFAULT = {
 
 export const SIGNUP_DATA_DEFAULT = {
   email: '',
-  firstname: '',
-  lastname: '',
+  firstName: '',
+  lastName: '',
   password: '',
   confirmPassword: "",
   agreedToTerms: false,

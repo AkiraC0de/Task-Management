@@ -17,6 +17,6 @@ authRoute.post('/logout', logout);
 authRoute.get('/refresh', refresh);
 
 // Verification Route
-authRoute.post('/verify', verifyEmail)
+authRoute.post('/verify-email', verifyEmail)
 
 module.exports = authRoute;

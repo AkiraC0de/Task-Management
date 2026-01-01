@@ -8,18 +8,18 @@ const SignupInputs = ({signUpData, InputOnchangeHandler, errors}) => {
         <div className='flex gap-3'>
           <InputField 
             label="First Name"
-            name="firstname"
-            value={signUpData.firstname}
-            error={errors?.firstname}
+            name="firstName"
+            value={signUpData.firstName}
+            error={errors?.firstName}
             onChange={InputOnchangeHandler}
             type='text'
             placeholder='John'
           />
           <InputField 
             label="Last Name"
-            name="lastname"
-            value={signUpData.lastname}
-            error={errors?.lastname}
+            name="lastName"
+            value={signUpData.lastName}
+            error={errors?.lastName}
             onChange={InputOnchangeHandler}
             type='text'
             placeholder='Dela Cruz'
