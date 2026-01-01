@@ -8,6 +8,7 @@ import { validateSignUpForm } from "../../utils/formValidation";
 import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
 import { signupUser } from "./service";
 import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
+import Spinner from "../../components/Spinner";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -35,7 +36,8 @@ const SignupForm = () => {
     try {
       const {data} = await signupUser(signUpData);
       setSignUpData(SIGNUP_DATA_DEFAULT);
-      // THIS REQUIRE FUTURE UPDATES TO HANDLE EMAIL VERIFICATION
+      
+      console.log(data)
       
     } catch (error) {
       const errorAt = getErrorSource(error);
@@ -55,8 +57,6 @@ const SignupForm = () => {
 
   return (
     <form className="w-full" onSubmit={handleSubmit} noValidate>
-      { isLoading && <LoadingOverlay/>}
-      
       <SignupInputs
         signUpData={signUpData}
         InputOnchangeHandler={handleInputsOnChance}
@@ -67,7 +67,7 @@ const SignupForm = () => {
         className='w-full mt-4'
         disabled={isLoading}
       >
-        {isLoading ? "Processing..." : "Sign Up"}
+        {isLoading ? <Spinner/> : "Sign Up"}
       </PrimaryButton>
     </form>
   )

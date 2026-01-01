@@ -11,6 +11,7 @@ import { validateFields } from "../../utils/formValidation";
 import { LOGIN_DATA_DEFAULT } from "../../constants/authConstant";
 import KeepLoginInput from "./KeepLoginInput";
 import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
+import Spinner from "../../components/Spinner";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -59,7 +60,6 @@ const LoginForm = () => {
 
   return (
     <form className="w-full" onSubmit={handleSubmit} noValidate>
-      { isLoading && <LoadingOverlay/>}
       <LoginInputs 
         loginData={loginData} 
         InputOnchangeHandler={handleInputsOnChance}
@@ -72,13 +72,13 @@ const LoginForm = () => {
         />
         <ForgotPassword/>
       </div>
-      <div className="text-center my-2">
+      <div className="my-2">
         <PrimaryButton 
           type='submit'
-          className="w-full"
+          className="w-full flex justify-center items-center"
           disabled={isLoading}
         >
-          {isLoading ? "PROCESSING..." : "LOGIN"}
+          {isLoading ? <Spinner/> : "LOGIN"}
         </PrimaryButton>
       </div>
     </form>

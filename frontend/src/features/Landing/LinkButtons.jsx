@@ -6,10 +6,10 @@ import SecondaryButton from "../../components/SecondaryButton"
 const LinkButtons = () => {
   return (
     <div className="flex gap-4">
-      <PrimaryButton className="px-3 text-sm">
+      <PrimaryButton className="px-3 pr-2 text-sm">
         <Link 
           to="/signup"
-          className="flex gap-1 items-center"
+          className="center gap-1"
         >
           Get Started
           <ChevronRight size={18}/>
