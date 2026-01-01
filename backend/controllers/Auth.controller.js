@@ -12,7 +12,7 @@ const signUp = async (req, res) => {
 
         // Verify the datas if complete
         const { firstName, lastName, email, password, profileImage } = req.body;
-        if(!email || !password || !firstName || !lastName) return res.status(400).json({success: false, message: 'Missing data', data: req.body});
+        if(!email || !password || !firstName || !lastName) return res.status(400).json({success: false, message: 'Missing data', reqBody: req.body});
 
         // Validate the email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -147,10 +147,14 @@ const verifyEmail = async (req, res) => {
         // Validate if there are missing data
         if(!userId || !token) return res.status(400).json({success: false, message: 'Missing required data'});
 
-        const validToken = await Token.findOne({userId, token});
+        const validToken = await Token.findOne({userId});
 
-        if(!validToken) return res.status(400).json({success: false, message: 'Code Expired or Invalid'});
-        
+        // Validate if the token for the user does exist in the DB
+        if(!validToken) return res.status(400).json({success: false, message: 'Code Expired'});
+
+        // Validate if the token from the DB is same as the users request
+        if(validToken.token !== token) return res.status(400).json({success: false, message: 'Incorrect Code'});
+
         // Update the user data to verified and delete the token from the
         await User.findByIdAndUpdate(req.body.userId, { isVerified: true });
         await validToken.deleteOne();
