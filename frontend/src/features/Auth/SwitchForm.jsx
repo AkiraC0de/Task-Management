@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import SecondaryButton from "../../components/SecondaryButton"
+import { LOGIN_PAGE_LINK, SIGNUP_PAGE_LINK } from "../../constants/pageLinkConstant"
 
 const SwitchForm = ({state = "login"}) => {
   return (
@@ -16,7 +17,7 @@ const SwitchForm = ({state = "login"}) => {
         className="w-full border-secondary-text text-secondary-text font-normal text-sm "
       >
         <Link 
-          to={state == "login" ? "/signup" : "/login"}
+          to={state == "login" ? SIGNUP_PAGE_LINK : LOGIN_PAGE_LINK}
           className="flex justify-center items-center"
         >
           {state == "login" ? "Create an Account" : "Login to my account"}

@@ -5,14 +5,15 @@ import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import LandingLayout from "../Layouts/LandingLayout";
 import NotFound from "../pages/NotFound";
+import { LOGIN_PAGE_LINK, SIGNUP_PAGE_LINK } from "../constants/pageLinkConstant";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingLayout/>}>
         <Route index element={<Home/>}/>
-        <Route path="login" element={<Login/>}/>
-        <Route path="signup" element={<Signup/>}/>
+        <Route path={LOGIN_PAGE_LINK} element={<Login/>}/>
+        <Route path={SIGNUP_PAGE_LINK} element={<Signup/>}/>
       </Route>
 
       <Route path="*" element={<NotFound/>}/>
