@@ -57,3 +57,21 @@ export const validateSignUpForm = (formData) => {
     errors // sample return { name : "name is required", password : "password is required." }
   };
 }
+
+export const validateVerificationCode = (arrCode, reqCodeLength) => {
+  let code = "";
+  arrCode.forEach(value => code += value);
+  console.log(code.length)
+
+  if(code.length !== reqCodeLength){
+    return {
+      isValid: false,
+      message: "Please input 6 digit code."
+    }
+  }
+  
+  return {
+    isValid: true,
+    code
+  }
+}
