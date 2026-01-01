@@ -60,7 +60,7 @@ const logIn = async (req, res) => {
 
         // Verify if the email does exist in the database
         if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet.', errorAt: "email"});
-   
+        
         // Validate if the passoword matched    
         const isMatched = await bcryptjs.compare(password, user.password);
         if(!isMatched) return res.status(404).json({success: false, message: 'Incorrect password.', errorAt: "password"});
@@ -80,7 +80,8 @@ const logIn = async (req, res) => {
             success: true, 
             message: 'Success Login', 
             data: {
-                name: user.name,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 email: user.email,
                 profileImage: user.profileImage
             },
