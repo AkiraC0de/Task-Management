@@ -31,7 +31,7 @@ const EmailVerification = () => {
 
   return (
     <main className="min-w-screen flex justify-center">
-      <div className="max-w-120 bg-amber-50 mt-14">
+      <div className="max-w-120 p-4 mt-14">
         <VerificationHeader email={user.email}/>
         <VerificationInputs/>
       </div>
