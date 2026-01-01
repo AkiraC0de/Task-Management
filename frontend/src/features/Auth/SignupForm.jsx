@@ -8,9 +8,12 @@ import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
 import { signupUser } from "./service";
 import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
 import Spinner from "../../components/Spinner";
+import useAuth from "../../hooks/useAuth"
+import { EMAIL_VERIFICATION_PAGE_LINK } from "../../constants/pageLinkConstant";
 
 const SignupForm = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { setIsEmailValidating, setUser } = useAuth();
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [ errors, setErrors] = useState({})
@@ -34,10 +37,12 @@ const SignupForm = () => {
     setIsLoading(true);
     try {
       const {data} = await signupUser(signUpData);
+      
       setSignUpData(SIGNUP_DATA_DEFAULT);
-      
-      console.log(data)
-      
+      setIsEmailValidating(true);
+      setUser({email: data.data.email});
+
+      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.data.userId}`)
     } catch (error) {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);
