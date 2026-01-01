@@ -3,7 +3,6 @@ import SignupInputs from "./SignupInputs";
 import PrimaryButton from "../../components/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage, getErrorSource } from "../../utils/errorHandler";
-import LoadingOverlay from "../../components/LoadingOverlay";
 import { validateSignUpForm } from "../../utils/formValidation";
 import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
 import { signupUser } from "./service";

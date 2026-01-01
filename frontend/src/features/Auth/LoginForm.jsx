@@ -15,7 +15,7 @@ import Spinner from "../../components/Spinner";
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { handleUser, handleIsLogin } = useAuth();
+  const { setUser, setIsLogin } = useAuth();
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [ errors, setErrors] = useState({})
@@ -39,10 +39,13 @@ const LoginForm = () => {
 
     setIsLoading(true);
     try {
-      const {data} = await loginUser(loginData);
+      const response = await loginUser(loginData);
 
-      handleUser(data.data);
-      handleIsLogin(true);
+      console.log(response)
+
+      setUser(response.data.data);
+      setIsLogin(true);
+      // THIS NEED TO BE UPDATE WHEN THE DASHBOARD PAGE HAS BEEN ESTABLISHED
       navigate('/')
     } catch (error) {
       const errorAt = getErrorSource(error);

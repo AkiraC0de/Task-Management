@@ -5,7 +5,8 @@ import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import LandingLayout from "../Layouts/LandingLayout";
 import NotFound from "../pages/NotFound";
-import { LOGIN_PAGE_LINK, SIGNUP_PAGE_LINK } from "../constants/pageLinkConstant";
+import { EMAIL_VERIFICATION_PAGE_LINK, LOGIN_PAGE_LINK, SIGNUP_PAGE_LINK } from "../constants/pageLinkConstant";
+import EmailVerification from "../pages/EmailVerification";
 
 const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const AppRoutes = () => {
         <Route path={SIGNUP_PAGE_LINK} element={<Signup/>}/>
       </Route>
 
+      <Route path={`${EMAIL_VERIFICATION_PAGE_LINK}/:userId`} element={<EmailVerification/>}/>
       <Route path="*" element={<NotFound/>}/>
      
       {/* <Route path="/" element={
