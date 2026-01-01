@@ -1,4 +1,4 @@
-# 🗂️ Task Management - Full Stack Web App
+# 🗂️ Task Management - Full Stack Web App (UNDATED DOCS)
 **Task Management** is my first full-stack web application focused on helping individuals manage and track their tasks efficiently. The aim is to provide users with a clean, responsive interface and secure backend where they can manage personal tasks and monitor their progress with ease.
 
 This project is designed to be *scalable*, with future plans to incorporate collaborative features that allow interactions between users.
