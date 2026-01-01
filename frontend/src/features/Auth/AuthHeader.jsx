@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import loginHeaderLight from '../../assets/login_header_light.webp'
 
 const AuthHeader = ({state = 'login'}) => {
   return (
