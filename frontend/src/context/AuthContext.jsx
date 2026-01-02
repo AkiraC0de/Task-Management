@@ -5,15 +5,16 @@ export const AuthContext = createContext({});
 
 const AuthProvider = ({children}) => {    
     const [user, setUser] = useState({});
-    const [isLogin, setIsLogin] = useState(false);
-    const [isValidatingEmail, setIsEmailValidating] = useState(true);
+    const [isLogin, setIsLogin] = useState(true);
+    const [isValidatingEmail, setIsValidatingEmail] = useState(true);
 
   return (
     <AuthContext.Provider value={
       { 
         user, setUser, 
         isLogin, setIsLogin,
-        isValidatingEmail, setIsEmailValidating
+        isValidatingEmail, setIsValidatingEmail
+
       }
     }>
         {children}
