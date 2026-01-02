@@ -7,8 +7,10 @@ import { validateUserEmail } from "./service";
 import { getErrorMessage } from "../../utils/errorHandler";
 import Spinner from "../../components/Spinner";
 import { LOGIN_PAGE_LINK } from "../../constants/pageLinkConstant";
+import ResendCode from "./ResendCode";
 
-const CODE_LENGTH = 6
+const CODE_LENGTH = 6;
+const RESEND_CODE_COOLDOWN = 120; // 120 seconds
 
 const VerificationForm = () => {
   const navigate = useNavigate()
@@ -19,7 +21,6 @@ const VerificationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
     // Verify the inputs
     const codeInput = validateVerificationCode(code, CODE_LENGTH);
@@ -27,12 +28,15 @@ const VerificationForm = () => {
       setError(codeInput.message);
       return;
     }
-
+    
+    setIsLoading(true);
     try {
       const response = await validateUserEmail({
         token : codeInput.code,
         userId
       })
+
+      //REQURIES AN UPDATE
       console.log(response)
 
       navigate(LOGIN_PAGE_LINK, {replace : true});
@@ -97,6 +101,7 @@ const VerificationForm = () => {
               </>
           }
         </PrimaryButton>
+        <ResendCode countdownSec={RESEND_CODE_COOLDOWN}/>
       </div>
     </form>
   )
