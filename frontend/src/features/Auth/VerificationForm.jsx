@@ -28,7 +28,6 @@ const VerificationForm = () => {
       setError(codeInput.message);
       return;
     }
-    
     setIsLoading(true);
     try {
       const response = await validateUserEmail({

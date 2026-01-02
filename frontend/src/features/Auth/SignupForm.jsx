@@ -47,8 +47,6 @@ const SignupForm = () => {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);
 
-      console.log(error)
-
       if(errorAt){
         setErrors({ [errorAt] : message });
       } else {
