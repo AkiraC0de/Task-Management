@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 
 const  { generateAccessToken, generateRefreshToken} = require('../utils/tokenJWT');
+const { generateSixDigitCode } = require('../utils/utils');
 
 const signUp = async (req, res) => {
     try {
@@ -25,10 +26,10 @@ const signUp = async (req, res) => {
 
         // Create the unverified account
         const newUser = await User.create({firstName, lastName, email, password, profileImage });
-        const code = Math.floor(100000 + Math.random() * 900000);
+        const code = generateSixDigitCode();
 
         // Generate the token for email validation
-        await Token.create({ userId : newUser._id, token: code })
+        await Token.create({ userId : newUser._id, token: code.toString() })
 
         res.status(201).json({
             success: true, 
@@ -174,10 +175,45 @@ const verifyEmail = async (req, res) => {
     }
 }
 
+const verifyEmailResend = async (req, res) => {
+    // Validate if the request body has content
+    if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
+
+    // Validate if the userId Exist in the request body
+    const {userId} = req.body;
+    if(!userId) return res.status(400).json({success: false, message: 'Missing user ID'});
+
+    // Validate if the previous token does exist in the DB
+    const prevToken = await Token.findOne(userId);
+    if(!prevToken) return res.status(400).json({success: false, message: 'Session Expired'});
+
+    const currentTime = new Date();
+    const timeDifference = currentTime - prevToken.createdAt; // Result is in milliseconds
+    const twoMinutesInMs = 2 * 60 * 1000;
+
+    // Validate if the previous token has been sent 2 minutes ago before sending a new one
+    if(timeDifference < twoMinutesInMs) return res.status(400).json({success: false, message: `PLease wait ${timeDifference * 1000} seconds before requesting a new code.`});
+
+    // Delete the old Token
+    await prevToken.deleteOne();
+
+    const generatedToken = generateSixDigitCode().toString()
+    const newToken = (await Token.create({userId, token: generatedToken})).populate('userId');
+
+    console.log(newToken)
+
+    // SHOULD HAVE AN EMAIL SENDER
+
+    // THIS REQUIRES the email to be also sent within the message
+    res.status(200).json({success: true, message: 'New Code has been to your email'})
+
+}
+
 module.exports = {
     signUp,
     logIn,
     logout,
     refresh,
-    verifyEmail
+    verifyEmail,
+    verifyEmailResend
 }
