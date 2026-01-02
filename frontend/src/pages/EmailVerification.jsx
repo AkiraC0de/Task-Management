@@ -1,26 +1,15 @@
-import { Navigate, useNavigate} from "react-router-dom";
+import { Navigate, useNavigate, useBlocker } from "react-router-dom";
 import useAuth from "../hooks/useAuth"
 import { HOME_PAGE_LINK } from "../constants/pageLinkConstant";
 import { useEffect} from "react";
 import VerificationHeader from "../features/Auth/VerificationHeader";
 import VerificationForm from "../features/Auth/VerificationForm";
+import useWarningLeave from "../hooks/useWarningLeave";
 
-const useWarningLeave = () => {
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      e.preventDefault();
-      e.returnValue = '';
-      return '';
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () =>  window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [])
-}
 
 const EmailVerification = () => {
   const navigate = useNavigate();
-  const { isValidatingEmail, user } = useAuth();
+  const { isValidatingEmail, setIsValidatingEmail, user } = useAuth();
 
   // Warn the user before page back or refresh
   useWarningLeave();
