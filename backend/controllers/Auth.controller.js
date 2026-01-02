@@ -184,7 +184,7 @@ const verifyEmailResend = async (req, res) => {
     if(!userId) return res.status(400).json({success: false, message: 'Missing user ID'});
 
     // Validate if the previous token does exist in the DB
-    const prevToken = await Token.findOne(userId);
+    const prevToken = await Token.findOne({userId});
     if(!prevToken) return res.status(400).json({success: false, message: 'Session Expired'});
 
     const currentTime = new Date();
@@ -192,7 +192,8 @@ const verifyEmailResend = async (req, res) => {
     const twoMinutesInMs = 2 * 60 * 1000;
 
     // Validate if the previous token has been sent 2 minutes ago before sending a new one
-    if(timeDifference < twoMinutesInMs) return res.status(400).json({success: false, message: `PLease wait ${timeDifference * 1000} seconds before requesting a new code.`});
+    const remainingSecs = Math.ceil((twoMinutesInMs - timeDifference) / 1000);
+    if(timeDifference < twoMinutesInMs) return res.status(400).json({success: false, message: `Please wait ${remainingSecs} seconds before requesting a new code.`});
 
     // Delete the old Token
     await prevToken.deleteOne();
@@ -205,7 +206,7 @@ const verifyEmailResend = async (req, res) => {
     // SHOULD HAVE AN EMAIL SENDER
 
     // THIS REQUIRES the email to be also sent within the message
-    res.status(200).json({success: true, message: 'New Code has been to your email'})
+    res.status(200).json({success: true, message: 'New Code has been sent to your email'})
 
 }
 
