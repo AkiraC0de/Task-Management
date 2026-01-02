@@ -15,3 +15,7 @@ export const logoutUser = (credentials) => {
 export const validateUserEmail = (credentials) => {
     return api.post('api/auth/verify-email', credentials)
 }
+
+export const emailValidationResendCode = (credentials) => {
+    return api.post('api/auth/verify-email-resend', credentials)
+}

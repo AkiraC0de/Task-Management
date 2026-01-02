@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
+import { emailValidationResendCode } from "./service";
+import { useParams } from "react-router-dom"
+import { getErrorMessage } from "../../utils/errorHandler";
 
 const ResendCode = ({countdownSec = 0}) => {
   const [countdown, setCountdown] = useState(countdownSec);
+  const [isLoading, setIsLoading] = useState(false);
+  const {userId } = useParams()
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -15,14 +20,33 @@ const ResendCode = ({countdownSec = 0}) => {
     return () => clearInterval(countdownInterval);
   }, [countdown])
 
+  const handleResetCode = useCallback(async () => {
+    console.log("WORK")
+    if(countdown > 0) return
+    console.log("TEST")
+    setIsLoading(true);
+    try {
+      const response = await emailValidationResendCode({userId})
+
+      console.log(response)
+    } catch (error) {
+      const message = getErrorMessage(error);
+
+      console.log(message)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [countdown, setCountdown])
+
   return (
     <div className="text-sm mt-4 text-secondary-text">
       <p className="flex gap-1">
         Didn't recieve a code?
         <button 
-          className="text-secondary-text font-semibold cursor-pointer"
-          disabled={countdown === 0}
+          className="text-secondary-text bg-amber-200 font-semibold cursor-pointer"
+          disabled={countdown > 0 || isLoading}
           type="button"
+          onClick={handleResetCode}
         >
           Resend Code 
         </button>
