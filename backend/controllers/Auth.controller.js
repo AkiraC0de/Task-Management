@@ -61,6 +61,9 @@ const logIn = async (req, res) => {
 
         // Verify if the email does exist in the database
         if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet.', errorAt: "email"});
+
+        // Verify if the account has been verified
+        if(!user.isVerified) return res.status(404).json({success: false, message: 'The Email has not been verified yet.'});
         
         // Validate if the passoword matched    
         const isMatched = await bcryptjs.compare(password, user.password);
@@ -142,7 +145,7 @@ const refresh = (req, res) => {
 const verifyEmail = async (req, res) => {
     try {
         // Validate if the request body has content
-        if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
+        if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
 
         const {userId, token} = req.body;
 
@@ -158,8 +161,13 @@ const verifyEmail = async (req, res) => {
         if(validToken.token !== token) return res.status(400).json({success: false, message: 'Incorrect Code'});
 
         // Update the user data to verified and delete the token from the
-        await User.findByIdAndUpdate(req.body.userId, { isVerified: true });
+        const user = await User.findByIdAndUpdate(req.body.userId, { isVerified: true });
         await validToken.deleteOne();
+        res.status(200).json({
+            success : true, 
+            message: `Success! ${user.firstName}, your account is now verified. Start organizing your group tasks and boosting your productivity today.`,
+            data : {email : user.email}
+        })
     } catch (error) {
         res.status(500).json({success: false, message: `Server Error`});
         console.log(error.message) // Should have an error handler
