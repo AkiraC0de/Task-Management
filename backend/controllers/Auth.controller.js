@@ -3,7 +3,7 @@ const Token = require('../models/Token');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 
-const  { generateAccessToken, generateRefreshToken} = require('../utils/tokenJWT');
+const  { generateAccessToken, generateRefreshToken, generateVerificationAccessToken} = require('../utils/tokenJWT');
 const { generateSixDigitCode } = require('../utils/utils');
 
 const signUp = async (req, res) => {
@@ -152,9 +152,8 @@ const verifyEmail = async (req, res) => {
         // Validate if the request body has content
         if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
 
-        console.log(req.user)
-
-        const {userId, token} = req.body;
+        const { token } = req.body;
+        const userId = req.user._id
 
         // Validate if there are missing data
         if(!userId || !token) return res.status(400).json({success: false, message: 'Missing required data'});
@@ -186,7 +185,7 @@ const verifyEmailResend = async (req, res) => {
     if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
 
     // Validate if the userId Exist in the request body
-    const {userId} = req.body;
+    const userId = req.user._id
     if(!userId) return res.status(400).json({success: false, message: 'Missing user ID'});
 
     // Validate if the previous token does exist in the DB
