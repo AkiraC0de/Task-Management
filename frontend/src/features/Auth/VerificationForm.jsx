@@ -8,16 +8,17 @@ import { getErrorMessage } from "../../utils/errorHandler";
 import Spinner from "../../components/Spinner";
 import { LOGIN_PAGE_LINK } from "../../constants/pageLinkConstant";
 import ResendCode from "./ResendCode";
+import useAuth from "../../hooks/useAuth";
 
 const CODE_LENGTH = 6;
 const RESEND_CODE_COOLDOWN = 120; // 120 seconds
 
 const VerificationForm = () => {
   const navigate = useNavigate()
-  const {userId} = useParams()
   const [code, setCode] = useState(new Array(CODE_LENGTH).fill(""));
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const {accessToken} = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,12 +29,13 @@ const VerificationForm = () => {
       setError(codeInput.message);
       return;
     }
+
     setIsLoading(true);
     try {
       const response = await validateUserEmail({
         token : codeInput.code,
-        userId
-      })
+        userId : "TESST" // TESTING VALUE
+      }, accessToken);
 
       //REQURIES AN UPDATE
       console.log(response)

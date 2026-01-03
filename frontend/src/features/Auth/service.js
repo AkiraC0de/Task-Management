@@ -12,10 +12,19 @@ export const logoutUser = (credentials) => {
     return api.get('/api/auth/signin');
 }
 
-export const validateUserEmail = (credentials) => {
-    return api.post('api/auth/verify-email', credentials)
+export const validateUserEmail = (credentials, token) => {
+    return api.post('api/auth/verify-email', credentials, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
 }
 
-export const emailValidationResendCode = (credentials) => {
-    return api.post('api/auth/verify-email-resend', credentials)
+export const emailValidationResendCode = (credentials, token) => {
+    return api.post('api/auth/verify-email-resend', credentials, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
 }

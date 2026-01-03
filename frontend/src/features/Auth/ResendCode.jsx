@@ -2,11 +2,12 @@ import { useEffect, useState, useCallback } from "react"
 import { emailValidationResendCode } from "./service";
 import { useParams } from "react-router-dom"
 import { getErrorMessage } from "../../utils/errorHandler";
+import useAuth from "../../hooks/useAuth";
 
 const ResendCode = ({countdownSec = 0}) => {
   const [countdown, setCountdown] = useState(countdownSec);
   const [isLoading, setIsLoading] = useState(false);
-  const {userId } = useParams()
+  const {accessToken} = useAuth()
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -26,8 +27,9 @@ const ResendCode = ({countdownSec = 0}) => {
     console.log("TEST")
     setIsLoading(true);
     try {
-      const response = await emailValidationResendCode({userId})
+      const response = await emailValidationResendCode({userId}, accessToken)
 
+      // SHOULD RESET
       console.log(response)
     } catch (error) {
       const message = getErrorMessage(error);
