@@ -4,20 +4,23 @@
 This project is designed to be *scalable*, with future plans to incorporate collaborative features that allow interactions between users.
 
 ## CURRENT TASK
-- backend: Error Handler
-- backend: Email sender
-- frontend: Make the email verification page secure 
-- fullstack: reset password
-- frontend: Verification Code inputs style if there is an error 
+| Category | Task | Status |
+| :--- | :--- | :---: |
+| **fullstack** | Implement an access token for email verification | On progress |
+| **Backend** | Centralized Global Error Handling Middleware | Pending |
+| **Backend** | SMTP Integration for Email Dispatch (Nodemailer) | Pending |
+| **Frontend** | Guarded Routes for Email Verification | Pending|
+| **Fullstack** | Secure Password Reset (Token-based) | Pending |
+| **Frontend** | UI/UX: Error states for OTP/Verification inputs | Pending |
 
-## 🧩 Features (UNUPDATED)
+## Features (UNUPDATED)
 - User authentication with JWT (signup, login, logout)
 - Create and update personal tasks
 - Secure API endpoints with middleware protection
 - Clean UI built with Tailwind CSS
 - Scalable backend with MongoDB and Mongoose
 
-## 🛠️ Built With
+## Built With
 # Frontend
 - **React JS** 
 - **Tailwind CSS**
@@ -27,21 +30,19 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 - **MongoDB**
 - **Mongoose** 
 
-## Api End Points 
-- **Auth**
-| Method | Endpoint                 | Description                                  |
-| ------ | ------------------------ | -------------------------------------------- |
-| POST   | `/api/auth/signup`       | Register a new user                          |
-| POST   | `/api/auth/login`        | Login and receive JWT access token           |
-| POST   | `/api/auth/logout`       | Logout and delete JWT access token           |
-| GET    | `/api/auth/refresh`      | Get a new access token via refreshTKN(Cookie)|
-| POST   | `/api/auth/verify-email` | Verify the users email via token             |
-| POST   | `/api/auth               | Reset the users email verification token     |
-|        | /verify-email-resend`    |                                              |
+### **Authentication Module**
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/signup` | Register user & trigger verification email |
+| `POST` | `/api/auth/login` | Authenticate user & issue JWT |
+| `POST` | `/api/auth/logout` | Revoke tokens & clear session |
+| `GET` | `/api/auth/refresh` | Rotate access token using Refresh Token |
+| `POST` | `/api/auth/verify-email` | Validate account via email token |
+| `POST` | `/api/auth/resend-code` | Regenerate and resend verification code |
 
-
-- **Task**
-| Method | Endpoint                | Description                                  |
-| ------ | --------------------    | -------------------------------------------- |
-| POST   | `/api/task`             | Create a new task                            |
-| POST   | `/api/task/:taskId`     | Update a task (protected)                    |
+### **Task Module**
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/task` | Create a new task instance |
+| `PATCH` | `/api/task/:taskId` | Update task details (Protected) |
+| `GET` | `/api/task/export` | Generate PDF summary of tasks |
