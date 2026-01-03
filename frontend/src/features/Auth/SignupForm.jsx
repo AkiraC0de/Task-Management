@@ -13,7 +13,7 @@ import { EMAIL_VERIFICATION_PAGE_LINK } from "../../constants/pageLinkConstant";
 
 const SignupForm = () => {
   const navigate = useNavigate()
-  const { setIsValidatingEmail, setUser } = useAuth();
+  const { setIsValidatingEmail, setUser, setAccessToken } = useAuth();
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [ errors, setErrors] = useState({})
@@ -41,6 +41,7 @@ const SignupForm = () => {
       setSignUpData(SIGNUP_DATA_DEFAULT);
       setIsValidatingEmail(true);
       setUser({email: data.data.email});
+      setAccessToken(data.accessToken)
 
       navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.data.userId}`)
     } catch (error) {

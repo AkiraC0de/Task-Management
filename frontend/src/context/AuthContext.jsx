@@ -7,14 +7,15 @@ const AuthProvider = ({children}) => {
     const [user, setUser] = useState({});
     const [isLogin, setIsLogin] = useState(true);
     const [isValidatingEmail, setIsValidatingEmail] = useState(true);
+    const [accessToken, setAccessToken] = useState('');
 
   return (
     <AuthContext.Provider value={
       { 
         user, setUser, 
         isLogin, setIsLogin,
-        isValidatingEmail, setIsValidatingEmail
-
+        isValidatingEmail, setIsValidatingEmail,
+        accessToken, setAccessToken
       }
     }>
         {children}
