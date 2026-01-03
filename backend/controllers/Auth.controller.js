@@ -31,9 +31,13 @@ const signUp = async (req, res) => {
         // Generate the token for email validation
         await Token.create({ userId : newUser._id, token: code.toString() })
 
+        // Generate an Access token for verification
+        const accessToken = generateVerificationAccessToken(newUser)
+
         res.status(201).json({
             success: true, 
             message: `The account (${email}) have successfully registered`,
+            accessToken,
             data: {
                 userId : newUser._id,
                 email: newUser.email
@@ -74,7 +78,7 @@ const logIn = async (req, res) => {
         const refreshToken = generateRefreshToken(user);
         const accessToken = generateAccessToken(user);
         
-        // Send the access token through cookie
+        // Send the refresh token through cookie
         // to avoid access of javascript add security
         res.cookie('jwt', refreshToken, { 
             httpOnly: true,
@@ -147,6 +151,8 @@ const verifyEmail = async (req, res) => {
     try {
         // Validate if the request body has content
         if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
+
+        console.log(req.user)
 
         const {userId, token} = req.body;
 
