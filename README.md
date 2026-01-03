@@ -6,12 +6,11 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 ## CURRENT TASK
 | Category | Task | Status |
 | :--- | :--- | :---: |
-| **fullstack** | Implement an access token for email verification | On progress |
+| **Frontend** | UI/UX: Error states for OTP/Verification inputs | On progress |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
 | **Backend** | SMTP Integration for Email Dispatch (Nodemailer) | Pending |
 | **Frontend** | Guarded Routes for Email Verification | Pending|
 | **Fullstack** | Secure Password Reset (Token-based) | Pending |
-| **Frontend** | UI/UX: Error states for OTP/Verification inputs | Pending |
 
 ## Features (UNUPDATED)
 - User authentication with JWT (signup, login, logout)
@@ -37,8 +36,8 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 | `POST` | `/api/auth/login` | Authenticate user & issue JWT |
 | `POST` | `/api/auth/logout` | Revoke tokens & clear session |
 | `GET` | `/api/auth/refresh` | Rotate access token using Refresh Token |
-| `POST` | `/api/auth/verify-email` | Validate account via email token |
-| `POST` | `/api/auth/resend-code` | Regenerate and resend verification code |
+| `POST` | `/api/auth/verify-email` | Validate account via email token (Protected with access token) |
+| `POST` | `/api/auth/resend-code` | Regenerate and resend verification code (Protected with access token) |
 
 ### **Task Module**
 | Method | Endpoint | Description |
