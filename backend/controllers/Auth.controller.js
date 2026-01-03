@@ -22,7 +22,7 @@ const signUp = async (req, res) => {
 
         // Verify if the email has not been registered
         const isRegistered = await User.findOne({email});
-        if(isRegistered) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email '});
+        if(isRegistered) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email'});
 
         // Create the unverified account
         const newUser = await User.create({firstName, lastName, email, password, profileImage });
