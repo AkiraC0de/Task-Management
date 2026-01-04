@@ -167,7 +167,7 @@ const verifyEmail = async (req, res) => {
         if(validToken.token !== token) return res.status(400).json({success: false, message: 'Incorrect Code'});
 
         // Update the user data to verified and delete the token from the
-        const user = await User.findByIdAndUpdate(req.body.userId, { isVerified: true });
+        const user = await User.findByIdAndUpdate(userId, { isVerified: true });
         await validToken.deleteOne();
         res.status(200).json({
             success : true, 
