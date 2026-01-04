@@ -181,10 +181,7 @@ const verifyEmail = async (req, res) => {
 }
 
 const verifyEmailResend = async (req, res) => {
-    // Validate if the request body has content
-    if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
-
-    // Validate if the userId Exist in the request body
+    // Validate if the userId Exist 
     const userId = req.user._id
     if(!userId) return res.status(400).json({success: false, message: 'Missing user ID'});
 
@@ -204,9 +201,7 @@ const verifyEmailResend = async (req, res) => {
     await prevToken.deleteOne();
 
     const generatedToken = generateSixDigitCode().toString()
-    const newToken = (await Token.create({userId, token: generatedToken})).populate('userId');
-
-    console.log(newToken)
+    const newToken = await Token.create({userId, token: generatedToken});
 
     // SHOULD HAVE AN EMAIL SENDER
 
