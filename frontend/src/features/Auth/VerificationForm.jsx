@@ -15,6 +15,7 @@ const RESEND_CODE_COOLDOWN = 120; // 120 seconds
 
 const VerificationForm = () => {
   const navigate = useNavigate()
+  const {setIsValidatingEmail} = useAuth()
   const [code, setCode] = useState(new Array(CODE_LENGTH).fill(""));
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -36,9 +37,6 @@ const VerificationForm = () => {
         token : codeInput.code,
         userId : "TESST" // TESTING VALUE
       }, accessToken);
-
-      //REQURIES AN UPDATE
-      console.log(response)
 
       navigate(LOGIN_PAGE_LINK, {replace : true});
     } catch (error) {
@@ -102,7 +100,11 @@ const VerificationForm = () => {
               </>
           }
         </PrimaryButton>
-        <ResendCode countdownSec={RESEND_CODE_COOLDOWN}/>
+        <ResendCode 
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          countdownSec={RESEND_CODE_COOLDOWN}
+        />
       </div>
     </form>
   )

@@ -183,7 +183,8 @@ const verifyEmail = async (req, res) => {
 const verifyEmailResend = async (req, res) => {
     // Validate if the userId Exist 
     const userId = req.user._id
-    if(!userId) return res.status(400).json({success: false, message: 'Missing user ID'});
+    const userEmail = req.user.email
+    if(!userId || !userEmail) return res.status(400).json({success: false, message: 'Missing required data'});
 
     // Validate if the previous token does exist in the DB
     const prevToken = await Token.findOne({userId});
@@ -200,13 +201,14 @@ const verifyEmailResend = async (req, res) => {
     // Delete the old Token
     await prevToken.deleteOne();
 
-    const generatedToken = generateSixDigitCode().toString()
+    const generatedToken = generateSixDigitCode().toString();
+    const newAccessToken = generateVerificationAccessToken(req.user);
     const newToken = await Token.create({userId, token: generatedToken});
 
     // SHOULD HAVE AN EMAIL SENDER
 
     // THIS REQUIRES the email to be also sent within the message
-    res.status(200).json({success: true, message: 'New Code has been sent to your email'})
+    res.status(200).json({success: true, message: 'New Code has been sent to your email', accessToken: newAccessToken})
 
 }
 

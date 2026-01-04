@@ -4,10 +4,9 @@ import { useParams } from "react-router-dom"
 import { getErrorMessage } from "../../utils/errorHandler";
 import useAuth from "../../hooks/useAuth";
 
-const ResendCode = ({countdownSec = 0}) => {
+const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
   const [countdown, setCountdown] = useState(countdownSec);
-  const [isLoading, setIsLoading] = useState(false);
-  const {accessToken} = useAuth()
+  const {accessToken, setAccessToken} = useAuth()
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -23,16 +22,17 @@ const ResendCode = ({countdownSec = 0}) => {
 
   const handleResetCode = useCallback(async () => {
     if(countdown > 0) return
-    console.log("TEST")
     setIsLoading(true);
     try {
-      const response = await emailValidationResendCode(accessToken)
+      const {data} = await emailValidationResendCode(accessToken)
 
-      // SHOULD RESET
-      console.log(response)
+      console.log(data)
+
+      setAccessToken(data.accessToken)
+      setCountdown(countdownSec)
+
     } catch (error) {
       const message = getErrorMessage(error);
-
       console.log(message)
     } finally {
       setIsLoading(false)
@@ -44,14 +44,19 @@ const ResendCode = ({countdownSec = 0}) => {
       <p className="flex gap-1">
         Didn't recieve a code?
         <button 
-          className="text-secondary-text bg-amber-200 font-semibold cursor-pointer"
+          className="text-secondary-tex font-semibold cursor-pointer"
           disabled={countdown > 0 || isLoading}
           type="button"
           onClick={handleResetCode}
         >
           Resend Code 
         </button>
-        in <span className="font-semibold">{countdown}s</span>
+        {
+          countdown > 0 &&
+          <>
+            in <span className="font-semibold">{countdown}s</span>
+          </>
+        }
       </p>
     </div>
   )
