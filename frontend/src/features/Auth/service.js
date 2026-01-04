@@ -21,8 +21,8 @@ export const validateUserEmail = (credentials, token) => {
     })
 }
 
-export const emailValidationResendCode = (credentials, token) => {
-    return api.post('api/auth/verify-email-resend', credentials, {
+export const emailValidationResendCode = (token) => {
+    return api.get('api/auth/verify-email-resend', {
         headers: {
             'Authorization': `Bearer ${token}`
         }

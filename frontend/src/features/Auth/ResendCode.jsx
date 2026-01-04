@@ -22,12 +22,11 @@ const ResendCode = ({countdownSec = 0}) => {
   }, [countdown])
 
   const handleResetCode = useCallback(async () => {
-    console.log("WORK")
     if(countdown > 0) return
     console.log("TEST")
     setIsLoading(true);
     try {
-      const response = await emailValidationResendCode({userId}, accessToken)
+      const response = await emailValidationResendCode(accessToken)
 
       // SHOULD RESET
       console.log(response)
