@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react"
 import { emailValidationResendCode } from "./service";
-import { useParams } from "react-router-dom"
 import { getErrorMessage } from "../../utils/errorHandler";
 import useAuth from "../../hooks/useAuth";
 
@@ -25,9 +24,6 @@ const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
     setIsLoading(true);
     try {
       const {data} = await emailValidationResendCode(accessToken)
-
-      console.log(data)
-
       setAccessToken(data.accessToken)
       setCountdown(countdownSec)
 

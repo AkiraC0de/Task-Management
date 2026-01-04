@@ -52,6 +52,9 @@ const VerificationForm = () => {
     if (isNaN(value)) return; // Only allow numbers
     if (value === " ") return // do not allow space
 
+    // Reset the errors 
+    setError('')
+
     const newCode = [...code];
     // Take only the last character (prevents multiple digits in one box)
     newCode[index] = value.substring(value.length - 1);
@@ -74,7 +77,7 @@ const VerificationForm = () => {
       <div className="flex justify-center gap-3 my-4">
       {code.map((digit, index) => (
           <input
-            className="border-2 border-secondary-text/50 focus:outline-3 focus:outline-primary w-10 text-center text-xl h-14 rounded-lg"
+            className={`${error ? "border-3 border-red-400 text-red-400" : "focus:outline-3 focus:outline-primary border-2 border-secondary-text/50"}  w-10 text-center text-xl h-14 rounded-lg`}
             key={index}
             type="text"
             inputMode="numeric"

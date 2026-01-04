@@ -6,11 +6,11 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 ## CURRENT TASK
 | Category | Task | Status |
 | :--- | :--- | :---: |
-| **Frontend** | UI/UX: Error states for OTP/Verification inputs | On progress |
+| **Frontend** | Established the dashboard page | On progess |
+| **Fullstack** | Secure Password Reset (Token-based) | Pending |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
 | **Backend** | SMTP Integration for Email Dispatch (Nodemailer) | Pending |
-| **Frontend** | Guarded Routes for Email Verification | Pending|
-| **Fullstack** | Secure Password Reset (Token-based) | Pending |
+
 
 ## Features (UNUPDATED)
 - User authentication with JWT (signup, login, logout)
