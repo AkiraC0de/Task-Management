@@ -12,6 +12,7 @@ import { LOGIN_DATA_DEFAULT } from "../../constants/authConstant";
 import KeepLoginInput from "./KeepLoginInput";
 import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
 import Spinner from "../../components/Spinner";
+import { DASHBOARD_PAGE_LINK } from "../../constants/pageLinkConstant";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -39,14 +40,12 @@ const LoginForm = () => {
 
     setIsLoading(true);
     try {
-      const response = await loginUser(loginData);
+      const {data} = await loginUser(loginData);
 
-      console.log(response)
-
-      setUser(response.data.data);
+      setUser(data.data);
       setIsLogin(true);
-      // THIS NEED TO BE UPDATE WHEN THE DASHBOARD PAGE HAS BEEN ESTABLISHED
-      navigate('/')
+
+      navigate(DASHBOARD_PAGE_LINK)
     } catch (error) {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);

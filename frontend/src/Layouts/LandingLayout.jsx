@@ -8,7 +8,9 @@ const LandingLayout = () => {
       <main className="flex-1 overflow-auto flex flex-col">
         <Outlet />
       </main>
-      <footer>a</footer>
+      <footer>
+        
+      </footer>
     </div>
   )
 }
