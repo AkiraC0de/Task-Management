@@ -12,6 +12,30 @@
 
 html {
   font-family: "Poppins", sans-serif;
+
+  /* CUSTOM SCROLL BAR */
+  scrollbar-width: thin;
+  scrollbar-color: #adb1b5 transparent; /* thumb color | track color */
+}
+
+html::-webkit-scrollbar {
+  width: 8px;      /* Width of the vertical scrollbar */
+  height: 8px;     /* Height of the horizontal scrollbar */
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent; /* Makes the track blend into the background */
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: #d1d5db; /* Tailwind gray-300 */
+  border-radius: 20px;       /* Roundness of the thumb */
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af; 
 }
 
 @keyframes fadeUp {
