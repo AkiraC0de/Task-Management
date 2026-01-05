@@ -17,7 +17,7 @@ const Footer = () => {
           </nav>
 
           <p className="text-sm text-gray-400">
-            &copy; {currentYear} GTask Inc. All rights reserved.
+            &copy; {currentYear} AkiraCode. All rights reserved.
           </p>
           
         </div>
