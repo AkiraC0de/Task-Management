@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import Header from "../features/Landing/Header"
+import Footer from "../features/Landing/Footer"
 
 const LandingLayout = () => {
   return (
@@ -8,9 +9,7 @@ const LandingLayout = () => {
       <main className="flex-1 overflow-auto flex flex-col">
         <Outlet />
       </main>
-      <footer>
-        
-      </footer>
+      <Footer/>
     </div>
   )
 }

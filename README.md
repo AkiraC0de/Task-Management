@@ -6,8 +6,8 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 ## CURRENT TASK
 | Category | Task | Status |
 | :--- | :--- | :---: |
+| **Backend** | SMTP Integration for Email Dispatch (Nodemailer) | on progress |
 | **Frontend** | Established the dashboard page | On progess |
-| **Frontend** | Add a Footer for landing layout | On progess |
 | **Fullstack** | Secure Password Reset (Token-based) | Pending |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
 | **Backend** | SMTP Integration for Email Dispatch (Nodemailer) | Pending |
