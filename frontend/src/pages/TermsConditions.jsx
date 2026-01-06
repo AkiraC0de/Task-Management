@@ -1,24 +1,13 @@
-import ContentSections from "../components/ContentSections";
+import ContentSections from "../features/About/ContentSections";
+import Header from "../features/About/Header";
 
 const TermsConditions = () => {
   const lastUpdated = "January 6, 2026";
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 py-12 px-6 lg:px-8">
+    <div className="min-h-screen bg-white text-gray-800 py-8 px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        
-        <header className="mb-12 border-b border-gray-100 pb-8">
-          <button 
-            onClick={() => window.history.back()}
-            className="text-primary hover:underline mb-6 flex items-center gap-2 font-medium"
-          >
-            ← Back to GTask
-          </button>
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-            Terms of Service
-          </h1>
-          <p className="text-gray-500 italic">Last Updated: {lastUpdated}</p>
-        </header>
+        <Header pageTitle="Terms of Service" lastUpdated={lastUpdated}/>
 
         <div className="space-y-10 leading-relaxed text-gray-700">
           <ContentSections header="1. Acceptance of Terms">
@@ -67,7 +56,6 @@ const TermsConditions = () => {
             These terms are governed by the laws of the jurisdiction in which AkiraCode operates, 
             without regard to its conflict of law provisions.
           </ContentSections>
-
         </div>
       </div>
     </div>
