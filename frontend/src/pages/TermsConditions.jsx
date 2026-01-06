@@ -1,3 +1,5 @@
+import ContentSections from "../components/ContentSections";
+
 const TermsConditions = () => {
   const lastUpdated = "January 6, 2026";
 
@@ -19,23 +21,16 @@ const TermsConditions = () => {
         </header>
 
         <div className="space-y-10 leading-relaxed text-gray-700">
-          
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-3">1. Acceptance of Terms</h2>
-            <p>
-              By accessing or using <span className="font-semibold">GTask</span>, provided by 
+          <ContentSections header="1. Acceptance of Terms">
+             By accessing or using <span className="font-semibold">GTask</span>, provided by 
               <span className="font-semibold text-primary"> AkiraCode</span>, you agree to be bound by these Terms of Service. 
               If you do not agree to these terms, please do not use the service.
-            </p>
-          </section>
+          </ContentSections>
 
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-3">2. Description of Service</h2>
-            <p>
-              GTask is a task-management platform designed to help users organize group and individual tasks. 
+          <ContentSections header="2. Description of Service">
+            GTask is a task-management platform designed to help users organize group and individual tasks. 
               We reserve the right to modify, suspend, or discontinue any part of the service at any time.
-            </p>
-          </section>
+          </ContentSections>
 
           <section>
             <h2 className="text-xl font-bold text-primary mb-3">3. User Accounts</h2>
@@ -57,30 +52,21 @@ const TermsConditions = () => {
             </ul>
           </section>
 
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-3">5. Intellectual Property</h2>
-            <p>
-              The GTask interface, logo, and brand are the property of AkiraCode. However, 
-              <span className="font-semibold text-gray-900"> you retain full ownership</span> of the data and task 
-              content you upload to the platform.
-            </p>
-          </section>
+          <ContentSections header="5. Intellectual Property">
+            The GTask interface, logo, and brand are the property of AkiraCode. However, 
+            <span className="font-semibold text-gray-900"> you retain full ownership</span> of the data and task 
+            content you upload to the platform.
+          </ContentSections>
 
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-3">6. Limitation of Liability</h2>
-            <p className="text-sm text-gray-500">
-              GTask is provided "as is" without warranties of any kind. AkiraCode shall not be liable for 
-              any indirect, incidental, or consequential damages resulting from your use of the service.
-            </p>
-          </section>
+          <ContentSections header="6. Limitation of Liability">
+            GTask is provided "as is" without warranties of any kind. AkiraCode shall not be liable for 
+            any indirect, incidental, or consequential damages resulting from your use of the service.
+          </ContentSections>
 
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-3">7. Governing Law</h2>
-            <p>
-              These terms are governed by the laws of the jurisdiction in which AkiraCode operates, 
-              without regard to its conflict of law provisions.
-            </p>
-          </section>
+          <ContentSections header="7. Governing Law">
+            These terms are governed by the laws of the jurisdiction in which AkiraCode operates, 
+            without regard to its conflict of law provisions.
+          </ContentSections>
 
         </div>
       </div>
