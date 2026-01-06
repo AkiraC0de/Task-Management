@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { PRIVACY_AND_POLICY_PAGE_LINK } from "../../constants/pageLinkConstant";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -11,9 +14,9 @@ const Footer = () => {
           </div>
 
           <nav className="flex gap-6 text-sm font-medium text-gray-500">
-            <a href="#" className="hover:text-blue-600 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-blue-600 transition-colors">Contact</a>
+            <Link to={PRIVACY_AND_POLICY_PAGE_LINK} className="hover:text-blue-600 transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-blue-600 transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-blue-600 transition-colors">Contact</Link>
           </nav>
 
           <p className="text-sm text-gray-400">

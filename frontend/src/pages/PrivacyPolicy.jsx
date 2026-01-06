@@ -1,0 +1,78 @@
+const PrivacyPolicy = () => {
+  const lastUpdated = "January 6, 2026";
+
+  return (
+    <div className="min-h-screen bg-white text-gray-800 py-12 px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <header className="mb-12 border-b border-gray-100 pb-8">
+          <button 
+            onClick={() => window.history.back()}
+            className="text-primary hover:underline mb-6 cursor-pointer flex items-center gap-2 font-medium"
+          >
+            ← Back to GTask
+          </button>
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+            Privacy Policy
+          </h1>
+          <p className="text-gray-500 italic">Last Updated: {lastUpdated}</p>
+        </header>
+
+        <div className="space-y-10 leading-relaxed text-gray-700">
+          
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-3">1. Introduction</h2>
+            <p>
+              Welcome to GTask. Your privacy is critically important to us. This Privacy Policy explains how 
+              <span className="font-semibold"> AkiraCode</span> ("we," "us," or "our") collects, uses, and shares information 
+              about you when you use our web application.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-3">2. Information We Collect</h2>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><span className="font-semibold">Account Data:</span> Your email and name for authentication and verification.</li>
+              <li><span className="font-semibold">Task Data:</span> Titles, group names, and descriptions you create to organize your workflow.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-3">3. Use of Data</h2>
+            <p>
+              We use your data strictly to provide the GTask service, verify your account, and improve 
+              user experience. <span className="text-gray-900 font-medium underline decoration-primary/30">We do not sell your personal data to third parties.</span>
+            </p>
+          </section>
+
+          <section className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+            <h2 className="text-xl font-bold text-primary mb-3">4. Security</h2>
+            <p>
+              GTask employs industry-standard SSL/TLS encryption. While we implement strong security measures, 
+              no method of electronic storage is 100% secure.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-3">5. Your Rights</h2>
+            <p>
+              Under GDPR and CCPA, you have the right to access, update, or delete your data. 
+              You may close your account at any time to remove your data from our active databases.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-3">6. Contact</h2>
+            <p>
+              For questions regarding this policy, reach out via the AkiraCode GitHub profile or 
+              contact our support channel.
+            </p>
+          </section>
+
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default PrivacyPolicy
