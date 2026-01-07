@@ -4,14 +4,13 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 
 const  { generateAccessToken, generateRefreshToken, generateVerificationAccessToken} = require('../utils/tokenJWT');
-const { generateSixDigitCode } = require('../utils/utils');
+const { generateSixDigitCode, generateEmailCodeVerificationHTML } = require('../utils/utils');
+const { sendEmail } = require('../utils/mailer');
 
 const signUp = async (req, res) => {
     try {
-        // Verify if the request body has content
         if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
 
-        // Verify the datas if complete
         const { firstName, lastName, email, password, profileImage } = req.body;
         if(!email || !password || !firstName || !lastName) return res.status(400).json({success: false, message: 'Missing data', reqBody: req.body});
 
@@ -19,20 +18,22 @@ const signUp = async (req, res) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)) return res.status(400).json({success: false, message: `Invalid email format: ${email}`, errorAt: 'email'});
 
-
         // Verify if the email has not been registered
         const isRegistered = await User.findOne({email});
         if(isRegistered) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email'});
 
         // Create the unverified account
         const newUser = await User.create({firstName, lastName, email, password, profileImage });
-        const code = generateSixDigitCode();
+        const verificationCode = generateSixDigitCode().toString();
 
         // Generate the token for email validation
-        await Token.create({ userId : newUser._id, token: code.toString() })
+        await Token.create({ userId : newUser._id, token: verificationCode });
 
-        // Generate an Access token for verification
-        const accessToken = generateVerificationAccessToken(newUser)
+        const emailSubject = "Email Verification";
+        const emailHtml = generateEmailCodeVerificationHTML(verificationCode, firstName, lastName);
+        await sendEmail(email, emailSubject, emailHtml);
+
+        const accessToken = generateVerificationAccessToken(newUser);
 
         res.status(201).json({
             success: true, 
@@ -52,13 +53,9 @@ const signUp = async (req, res) => {
 
 const logIn = async (req, res) => {
     try {
-        // Validate if the request body has content
         if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
 
-        // Extact the only field needed in req.body
         const { email, password} = req.body;
-
-        // Verify the datas if complete
         if(!email || !password) return res.status(400).json({success: false, message: 'Missing data'});
 
         // Find the Email in the database
