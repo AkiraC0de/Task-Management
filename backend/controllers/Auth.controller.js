@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 
 const  { generateAccessToken, generateRefreshToken, generateVerificationAccessToken} = require('../utils/tokenJWT');
-const { generateSixDigitCode, generateEmailCodeVerificationHTML } = require('../utils/utils');
+const { generateSixDigitCode, generateCodeVerificationHTML, generateResendCodeHTML } = require('../utils/utils');
 const { sendEmail } = require('../utils/mailer');
 
 const signUp = async (req, res) => {
@@ -29,8 +29,8 @@ const signUp = async (req, res) => {
         // Generate the token for email validation
         await Token.create({ userId : newUser._id, token: verificationCode });
 
-        const emailSubject = "Email Verification";
-        const emailHtml = generateEmailCodeVerificationHTML(verificationCode, firstName, lastName);
+        const emailSubject = "Email Verification Code";
+        const emailHtml = generateCodeVerificationHTML(verificationCode, firstName, lastName);
         await sendEmail(email, emailSubject, emailHtml);
 
         const accessToken = generateVerificationAccessToken(newUser);
@@ -61,7 +61,6 @@ const logIn = async (req, res) => {
         // Find the Email in the database
         const user = await User.findOne({email}).select('+password');
 
-        // Verify if the email does exist in the database
         if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet.', errorAt: "email"});
 
         // Verify if the account has been verified
@@ -187,25 +186,28 @@ const verifyEmailResend = async (req, res) => {
     const prevToken = await Token.findOne({userId});
     if(!prevToken) return res.status(400).json({success: false, message: 'Session Expired'});
 
+    // Validate if the previous token has been sent 2 minutes ago before sending a new one
     const currentTime = new Date();
     const timeDifference = currentTime - prevToken.createdAt; // Result is in milliseconds
     const twoMinutesInMs = 2 * 60 * 1000;
-
-    // Validate if the previous token has been sent 2 minutes ago before sending a new one
     const remainingSecs = Math.ceil((twoMinutesInMs - timeDifference) / 1000);
+
     if(timeDifference < twoMinutesInMs) return res.status(400).json({success: false, message: `Please wait ${remainingSecs} seconds before requesting a new code.`});
 
     // Delete the old Token
     await prevToken.deleteOne();
 
     const generatedToken = generateSixDigitCode().toString();
+    await Token.create({userId, token: generatedToken});
+
+    // Send the Verification Code via email
+    const emailSubject = "New email Verification Code";
+    const emailHtml = generateResendCodeHTML(generatedToken);
+    await sendEmail(userEmail, emailSubject, emailHtml);
+
     const newAccessToken = generateVerificationAccessToken(req.user);
-    const newToken = await Token.create({userId, token: generatedToken});
 
-    // SHOULD HAVE AN EMAIL SENDER
-
-    // THIS REQUIRES the email to be also sent within the message
-    res.status(200).json({success: true, message: 'New Code has been sent to your email', accessToken: newAccessToken})
+    res.status(200).json({success: true, message: `New Code has been sent to your email (${userEmail})`, accessToken: newAccessToken})
 
 }
 
