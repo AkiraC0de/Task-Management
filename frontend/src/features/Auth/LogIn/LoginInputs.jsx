@@ -1,5 +1,5 @@
 import { Mail, Lock } from 'lucide-react'
-import InputField from '../../components/InputField'
+import InputField from '../../../components/InputField'
 
 const LoginInputs = ({loginData, errors, InputOnchangeHandler}) => {
   return (

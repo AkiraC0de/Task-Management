@@ -1,15 +1,12 @@
 import { Navigate, useNavigate, useBlocker } from "react-router-dom";
 import useAuth from "../hooks/useAuth"
 import { HOME_PAGE_LINK } from "../constants/pageLinkConstant";
-import { useEffect} from "react";
-import VerificationHeader from "../features/Auth/VerificationHeader";
-import VerificationForm from "../features/Auth/VerificationForm";
+import VerificationHeader from "../features/Auth/EmailVerification/VerificationHeader";
+import VerificationForm from "../features/Auth/EmailVerification/VerificationForm";
 import useWarningLeave from "../hooks/useWarningLeave";
 
-
 const EmailVerification = () => {
-  const navigate = useNavigate();
-  const { isValidatingEmail, setIsValidatingEmail, user } = useAuth();
+  const { isValidatingEmail, user } = useAuth();
 
   // Warn the user before page back or refresh
   useWarningLeave();

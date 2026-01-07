@@ -1,14 +1,14 @@
 import { useState } from "react"
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../../components/PrimaryButton";
 import { ChevronRight } from "lucide-react"
-import { validateVerificationCode } from "../../utils/formValidation";
+import { validateVerificationCode } from "../../../utils/formValidation";
 import { useNavigate, useParams } from "react-router-dom";
-import { validateUserEmail } from "./service";
-import { getErrorMessage } from "../../utils/errorHandler";
-import Spinner from "../../components/Spinner";
-import { LOGIN_PAGE_LINK } from "../../constants/pageLinkConstant";
+import { validateUserEmail } from "../service";
+import { getErrorMessage } from "../../../utils/errorHandler";
+import Spinner from "../../../components/Spinner";
+import { LOGIN_PAGE_LINK } from "../../../constants/pageLinkConstant";
 import ResendCode from "./ResendCode";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 
 const CODE_LENGTH = 6;
 const RESEND_CODE_COOLDOWN = 120; // 120 seconds

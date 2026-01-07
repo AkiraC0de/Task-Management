@@ -1,6 +1,5 @@
-import { Mail, Lock, UserPen } from 'lucide-react'
-import InputField from '../../components/InputField'
-import { handleChangeObject } from '../../utils/handler'
+import { Mail, Lock } from 'lucide-react'
+import InputField from '../../../components/InputField'
 
 const SignupInputs = ({signUpData, InputOnchangeHandler, errors}) => {
   return (

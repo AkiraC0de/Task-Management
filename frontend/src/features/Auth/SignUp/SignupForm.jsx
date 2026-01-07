@@ -1,15 +1,15 @@
 import { useState, useCallback } from "react";
 import SignupInputs from "./SignupInputs";
-import PrimaryButton from "../../components/PrimaryButton";
-import { replace, useNavigate } from "react-router-dom";
-import { getErrorMessage, getErrorSource } from "../../utils/errorHandler";
-import { validateSignUpForm } from "../../utils/formValidation";
-import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
-import { signupUser } from "./service";
-import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
-import Spinner from "../../components/Spinner";
-import useAuth from "../../hooks/useAuth"
-import { EMAIL_VERIFICATION_PAGE_LINK } from "../../constants/pageLinkConstant";
+import PrimaryButton from "../../../components/PrimaryButton";
+import { useNavigate } from "react-router-dom";
+import { getErrorMessage, getErrorSource } from "../../../utils/errorHandler";
+import { validateSignUpForm } from "../../../utils/formValidation";
+import { SIGNUP_DATA_DEFAULT } from "../../../constants/authConstant";
+import { signupUser } from "../service";
+import { handleChangeObject, onChangeRemoveError } from '../../../utils/handler'
+import Spinner from "../../../components/Spinner";
+import useAuth from "../../../hooks/useAuth"
+import { EMAIL_VERIFICATION_PAGE_LINK } from "../../../constants/pageLinkConstant";
 import SignUpAgreement from "./SignUpAgreement";
 
 const SignupForm = () => {
@@ -20,7 +20,6 @@ const SignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   
-
   const handleInputsOnChance = (e) => {
     handleChangeObject(e, setSignUpData);
     onChangeRemoveError(e, errors, setErrors);

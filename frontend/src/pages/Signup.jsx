@@ -1,5 +1,5 @@
 import AuthHeader from "../features/Auth/AuthHeader"
-import SignupForm from "../features/Auth/SignupForm"
+import SignupForm from "../features/Auth/SignUp/SignupForm"
 import Hero from "../features/Auth/Hero"
 import SwitchForm from "../features/Auth/SwitchForm"
 

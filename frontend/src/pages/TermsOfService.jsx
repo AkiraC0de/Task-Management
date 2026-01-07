@@ -1,7 +1,7 @@
 import ContentSections from "../features/About/ContentSections";
 import Header from "../features/About/Header";
 
-const TermsConditions = () => {
+const TermsOfService = () => {
   const lastUpdated = "January 6, 2026";
 
   return (
@@ -61,4 +61,4 @@ const TermsConditions = () => {
     </div>
   );
 };
-export default TermsConditions
+export default TermsOfService

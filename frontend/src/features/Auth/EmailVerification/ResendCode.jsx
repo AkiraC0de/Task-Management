@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react"
-import { emailValidationResendCode } from "./service";
-import { getErrorMessage } from "../../utils/errorHandler";
-import useAuth from "../../hooks/useAuth";
+import { emailValidationResendCode } from "../service";
+import { getErrorMessage } from "../../../utils/errorHandler";
+import useAuth from "../../../hooks/useAuth";
 
 const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
   const [countdown, setCountdown] = useState(countdownSec);
