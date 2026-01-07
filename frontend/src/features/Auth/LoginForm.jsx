@@ -67,11 +67,7 @@ const LoginForm = () => {
         InputOnchangeHandler={handleInputsOnChance}
         errors={errors}
       />
-      <div className="flex justify-between mt-2 mb-4">
-        <KeepLoginInput
-          value={loginData.keepMeLogin}
-          onChange={(e) => setLoginData(prev => ({...prev, keepMeLogin: e.target.value }))}
-        />
+      <div className="flex justify-end mt-2 mb-4">
         <ForgotPassword/>
       </div>
       <div className="my-2">

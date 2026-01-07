@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import SignupInputs from "./SignupInputs";
 import PrimaryButton from "../../components/PrimaryButton";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import { getErrorMessage, getErrorSource } from "../../utils/errorHandler";
 import { validateSignUpForm } from "../../utils/formValidation";
 import { SIGNUP_DATA_DEFAULT } from "../../constants/authConstant";
@@ -10,14 +10,16 @@ import { handleChangeObject, onChangeRemoveError } from '../../utils/handler'
 import Spinner from "../../components/Spinner";
 import useAuth from "../../hooks/useAuth"
 import { EMAIL_VERIFICATION_PAGE_LINK } from "../../constants/pageLinkConstant";
+import SignUpAgreement from "./SignUpAgreement";
 
 const SignupForm = () => {
   const navigate = useNavigate()
   const { setIsValidatingEmail, setUser, setAccessToken } = useAuth();
 
-  const [ isLoading, setIsLoading ] = useState(false);
-  const [ errors, setErrors] = useState({})
-  const [signUpData, setSignUpData] = useState(SIGNUP_DATA_DEFAULT)
+  const [signUpData, setSignUpData] = useState(SIGNUP_DATA_DEFAULT);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  
 
   const handleInputsOnChance = (e) => {
     handleChangeObject(e, setSignUpData);
@@ -43,7 +45,7 @@ const SignupForm = () => {
       setUser({email: data.data.email});
       setAccessToken(data.accessToken)
 
-      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.data.userId}`)
+      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.data.userId}`, {replace: true})
     } catch (error) {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);
@@ -65,12 +67,13 @@ const SignupForm = () => {
         InputOnchangeHandler={handleInputsOnChance}
         errors={errors}
       />
+      <SignUpAgreement/>
       <PrimaryButton 
         type='submit'
         className='w-full mt-4 flex justify-center items-center'
         disabled={isLoading}
       >
-        {isLoading ? <Spinner/> : "Sign Up"}
+        {isLoading ? <Spinner/> : "Sign up"}
       </PrimaryButton>
     </form>
   )
