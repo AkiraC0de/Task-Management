@@ -27,7 +27,7 @@ const signUp = async (req, res) => {
         const verificationCode = generateSixDigitCode().toString();
 
         // Generate the token for email validation
-        await Token.create({ userId : newUser._id, token: verificationCode });
+        await Token.create({ user : newUser._id, token: verificationCode });
 
         const emailSubject = "Email Verification Code";
         const emailHtml = generateCodeVerificationHTML(verificationCode, firstName, lastName);
@@ -154,7 +154,7 @@ const verifyEmail = async (req, res) => {
         // Validate if there are missing data
         if(!userId || !token) return res.status(400).json({success: false, message: 'Missing required data'});
 
-        const validToken = await Token.findOne({userId});
+        const validToken = await Token.findOne({user: userId});
 
         // Validate if the token for the user does exist in the DB
         if(!validToken) return res.status(400).json({success: false, message: 'Code Expired'});
@@ -198,7 +198,7 @@ const verifyEmailResend = async (req, res) => {
     await prevToken.deleteOne();
 
     const generatedToken = generateSixDigitCode().toString();
-    await Token.create({userId, token: generatedToken});
+    await Token.create({user: userId, token: generatedToken});
 
     // Send the Verification Code via email
     const emailSubject = "New email Verification Code";
