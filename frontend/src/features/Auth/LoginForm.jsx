@@ -45,7 +45,7 @@ const LoginForm = () => {
       setUser(data.data);
       setIsLogin(true);
 
-      navigate(DASHBOARD_PAGE_LINK)
+      navigate(DASHBOARD_PAGE_LINK, {replace: true})
     } catch (error) {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);
