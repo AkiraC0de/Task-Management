@@ -15,11 +15,11 @@ const RESEND_CODE_COOLDOWN = 120; // 120 seconds
 
 const VerificationForm = () => {
   const navigate = useNavigate()
-  const {setIsValidatingEmail} = useAuth()
+
+  const {token} = useParams();
   const [code, setCode] = useState(new Array(CODE_LENGTH).fill(""));
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const {accessToken} = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,10 +33,11 @@ const VerificationForm = () => {
 
     setIsLoading(true);
     try {
-      const response = await validateUserEmail({
+      await validateUserEmail({
         token : codeInput.code,
-        userId : "TESST" // TESTING VALUE
-      }, accessToken);
+      }, token);
+
+      // SHOULD HAVE BE ABLE TO NOTIF THE USER THAT THEIR ACCOUNT HAS BEEN VERIFIED
 
       navigate(LOGIN_PAGE_LINK, {replace : true});
     } catch (error) {

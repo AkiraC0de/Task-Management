@@ -30,7 +30,7 @@ const AppRoutes = () => {
         </Route>
       </Route>
       
-      <Route path={`${EMAIL_VERIFICATION_PAGE_LINK}/:userId`} element={<EmailVerification/>}/>
+      <Route path={`${EMAIL_VERIFICATION_PAGE_LINK}/:token`} element={<EmailVerification/>}/>
       <Route path="*" element={<NotFound/>}/>
     </Routes>
   )
