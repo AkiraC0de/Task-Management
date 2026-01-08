@@ -15,7 +15,7 @@ const TogglePasswordButton = ({showPassword, toggle}) => {
   )
 }
 
-const InputField = ({type = 'text', label, icon, error, ...props}) => {
+const InputField = ({type = 'text', label, icon, className = '', error, ...props}) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPasswordType = type == "password";
   // @desk add the ability to toggle between "text" and "password" input type if the type params is set as "password"
@@ -29,7 +29,7 @@ const InputField = ({type = 'text', label, icon, error, ...props}) => {
           <input
             type={inputType}
             {...props}
-            className="outline-none w-full bg-transparent text-sm text-primary-text placeholder:text-secondary-text"
+            className={`outline-none w-full bg-transparent text-sm text-primary-text placeholder:text-secondary-text ${className}`}
           />
           { 
             isPasswordType && 
