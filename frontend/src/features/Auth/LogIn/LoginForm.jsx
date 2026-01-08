@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import LoginInputs from "./LoginInputs";
 import PrimaryButton from "../../../components/PrimaryButton";
-import ForgotPassword from "./ForgotPassword";
+import ForgotPasswordButton from "./ForgotPasswordButton";
 import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage, getErrorSource } from "../../../utils/errorHandler";
@@ -66,7 +66,7 @@ const LoginForm = () => {
         errors={errors}
       />
       <div className="flex justify-end mt-2 mb-4">
-        <ForgotPassword/>
+        <ForgotPasswordButton/>
       </div>
       <div className="my-2">
         <PrimaryButton 

@@ -1,4 +1,4 @@
-const ForgotPassword = () => {
+const ForgotPasswordButton = () => {
   return (
     <button
         type="button" 
@@ -8,4 +8,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default ForgotPasswordButton
