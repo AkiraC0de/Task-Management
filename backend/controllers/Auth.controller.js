@@ -211,6 +211,17 @@ const verifyEmailResend = async (req, res) => {
 
 }
 
+const requestResetPassword = async (req, res) => {
+    const {email} = req.body;
+    if(!email) return res.status(400).json({success: false, message: 'Missing Required data: email'});
+
+    const user = await User.findOne({email});
+    if(!user) return res.status(400).json({success: false, message: 'We cannot find your email'});
+
+    // JUST THE SET UP
+
+}
+
 module.exports = {
     signUp,
     logIn,

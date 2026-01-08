@@ -45,6 +45,16 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+// Add Time To Live (TTL) for unverified accounnts
+// expireAfterSeconds: 900 (15 minutes)
+userSchema.index(
+  { createdAt: 1 }, 
+  { 
+    expireAfterSeconds: 900, 
+    partialFilterExpression: { isVerified: false } 
+  }
+);
+
 // Security feature: 
 // Middleware to hash the password
 // before saving to the database
