@@ -27,13 +27,13 @@ const signUp = async (req, res) => {
         const verificationCode = generateSixDigitCode().toString();
 
         // Generate the token for email validation
-        await Token.create({ user : newUser._id, token: verificationCode });
+        const newVerificationToken = await Token.create({ user : newUser._id, token: verificationCode });
 
         const emailSubject = "Email Verification Code";
         const emailHtml = generateCodeVerificationHTML(verificationCode, firstName, lastName);
         await sendEmail(email, emailSubject, emailHtml);
 
-        const accessToken = generateVerificationAccessToken(newUser);
+        const accessToken = generateVerificationAccessToken(newUser, newVerificationToken._id);
 
         res.status(201).json({
             success: true, 
@@ -145,22 +145,19 @@ const refresh = (req, res) => {
 
 const verifyEmail = async (req, res) => {
     try {
-        // Validate if the request body has content
         if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
-
-        const { token } = req.body;
-        const userId = req.user._id
-
-        // Validate if there are missing data
-        if(!userId || !token) return res.status(400).json({success: false, message: 'Missing required data'});
-
-        const validToken = await Token.findOne({user: userId});
+        
+        const userTokenInput = req.body.token;
+        const userId = req.user._id;
+        const userVerificationTokenId = req.user.verificationTokenId;
+        if(!userId || !userTokenInput || !userVerificationTokenId) return res.status(400).json({success: false, message: 'Missing required data'});
 
         // Validate if the token for the user does exist in the DB
+        const validToken = await Token.findById(userVerificationTokenId);
         if(!validToken) return res.status(400).json({success: false, message: 'Code Expired'});
 
         // Validate if the token from the DB is same as the users request
-        if(validToken.token !== token) return res.status(400).json({success: false, message: 'Incorrect Code'});
+        if(validToken.token !== userTokenInput) return res.status(400).json({success: false, message: 'Incorrect Code'});
 
         // Update the user data to verified and delete the token from the
         const user = await User.findByIdAndUpdate(userId, { isVerified: true });
@@ -177,13 +174,13 @@ const verifyEmail = async (req, res) => {
 }
 
 const verifyEmailResend = async (req, res) => {
-    // Validate if the userId Exist 
-    const userId = req.user._id
-    const userEmail = req.user.email
-    if(!userId || !userEmail) return res.status(400).json({success: false, message: 'Missing required data'});
+    const userId = req.user._id;
+    const userEmail = req.user.email;
+    const userVerificationTokenId = req.user.verificationTokenId;
+    if(!userId || !userEmail || !userVerificationTokenId) return res.status(400).json({success: false, message: 'Missing required data'});
 
     // Validate if the previous token does exist in the DB
-    const prevToken = await Token.findOne({userId});
+    const prevToken = await Token.findById(userVerificationTokenId);
     if(!prevToken) return res.status(400).json({success: false, message: 'Session Expired'});
 
     // Validate if the previous token has been sent 2 minutes ago before sending a new one
@@ -198,14 +195,14 @@ const verifyEmailResend = async (req, res) => {
     await prevToken.deleteOne();
 
     const generatedToken = generateSixDigitCode().toString();
-    await Token.create({user: userId, token: generatedToken});
+    const newVerificationToken = await Token.create({user: userId, token: generatedToken});
 
     // Send the Verification Code via email
     const emailSubject = "New email Verification Code";
     const emailHtml = generateResendCodeHTML(generatedToken);
     await sendEmail(userEmail, emailSubject, emailHtml);
 
-    const newAccessToken = generateVerificationAccessToken(req.user);
+    const newAccessToken = generateVerificationAccessToken(req.user, newVerificationToken._id);
 
     res.status(200).json({success: true, message: `New Code has been sent to your email (${userEmail})`, accessToken: newAccessToken})
 
