@@ -18,11 +18,14 @@ const signUp = async (req, res) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)) return res.status(400).json({success: false, message: `Invalid email format: ${email}`, errorAt: 'email'});
 
-        // Verify if the email has not been registered
-        const isRegistered = await User.findOne({email});
-        if(isRegistered) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email'});
+        // Verify if the email is not a verified account
+        const existedUser = await User.findOne({email});
+        if(existedUser?.isVerified) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email'});
 
-        // Create the unverified account
+        // If there was an existing Unverified account, Delete the account in the database
+        if(existedUser) await existedUser.deleteOne();
+
+        // Create an unverified account
         const newUser = await User.create({firstName, lastName, email, password, profileImage });
         const verificationCode = generateSixDigitCode().toString();
 

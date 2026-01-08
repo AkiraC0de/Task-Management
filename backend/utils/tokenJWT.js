@@ -20,10 +20,9 @@ const generateVerificationAccessToken = (user, verificationTokenId) => {
     }, 
     process.env.JWT_ACCESSTOKEN,
     {
-        expiresIn: '10m'
+        expiresIn: '15m'
     })
 }
-
 
 const generateRefreshToken = (user) => {
     return jwt.sign({
