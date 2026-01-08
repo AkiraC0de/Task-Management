@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from "react"
 import { emailValidationResendCode } from "../service";
 import { getErrorMessage } from "../../../utils/errorHandler";
-import useAuth from "../../../hooks/useAuth";
+import { useNavigate, useParams } from "react-router-dom"
+import { EMAIL_VERIFICATION_PAGE_LINK } from "../../../constants/pageLinkConstant";
 
 const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
+  const navigate = useNavigate();
   const [countdown, setCountdown] = useState(countdownSec);
-  const {accessToken, setAccessToken} = useAuth()
+  const {token} = useParams()
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -23,10 +25,9 @@ const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
     if(countdown > 0) return
     setIsLoading(true);
     try {
-      const {data} = await emailValidationResendCode(accessToken)
-      setAccessToken(data.accessToken)
+      const {data} = await emailValidationResendCode(token)
       setCountdown(countdownSec)
-
+      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.accessToken}`, {replace: true})
     } catch (error) {
       const message = getErrorMessage(error);
       console.log(message)
