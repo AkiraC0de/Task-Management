@@ -12,6 +12,7 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 import TermsOfService from "../pages/TermsOfService";
 import ForgotPassword from "../pages/ForgotPassword";
+import VerficationLayout from "../Layouts/VerificationLayout";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,11 @@ const AppRoutes = () => {
         <Route path={TERMS_OF_SERVICE_PAGE_LINK} element={<TermsOfService/>}/>
       </Route>
 
+      <Route path="/" element={<VerficationLayout/>}>
+        <Route path={FORGOT_PASSWORD_PAGE_LINK} element={<ForgotPassword/>}/>
+        <Route path={`${EMAIL_VERIFICATION_PAGE_LINK}/:token`} element={<EmailVerification/>}/>
+      </Route>
+      
       {/* Protected Routes, Where it requires to be logged in before accessing */}
       <Route element={<ProtectedRoutes />}>
         <Route path={DASHBOARD_PAGE_LINK} element={<DashboardLayout/>}>
@@ -31,8 +37,6 @@ const AppRoutes = () => {
         </Route>
       </Route>
       
-      <Route path={FORGOT_PASSWORD_PAGE_LINK} element={<ForgotPassword/>}/>
-      <Route path={`${EMAIL_VERIFICATION_PAGE_LINK}/:token`} element={<EmailVerification/>}/>
       <Route path="*" element={<NotFound/>}/>
     </Routes>
   )
