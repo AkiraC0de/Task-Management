@@ -4,7 +4,7 @@ import ForgotPasswordHeader from "../features/Auth/ForgotPassword/ForgotPassword
 const ForgotPassword = () => {
   return (
     <div className="flex justify-center">
-      <div className="text-primary-text p-4 text-center max-w-90 mt-10 flex flex-col items-center bg-amber-100">
+      <div className="text-primary-text px-8 py-10 text-center max-w-90 mt-10 flex flex-col items-center md:shadow-xl rounded-lg">
         <ForgotPasswordHeader/>
         <ForgotPasswordForm/>
       </div>
