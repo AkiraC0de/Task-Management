@@ -74,7 +74,7 @@ const LoginForm = () => {
           className="w-full flex justify-center items-center"
           disabled={isLoading}
         >
-          {isLoading ? <Spinner/> : "LOGIN"}
+          {isLoading ? <Spinner/> : "Log in"}
         </PrimaryButton>
       </div>
     </form>
