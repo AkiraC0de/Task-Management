@@ -18,12 +18,25 @@ const signUp = async (req, res) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)) return res.status(400).json({success: false, message: `Invalid email format: ${email}`, errorAt: 'email'});
 
-        // Verify if the email is not a verified account
-        const existedUser = await User.findOne({email});
-        if(existedUser?.isVerified) return res.status(400).json({success: false  , message: 'The email has already been registred' , errorAt: 'email'});
+        // Check for existing user
+        const existedUser = await User.findOne({ email });
 
-        // If there was an existing Unverified account, Delete the account in the database
-        if(existedUser) await existedUser.deleteOne();
+        // If there is an existing user, and it is an unverified account
+        // Delete the account and any token that has the user reference of that account.
+        if (existedUser) {
+            if (existedUser.isVerified) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'The email has already been registered', 
+                    errorAt: 'email' 
+                });
+            }
+
+            await Promise.all([
+                Token.deleteOne({ user: existedUser._id }),
+                existedUser.deleteOne()
+            ]);
+        }
 
         // Create an unverified account
         const newUser = await User.create({firstName, lastName, email, password, profileImage });
