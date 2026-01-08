@@ -22,7 +22,7 @@ const EmailVerification = () => {
     <main className="min-w-screen flex justify-center">
       {
         !isVerified ? 
-        <div className="max-w-100 p-4 mt-14">
+        <div className="max-w-95 mt-14 px-8 py-14 md:shadow-lg rounded-lg">
           <VerificationHeader email={user.email}/>
           <VerificationForm/>
         </div> 

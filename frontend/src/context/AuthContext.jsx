@@ -6,7 +6,7 @@ export const AuthContext = createContext({});
 const AuthProvider = ({children}) => {    
     const [user, setUser] = useState({});
     const [isLogin, setIsLogin] = useState(false);
-    const [isValidatingEmail, setIsValidatingEmail] = useState(false);
+    const [isValidatingEmail, setIsValidatingEmail] = useState(true);
     const [accessToken, setAccessToken] = useState('');
 
   return (
