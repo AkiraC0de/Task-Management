@@ -6,7 +6,7 @@ import { SIGNUP_PAGE_LINK } from "../../constants/pageLinkConstant"
 
 const LinkButtons = () => {
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 anim-fade-up-delayed">
       <PrimaryButton className="px-3 pr-2 text-sm">
         <Link 
           to={SIGNUP_PAGE_LINK}
