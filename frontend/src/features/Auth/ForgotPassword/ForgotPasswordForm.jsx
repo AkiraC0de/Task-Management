@@ -25,6 +25,7 @@ const ForgotPasswordForm = () => {
         icon={<Mail/>}
         type="email"
         className="w-full mb-6"
+        placeholder="john@example.com"
       />
 
       <div>
