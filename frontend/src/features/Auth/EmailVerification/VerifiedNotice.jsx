@@ -5,17 +5,17 @@ import { LOGIN_PAGE_LINK } from "../../../constants/pageLinkConstant"
 
 const VerifiedNotice = ({email}) => {
   return (
-    <div className="max-w-100 mt-14 p-4 flex items-center flex-col">
+    <div className="max-w-100 mt-14 px-5 py-14 flex items-center flex-col md:shadow-lg rounded-lg">
       <Verified className="text-primary" size={100}/>
-      <h1 className="font-bold text-2xl text-primary mb-3 mt-1.5">
+      <h1 className="font-bold text-2xl text-primary mt-1.5">
         Welcome to Gtask!
       </h1>
 
-      <p className="text-primary-text my-4">
-        Your account {email} has been verified. You may now log in and start organizing your groups' task.
+      <p className="text-primary-text my-4 text-center">
+        Your account <strong>{email}</strong> has been verified. You may now log in and start organizing your groups' task.
       </p>
 
-      <PrimaryButton>
+      <PrimaryButton className="mt-2">
         <Link
           to={LOGIN_PAGE_LINK}
           replace 

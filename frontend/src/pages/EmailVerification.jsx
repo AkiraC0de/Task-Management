@@ -24,7 +24,7 @@ const EmailVerification = () => {
         !isVerified ? 
         <div className="max-w-95 mt-12 px-8 py-14 md:shadow-lg rounded-lg">
           <VerificationHeader email={user.email}/>
-          <VerificationForm/>
+          <VerificationForm setIsVerified={setIsVerified}/>
         </div> 
         : <VerifiedNotice email={user.email}/>
       }

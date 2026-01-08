@@ -13,7 +13,7 @@ import useAuth from "../../../hooks/useAuth";
 const CODE_LENGTH = 6;
 const RESEND_CODE_COOLDOWN = 120; // 120 seconds
 
-const VerificationForm = () => {
+const VerificationForm = ({setIsVerified}) => {
   const navigate = useNavigate()
 
   const {token} = useParams();
@@ -37,9 +37,7 @@ const VerificationForm = () => {
         token : codeInput.code,
       }, token);
 
-      // SHOULD HAVE BE ABLE TO NOTIF THE USER THAT THEIR ACCOUNT HAS BEEN VERIFIED
-
-      navigate(LOGIN_PAGE_LINK, {replace : true});
+      setIsVerified(true);
     } catch (error) {
       const message = getErrorMessage(error);
       setError(message);
