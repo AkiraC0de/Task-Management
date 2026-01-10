@@ -20,7 +20,7 @@ const generateVerificationAccessToken = (user, verificationTokenId) => {
     }, 
     process.env.JWT_ACCESSTOKEN,
     {
-        expiresIn: '15m'
+        expiresIn: '10m'
     })
 }
 
