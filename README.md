@@ -7,7 +7,7 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 | Category | Task | Status |
 | :--- | :--- | :---: |
 | **Frontend** | Established the dashboard page | On progess |
-| **Fullstack** | Secure Password Reset (Token-based) | On Progress |
+| **Backend** | Secure Backend Password Reset | On Progress |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
 
 
