@@ -11,7 +11,10 @@ const Login = () => {
       <Hero state={PAGE_STATE}/>
       <div className="flex justify-center items-start">
         <div className='p-6 anim-fade-up w-full max-w-100'>
-          <AuthHeader state={PAGE_STATE}/>
+          <AuthHeader
+            header="Login Account"
+            subheader="Back to the grind. Let’s get your group to the finish line."
+          />
           <LoginForm/>
           <SwitchForm state={PAGE_STATE}/>
         </div>

@@ -4,7 +4,7 @@ import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import LandingLayout from "../Layouts/LandingLayout";
 import NotFound from "../pages/NotFound";
-import { DASHBOARD_PAGE_LINK, EMAIL_VERIFICATION_PAGE_LINK, FORGOT_PASSWORD_PAGE_LINK, LOGIN_PAGE_LINK, PRIVACY_POLICY_PAGE_LINK, SIGNUP_PAGE_LINK, TERMS_OF_SERVICE_PAGE_LINK } from "../constants/pageLinkConstant";
+import { DASHBOARD_PAGE_LINK, EMAIL_VERIFICATION_PAGE_LINK, FORGOT_PASSWORD_PAGE_LINK, LOGIN_PAGE_LINK,PRIVACY_POLICY_PAGE_LINK, RESET_PASSWORD_PAGE_LINK, SIGNUP_PAGE_LINK, TERMS_OF_SERVICE_PAGE_LINK } from "../constants/pageLinkConstant";
 import EmailVerification from "../pages/EmailVerification";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard";
@@ -13,6 +13,7 @@ import PrivacyPolicy from "../pages/PrivacyPolicy";
 import TermsOfService from "../pages/TermsOfService";
 import ForgotPassword from "../pages/ForgotPassword";
 import VerficationLayout from "../Layouts/VerificationLayout";
+import ResetPassword from "../pages/ResetPassword";
 
 const AppRoutes = () => {
   return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
       <Route path="/" element={<VerficationLayout/>}>
         <Route path={FORGOT_PASSWORD_PAGE_LINK} element={<ForgotPassword/>}/>
         <Route path={`${EMAIL_VERIFICATION_PAGE_LINK}/:token`} element={<EmailVerification/>}/>
+        <Route path={`${RESET_PASSWORD_PAGE_LINK}/:token`} element={<ResetPassword/>}/>
       </Route>
       
       {/* Protected Routes, Where it requires to be logged in before accessing */}

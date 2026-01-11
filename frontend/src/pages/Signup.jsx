@@ -11,7 +11,10 @@ const Signup = () => {
       <Hero/>
       <div className="flex items-start justify-center overflow-hidden">
         <div className='anim-fade-up w-full max-w-110 p-6'>
-          <AuthHeader state={PAGE_STATE}/>
+          <AuthHeader
+            header="Create an Account"
+            subheader="Join now! No more silent partners. Track every task, together"
+          />
           <SignupForm/>
           <SwitchForm state={PAGE_STATE}/>
         </div>

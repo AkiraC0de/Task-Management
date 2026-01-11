@@ -6,3 +6,4 @@ export const DASHBOARD_PAGE_LINK = "/dashboard";
 export const PRIVACY_POLICY_PAGE_LINK = "/privary-and-policies";
 export const TERMS_OF_SERVICE_PAGE_LINK = "/terms-of-service";
 export const FORGOT_PASSWORD_PAGE_LINK = "/forgot-password";
+export const RESET_PASSWORD_PAGE_LINK = "/reset-password";
