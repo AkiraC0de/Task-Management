@@ -74,3 +74,23 @@ export const validateVerificationCode = (arrCode, reqCodeLength) => {
     code
   }
 }
+
+export const validateForgotPassword = (email) => {
+  if(!email){
+    return { 
+      isValid: false, 
+      message: "Please enter your email"
+    }
+  }
+
+  if(!isEmailValid(email)) {
+    return { 
+      isValid: false, 
+      message: "Invalid email format"
+    }
+  }
+
+  return {
+    isValid: true, 
+  }
+}

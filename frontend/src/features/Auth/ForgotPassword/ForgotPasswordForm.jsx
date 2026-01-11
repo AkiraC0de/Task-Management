@@ -7,13 +7,23 @@ import { LOGIN_PAGE_LINK } from "../../../constants/pageLinkConstant"
 import { useState } from "react"
 import { requestForgotPassword } from "../service"
 import Spinner from "../../../components/Spinner"
+import { validateForgotPassword } from "../../../utils/formValidation"
+import { getErrorMessage } from "../../../utils/errorHandler"
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+
+    const validation = validateForgotPassword(email);
+    if(!validation.isValid){
+      setError(validation.message);
+      return
+    }
 
     setIsLoading(true);
     try {
@@ -21,7 +31,8 @@ const ForgotPasswordForm = () => {
 
       console.log(response)
     } catch (error) {
-      console.log(error);
+      const message = getErrorMessage(error);
+      setError(message);
     } finally{
       setIsLoading(false)
     }
@@ -38,11 +49,13 @@ const ForgotPasswordForm = () => {
         onChange={(e) => setEmail(e.target.value)}
         icon={<Mail/>}
         type="email"
-        className="w-full mb-6"
+        className="w-full mb-2"
         placeholder="john@example.com"
       />
 
-      <div>
+      {error && <p className="text-red-400 text-xs pt-2 font-medium">{error}</p>}
+
+      <div className="mt-6">
         <PrimaryButton
           type="submit"
           className="w-full mb-4 flex justify-center items-center"
