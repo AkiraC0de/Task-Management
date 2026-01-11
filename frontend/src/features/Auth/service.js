@@ -28,3 +28,7 @@ export const emailValidationResendCode = (token) => {
         }
     })
 }
+
+export const requestForgotPassword = (credentials) => {
+    return api.post('api/auth/request-reset-password', credentials)
+}

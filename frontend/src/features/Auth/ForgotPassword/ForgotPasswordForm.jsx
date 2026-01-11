@@ -5,12 +5,26 @@ import SecondaryButton from "../../../components/SecondaryButton"
 import { Link } from "react-router-dom"
 import { LOGIN_PAGE_LINK } from "../../../constants/pageLinkConstant"
 import { useState } from "react"
+import { requestForgotPassword } from "../service"
+import Spinner from "../../../components/Spinner"
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
+    try {
+      const response = await requestForgotPassword({email});
+
+      console.log(response)
+    } catch (error) {
+      console.log(error);
+    } finally{
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -31,9 +45,10 @@ const ForgotPasswordForm = () => {
       <div>
         <PrimaryButton
           type="submit"
-          className="w-full mb-4"
+          className="w-full mb-4 flex justify-center items-center"
+          disabled={isLoading}
         >
-          Submit
+          {isLoading ? <Spinner/> : "Submit"}
         </PrimaryButton>
         <SecondaryButton 
           type="button"
