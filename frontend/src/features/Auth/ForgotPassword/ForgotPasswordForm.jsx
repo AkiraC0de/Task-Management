@@ -9,11 +9,19 @@ import { requestForgotPassword } from "../service"
 import Spinner from "../../../components/Spinner"
 import { validateForgotPassword } from "../../../utils/formValidation"
 import { getErrorMessage } from "../../../utils/errorHandler"
+import useAuth from "../../../hooks/useAuth"
 
-const ForgotPasswordForm = () => {
+const ForgotPasswordForm = ({setIsPasswordSubmitted}) => {
+  const {setUser} = useAuth();
+
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleOnChange = (e) => {
+    if(error) setError('');
+    setEmail(e.target.value);
+  }
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,9 +35,10 @@ const ForgotPasswordForm = () => {
 
     setIsLoading(true);
     try {
-      const response = await requestForgotPassword({email});
+      const {data} = await requestForgotPassword({email});
 
-      console.log(response)
+      setUser({email});
+      setIsPasswordSubmitted(true);
     } catch (error) {
       const message = getErrorMessage(error);
       setError(message);
@@ -46,7 +55,7 @@ const ForgotPasswordForm = () => {
     >
       <InputField
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleOnChange}
         icon={<Mail/>}
         type="email"
         className="w-full mb-2"
