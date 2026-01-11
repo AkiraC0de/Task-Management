@@ -94,3 +94,30 @@ export const validateForgotPassword = (email) => {
     isValid: true, 
   }
 }
+
+export const validateResetPasswordForm = (newPassword) => {
+  let errors = {};
+
+  // Validate if the are empty input field
+  const fieldValidation = validateFields(newPassword);
+  if(!fieldValidation.isValid){
+    errors = {...errors, ...fieldValidation.errors}
+  }
+
+  // Validate the password only if it has not had an errro with fieldValidation
+  if(!fieldValidation.errors?.password && !isPasswordValid(newPassword?.password)){
+    errors = {...errors, password : "Password requires a minimum length of 8 characters, with at least one uppercase letter, one lowercase letter, and one digit."}
+  }
+
+  // Validate if the password matched confirmPassword
+  const isPasswordMatched = newPassword?.confirmPassword === newPassword?.password;
+  if(!fieldValidation.errors?.confirmPassword && !isPasswordMatched){
+    errors = {...errors, confirmPassword : "Password does not match."}
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors // sample return { name : "name is required", password : "password is required." }
+  };
+
+}

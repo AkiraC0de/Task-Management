@@ -22,7 +22,7 @@ const InputField = ({type = 'text', label, icon, className = '', error, ...props
   const inputType = isPasswordType && showPassword ? "text" : type; 
   
   return (
-      <div>
+      <div className='text-start'>
         {label && <label className='mb-2 ml-2 font-medium text-sm text-primary-text'>{label}</label>}
         <div className={`${error ? "ring-2 ring-red-400" : "focus-within:ring-2 focus-within:ring-primary"} flex items-center border border-secondary-text rounded-xl p-3 shadow-sm gap-2  ${className}`}>
           {icon && <span className="text-secondary-text/50">{icon}</span>}

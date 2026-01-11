@@ -19,7 +19,7 @@ const EmailVerification = () => {
   }
 
   return (
-    <main className="min-w-screen flex justify-center">
+    <div className="min-w-screen flex justify-center">
       {
         !isVerified ? 
         <div className="max-w-95 mt-12 px-8 py-14 md:shadow-lg rounded-lg">
@@ -28,7 +28,7 @@ const EmailVerification = () => {
         </div> 
         : <VerifiedNotice email={user.email}/>
       }
-    </main>
+    </div>
   )
 }
 export default EmailVerification

@@ -5,7 +5,7 @@ import Footer from "../features/Landing/Footer"
 const VerficationLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-1 overflow-auto flex flex-col">
+      <main className="flex-1 flex flex-col">
         <Outlet />
       </main>
       <Footer/>
