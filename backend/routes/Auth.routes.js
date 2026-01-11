@@ -24,6 +24,6 @@ authRoute.post('/verify-email', verifyAuth, verifyEmail);
 authRoute.get('/verify-email-resend', verifyAuth, verifyEmailResend);
 
 // Email Verificaton Resend Code Route
-authRoute.get('/forgot-password', verifyAuth, requestResetPassword);
+authRoute.post('/request-reset-password', requestResetPassword);
 
 module.exports = authRoute;

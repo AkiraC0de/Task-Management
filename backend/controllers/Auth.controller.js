@@ -163,7 +163,7 @@ const verifyEmail = async (req, res) => {
     try {
         if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
         
-        const userTokenInput = req.body.token;
+        const userTokenInput = req.body?.token;
         const userId = req.user._id;
         const userVerificationTokenId = req.user.verificationTokenId;
         if(!userId || !userTokenInput || !userVerificationTokenId) return res.status(400).json({success: false, message: 'Missing required data'});
@@ -225,7 +225,7 @@ const verifyEmailResend = async (req, res) => {
 }
 
 const requestResetPassword = async (req, res) => {
-    const userEmail = req.body.email;
+    const userEmail = req.body?.email;
     if(!userEmail) return res.status(400).json({success: false, message: 'Missing Required data: email'});
 
     const user = await User.findOne({email : userEmail});
