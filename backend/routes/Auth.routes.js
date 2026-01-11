@@ -2,7 +2,7 @@ const express = require('express');
 
 const authRoute = express.Router();
 
-const { signUp, logIn, logout, refresh, verifyEmail, verifyEmailResend } = require('../controllers/Auth.controller')
+const { signUp, logIn, logout, refresh, verifyEmail, verifyEmailResend, requestResetPassword } = require('../controllers/Auth.controller')
 const verifyAuth = require('../middlewares/verifyAuth')
 
 // Sign Up Route
@@ -18,9 +18,12 @@ authRoute.post('/logout', logout);
 authRoute.get('/refresh', refresh);
 
 // Email Verification Route
-authRoute.post('/verify-email', verifyAuth, verifyEmail)
+authRoute.post('/verify-email', verifyAuth, verifyEmail);
 
 // Email Verificaton Resend Code Route
-authRoute.get('/verify-email-resend', verifyAuth, verifyEmailResend)
+authRoute.get('/verify-email-resend', verifyAuth, verifyEmailResend);
+
+// Email Verificaton Resend Code Route
+authRoute.get('/forgot-password', verifyAuth, requestResetPassword);
 
 module.exports = authRoute;

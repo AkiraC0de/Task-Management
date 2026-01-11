@@ -225,12 +225,21 @@ const verifyEmailResend = async (req, res) => {
 }
 
 const requestResetPassword = async (req, res) => {
-    const {email} = req.body;
-    if(!email) return res.status(400).json({success: false, message: 'Missing Required data: email'});
+    const userEmail = req.body.email;
+    if(!userEmail) return res.status(400).json({success: false, message: 'Missing Required data: email'});
 
-    const user = await User.findOne({email});
+    const user = await User.findOne({email : userEmail});
     if(!user) return res.status(400).json({success: false, message: 'We cannot find your email'});
 
+    const accessToken = generateAccessToken(user);
+
+    const resetPasswordURL = `${process.env.FRONTEND_ORIGIN_URL}/reset-password/${accessToken}`
+
+    const emailSubject = "Reset Password Verification";
+    const emailHtml = generateForgotPasswordEmailHTML(resetPasswordURL, user.firstName);
+    await sendEmail(userEmail, emailSubject, emailHtml);
+
+    res.status(200).json({success: true, message: `Reset password link has been sent to your email (${userEmail})`})
 }
 
 module.exports = {
@@ -239,5 +248,6 @@ module.exports = {
     logout,
     refresh,
     verifyEmail,
-    verifyEmailResend
+    verifyEmailResend,
+    requestResetPassword
 }
