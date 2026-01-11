@@ -6,7 +6,6 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 ## CURRENT TASK
 | Category | Task | Status |
 | :--- | :--- | :---: |
-| **Frontend** | Established the Password Reset Form page | On progess |
 | **Backend** | Secure Backend Password Reset | On Progress |
 | **Frontend** | Established the dashboard page | Pending |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
