@@ -3,14 +3,14 @@ import SignupInputs from "./SignupInputs";
 import PrimaryButton from "../../../components/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage, getErrorSource } from "../../../utils/errorHandler";
-import { validateSignUpForm } from "../../../utils/formValidation";
+import { trimObject, validateSignUpForm } from "../../../utils/formValidation";
 import { SIGNUP_DATA_DEFAULT } from "../../../constants/authConstant";
 import { signupUser } from "../service";
 import { handleChangeObject, onChangeRemoveError } from '../../../utils/handler'
 import Spinner from "../../../components/Spinner";
 import useAuth from "../../../hooks/useAuth"
 import { EMAIL_VERIFICATION_PAGE_LINK } from "../../../constants/pageLinkConstant";
-import SignUpAgreement from "./SignUpAgreement";
+import SignUpAgreement from "./SignUpAgreement";;
 
 const SignupForm = () => {
   const navigate = useNavigate()
@@ -29,7 +29,10 @@ const SignupForm = () => {
     e.preventDefault();
     setErrors({});
 
-    const formValidation = validateSignUpForm(signUpData);
+    const CleanSignUpData = trimObject(signUpData);
+    setSignUpData(CleanSignUpData);
+
+    const formValidation = validateSignUpForm(CleanSignUpData);
     if(!formValidation.isValid){
       setErrors(formValidation.errors)
       return;
@@ -37,7 +40,7 @@ const SignupForm = () => {
 
     setIsLoading(true);
     try {
-      const {data} = await signupUser(signUpData);
+      const {data} = await signupUser(CleanSignUpData);
       
       setSignUpData(SIGNUP_DATA_DEFAULT);
       setIsValidatingEmail(true);

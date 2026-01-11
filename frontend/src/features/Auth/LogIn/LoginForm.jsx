@@ -6,7 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage, getErrorSource } from "../../../utils/errorHandler";
 import { loginUser } from "../service";
-import { validateFields } from "../../../utils/formValidation";
+import { trimObject, validateFields } from "../../../utils/formValidation";
 import { LOGIN_DATA_DEFAULT } from "../../../constants/authConstant";
 import { handleChangeObject, onChangeRemoveError } from '../../../utils/handler'
 import Spinner from "../../../components/Spinner";
@@ -29,7 +29,10 @@ const LoginForm = () => {
     e.preventDefault();
     setErrors({});
 
-    const validation = validateFields(loginData);
+    const cleanLoginData = trimObject(loginData);
+    setLoginData(cleanLoginData);
+
+    const validation = validateFields(cleanLoginData);
     if(!validation.isValid){
       console.log(validation)
       setErrors(validation.errors)
@@ -38,7 +41,7 @@ const LoginForm = () => {
 
     setIsLoading(true);
     try {
-      const {data} = await loginUser(loginData);
+      const {data} = await loginUser(cleanLoginData);
 
       setUser(data.data);
       setIsLogin(true);

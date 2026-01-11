@@ -3,7 +3,7 @@ import InputField from "../../../components/InputField"
 import { Lock } from "lucide-react"
 import PrimaryButton from "../../../components/PrimaryButton";
 import Spinner from "../../../components/Spinner";
-import { validateResetPasswordForm } from "../../../utils/formValidation";
+import { trimObject, validateResetPasswordForm } from "../../../utils/formValidation";
 import { RESET_PASSWORD_DATA_DEFAULT } from "../../../constants/authConstant";
 
 const ResetPasswordForm = () => {
@@ -15,7 +15,10 @@ const ResetPasswordForm = () => {
     e.preventDefault();
     setErrors({})
 
-    const validation = validateResetPasswordForm(newPassword);
+    const cleanPassword = trimObject(newPassword);
+    setNewPassword(cleanPassword);
+
+    const validation = validateResetPasswordForm(cleanPassword);
     if(!validation.isValid){
       setErrors(validation.errors)
       console.log(errors)

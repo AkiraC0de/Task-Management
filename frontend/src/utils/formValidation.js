@@ -1,3 +1,12 @@
+export const trimObject = (state) => {
+  return Object.keys(state).reduce((acc, key) => {
+    const value = state[key];
+    // Only trim if the value is a string
+    acc[key] = typeof value === 'string' ? value.trim() : value;
+    return acc;
+  }, {});
+};
+
 
 // @desc This func validate the input fields data if there are empty string within the data.
 // Drawbacks : this cannot validate if the data type is a boolean.
