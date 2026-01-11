@@ -4,7 +4,7 @@ import ForgotPasswordHeader from "../features/Auth/ForgotPassword/ForgotPassword
 import EmailSentNotice from "../features/Auth/ForgotPassword/EmailSentNotice";
 
 const ForgotPassword = () => {
-  const [isResetPasswordSubmitted, setIsPasswordSubmitted] = useState(true);
+  const [isResetPasswordSubmitted, setIsPasswordSubmitted] = useState(false);
   return (
     <div className="flex justify-center">
       { 

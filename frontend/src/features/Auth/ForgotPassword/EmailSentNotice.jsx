@@ -18,7 +18,7 @@ const EmailSentNotice = () => {
 
       <p className="text-primary-text my-4">
         We've sent a password reset link to <br />
-        <strong className="text-primary">{user?.email || "your email"}</strong>
+        <strong>{user?.email || "your email"}</strong>
       </p>
 
       <p className="text-secondary-text text-sm mb-8">
@@ -27,7 +27,7 @@ const EmailSentNotice = () => {
 
       <Link
         to={LOGIN_PAGE_LINK}
-        className="flex gap-2 items-center text-primary font-semibold hover:underline transition-all"
+        className="flex gap-2 text-sm items-center text-primary font-semibold hover:underline transition-all"
       >
         <ChevronLeft size={20} />
         <span>Back to Login</span>
