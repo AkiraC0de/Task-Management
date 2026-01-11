@@ -1,10 +1,9 @@
 const generateSixDigitCode = () => {
   return Math.floor(100000 + Math.random() * 900000);
 }
-const generateCodeVerificationHTML = (code, recieverFirstName, recieverLastName) => {
+const generateCodeVerificationHTML = (code, recieverFirstName) => {
   const primaryColor = "#437FC7";
   const year = new Date().getFullYear();
-  const fullName = `${recieverFirstName} ${recieverLastName}`;
 
   return `
     <!DOCTYPE html>
@@ -32,7 +31,7 @@ const generateCodeVerificationHTML = (code, recieverFirstName, recieverLastName)
               <tr>
                 <td style="padding: 0 40px 30px 40px; text-align: center;">
                   <p style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">
-                    Hi, ${fullName}!
+                    Hi, ${recieverFirstName}!
                   </p>
                   <p style="margin: 0; font-size: 15px; line-height: 24px; color: #64748b;">
                     Thanks for joining GTask. To finish setting up your account and start organizing your team, please enter the code below in the app.
@@ -152,4 +151,82 @@ const generateResendCodeHTML = (code) => {
   `;
 };
 
-module.exports = { generateSixDigitCode, generateCodeVerificationHTML, generateResendCodeHTML }
+const generateForgotPasswordEmailHTML = (resetLink, recieverFirstName) => {
+  const primaryColor = "#437FC7";
+  const year = new Date().getFullYear();
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Reset Your GTask Password</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; background-color: #f4f7fa; color: #334155;">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f7fa;">
+        <tr>
+          <td align="center" style="padding: 40px 10px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 500px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+              
+              <tr>
+                <td align="center" style="padding: 40px 40px 0 40px;">
+                  <div style="color: ${primaryColor}; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">GTask</div>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 30px 40px 20px 40px; text-align: center;">
+                  <h2 style="margin: 0 0 12px 0; color: #1e293b; font-size: 22px; font-weight: 700;">Password Reset</h2>
+                  <p style="margin: 0; font-size: 15px; line-height: 24px; color: #64748b;">
+                    Hi ${recieverFirstName}, we received a request to reset your password. Click the button below to choose a new one.
+                  </p>
+                </td>
+              </tr>
+
+              <tr>
+                <td align="center" style="padding: 10px 40px 30px 40px;">
+                  <a href="${resetLink}" target="_blank" style="background-color: ${primaryColor}; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; display: inline-block; font-size: 16px;">
+                    Reset Password
+                  </a>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 0 40px 30px 40px; text-align: center;">
+                  <p style="margin: 0; font-size: 12px; color: #94a3b8;">
+                    If the button doesn't work, copy and paste this link into your browser:
+                  </p>
+                  <p style="margin: 8px 0 0 0; font-size: 12px; color: ${primaryColor}; word-break: break-all;">
+                    ${resetLink}
+                  </p>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 0 40px 40px 40px;">
+                   <div style="background-color: #fef2f2; border-radius: 8px; padding: 16px; border: 1px solid #fee2e2;">
+                    <p style="margin: 0; font-size: 12px; color: #991b1b; line-height: 1.5; text-align: center;">
+                      <strong>Safety Check:</strong> If you didn't request this, your account is still safe and you can delete this email.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding: 30px 40px; background-color: #fafbfc; border-top: 1px solid #f1f5f9; text-align: center;">
+                  <p style="margin: 0; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">AkiraCode</p>
+                  <p style="margin: 4px 0 0 0; font-size: 11px; color: #94a3b8;">&copy; ${year} GTask</p>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+};
+
+module.exports = { generateSixDigitCode, generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML }

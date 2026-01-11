@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 
 const  { generateAccessToken, generateRefreshToken, generateVerificationAccessToken} = require('../utils/tokenJWT');
-const { generateSixDigitCode, generateCodeVerificationHTML, generateResendCodeHTML } = require('../utils/utils');
+const { generateSixDigitCode, generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/utils');
 const { sendEmail } = require('../utils/mailer');
 
 const signUp = async (req, res) => {
@@ -230,8 +230,6 @@ const requestResetPassword = async (req, res) => {
 
     const user = await User.findOne({email});
     if(!user) return res.status(400).json({success: false, message: 'We cannot find your email'});
-
-    // JUST THE SET UP
 
 }
 
