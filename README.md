@@ -6,6 +6,7 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 ## CURRENT TASK
 | Category | Task | Status |
 | :--- | :--- | :---: |
+| **Backend** | Refactore the Verification Auth From using JWT to simply Token ID | On Progress |
 | **Backend** | Secure Backend Password Reset | On Progress |
 | **Frontend** | Established the dashboard page | Pending |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
