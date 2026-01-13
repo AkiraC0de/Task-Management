@@ -14,7 +14,7 @@ import SignUpAgreement from "./SignUpAgreement";;
 
 const SignupForm = () => {
   const navigate = useNavigate()
-  const { setIsValidatingEmail, setUser, setAccessToken } = useAuth();
+  const { setUser } = useAuth();
 
   const [signUpData, setSignUpData] = useState(SIGNUP_DATA_DEFAULT);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +43,6 @@ const SignupForm = () => {
       const {data} = await signupUser(CleanSignUpData);
       
       setSignUpData(SIGNUP_DATA_DEFAULT);
-      setIsValidatingEmail(true);
       setUser({email: data.data.email});
       
       navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.token}`, {replace: true})

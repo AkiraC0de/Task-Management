@@ -4,8 +4,9 @@ import ResetPasswordForm from "../features/Auth/ResetPassword/ResetPasswordForm"
 import { verifyToken } from "../features/Auth/service"
 import { useNavigate, useParams } from "react-router-dom"
 import { getErrorMessage } from "../utils/errorHandler"
-import { LOGIN_PAGE_LINK } from "../constants/pageLinkConstant"
+import { HOME_PAGE_LINK } from "../constants/pageLinkConstant"
 import Loader from "../components/Loader"
+import useWarningLeave from "../hooks/useWarningLeave"
 
 const ResetPassword = () => {
   const {token} = useParams();
@@ -19,15 +20,15 @@ const ResetPassword = () => {
         await verifyToken(token);
       } catch (error) {
         const message = getErrorMessage(error);
-        navigate(LOGIN_PAGE_LINK);
-        console.log(message);
+        navigate(HOME_PAGE_LINK);
+        console.error(message);
       } finally {
         setIsLoading(false);
       }
     }
 
     validateUserToken();
-  });
+  }, []);
 
   return (
     <div className="min-w-screen flex justify-center">

@@ -1,33 +1,50 @@
-import { Navigate, useNavigate, useBlocker } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { verifyToken } from "../features/Auth/service";
 import useAuth from "../hooks/useAuth"
 import { HOME_PAGE_LINK } from "../constants/pageLinkConstant";
 import VerificationHeader from "../features/Auth/EmailVerification/VerificationHeader";
 import VerificationForm from "../features/Auth/EmailVerification/VerificationForm";
-import useWarningLeave from "../hooks/useWarningLeave";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import VerifiedNotice from "../features/Auth/EmailVerification/VerifiedNotice";
+import Loader from "../components/Loader";
+import { getErrorMessage } from "../utils/errorHandler";
 
 const EmailVerification = () => {
-  const { isValidatingEmail, user } = useAuth();
+  const { user } = useAuth();
   const [ isVerified, setIsVerified] = useState(false);
+  const {token} = useParams();
+  const navigate = useNavigate();
 
-  // Warn the user before page back or refresh
-  useWarningLeave();
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!isValidatingEmail) {
-    return <Navigate to={HOME_PAGE_LINK} replace />;
-  }
+  useEffect(() => {
+    const validateUserToken = async () => {
+      try {
+        await verifyToken(token);
+      } catch (error) {
+        const message = getErrorMessage(error);
+        navigate(HOME_PAGE_LINK);
+        console.error(message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    validateUserToken();
+  }, []);
 
   return (
     <div className="min-w-screen flex justify-center">
-      {
-        !isVerified ? 
-        <div className="max-w-95 mt-12 px-8 py-14 md:shadow-lg rounded-lg">
-          <VerificationHeader email={user.email}/>
-          <VerificationForm setIsVerified={setIsVerified}/>
-        </div> 
-        : <VerifiedNotice email={user.email}/>
-      }
+      <Loader isLoading={isLoading}>
+        {
+          !isVerified ? 
+          <div className="max-w-95 mt-12 px-8 py-14 md:shadow-lg rounded-lg">
+            <VerificationHeader email={user.email}/>
+            <VerificationForm setIsVerified={setIsVerified}/>
+          </div> 
+          : <VerifiedNotice email={user.email}/>
+        }
+      </Loader>
     </div>
   )
 }
