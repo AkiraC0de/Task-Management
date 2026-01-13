@@ -102,6 +102,7 @@ const VerificationForm = ({setIsVerified}) => {
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           countdownSec={RESEND_CODE_COOLDOWN}
+          setError={setError}
         />
       </div>
     </form>

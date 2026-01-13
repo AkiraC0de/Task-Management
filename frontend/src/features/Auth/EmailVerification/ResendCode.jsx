@@ -4,7 +4,7 @@ import { getErrorMessage } from "../../../utils/errorHandler";
 import { useNavigate, useParams } from "react-router-dom"
 import { EMAIL_VERIFICATION_PAGE_LINK } from "../../../constants/pageLinkConstant";
 
-const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
+const ResendCode = ({countdownSec = 0, setIsLoading, isLoading, setError}) => {
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(countdownSec);
   const {token} = useParams()
@@ -30,7 +30,7 @@ const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
       navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.token}`, {replace: true})
     } catch (error) {
       const message = getErrorMessage(error);
-      console.log(message)
+      setError(message);
     } finally {
       setIsLoading(false)
     }
