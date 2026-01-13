@@ -5,11 +5,19 @@ const tokenSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
-        index: true
     },
     token: {
         type: String,
         required: true,
+    },
+    otp: {
+        type: String
+    },
+    type: {
+        type: String,
+        enum: ['email_verify', 'password_reset'],
+        required: true,
+        index: true
     },
     createdAt: {
         type: Date,
