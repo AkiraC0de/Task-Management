@@ -10,6 +10,7 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 | **Backend** | Secure Backend Password Reset | On Progress |
 | **Frontend** | Established the dashboard page | Pending |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
+| **Backend** | Add Rate Limiter for routes | Pending |
 
 
 ## Features (UNUPDATED)
