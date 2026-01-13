@@ -257,16 +257,12 @@ const requestResetPassword = async (req, res) => {
     }
 }
 
-// NEEDS REFACTORING
-const verifyToken = async (req, res) => {
-    const userId = req.user?._id;
-    if(!userId) res.status(401).json({success: false, message: "Invalid Session"});
-
-    const validToken = await Token.findOne({user: userId});
-    if(!validToken) res.status(401).json({success: false, message: "Invalid or Expired Access"});
-
-    res.status(200).json({success: true, message: "Access Granted"});
-}
+const verifyTokenController = (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: 'Token is valid',
+  });
+};
 
 module.exports = {
     signUp,
@@ -276,4 +272,5 @@ module.exports = {
     verifyEmail,
     verifyEmailResend,
     requestResetPassword,
+    verifyTokenController
 }

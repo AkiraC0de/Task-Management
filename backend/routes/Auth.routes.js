@@ -10,6 +10,7 @@ const {
   verifyEmail, 
   verifyEmailResend, 
   requestResetPassword,
+  verifyTokenController
 } = require('../controllers/Auth.controller')
 const verifyAuth = require('../middlewares/verifyAuth');
 const verifyToken = require('../middlewares/verifyToken');
@@ -25,6 +26,9 @@ authRoute.post('/logout', logout);
 
 // Log out Route
 authRoute.get('/refresh', refresh);
+
+// Verify the users Token Route
+authRoute.get('/verify-token', verifyToken, verifyTokenController);
 
 // Email Verification Route
 authRoute.post('/verify-email', verifyToken, verifyEmail);
