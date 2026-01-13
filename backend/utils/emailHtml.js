@@ -78,7 +78,7 @@ const generateCodeVerificationHTML = (code, receiverFirstName) => {
           </span>
         </div>
         <p style="margin: 20px 0 0 0; font-size: 13px; color: #94a3b8;">
-          This code is valid for <strong>10 minutes</strong>.
+          This code is valid for <strong>15 minutes</strong>.
         </p>
       </td>
     </tr>
@@ -104,6 +104,9 @@ const generateResendCodeHTML = (code) => {
           <span style="font-family: 'Courier New', monospace; font-size: 36px; font-weight: 800; letter-spacing: 8px; color: ${primaryColor};">
             ${code}
           </span>
+          <p style="margin: 20px 0 0 0; font-size: 13px; color: #94a3b8;">
+            This code is valid for <strong>15 minutes</strong>.
+          </p>
         </div>
       </td>
     </tr>
