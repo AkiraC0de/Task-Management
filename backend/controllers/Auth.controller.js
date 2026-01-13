@@ -43,7 +43,7 @@ const signUp = async (req, res) => {
         const newUser = await User.create({firstName, lastName, email, password, profileImage });
 
         const otp = generateSixDigitCode().toString();
-        const token = crypto.randomBytes(12).toString();
+        const token = crypto.randomBytes(12).toString('hex');
         const hashedToken = crypto
                             .createHash('sha256')
                             .update(token)
@@ -175,7 +175,7 @@ const verifyEmail = async (req, res) => {
 
         // Update the user data to verified and delete the token from the
         const user = await User.findByIdAndUpdate(userId, { isVerified: true });
-        await validToken.deleteOne();
+        await token.deleteOne();
         res.status(200).json({
             success : true, 
             message: `Success! ${user.firstName}, your account is now verified. Start organizing your group tasks and boosting your productivity today.`,
@@ -198,6 +198,7 @@ const verifyEmailResend = async (req, res) => {
     if(!prevToken) return res.status(400).json({success: false, message: 'Session Expired'});
 
     // Validate if the previous token has been sent 2 minutes ago before sending a new one
+    // NEEDS TO BE UPDATED TO RATE LIMITER
     const currentTime = new Date();
     const timeDifference = currentTime - prevToken.createdAt; // Result is in milliseconds
     const twoMinutesInMs = 2 * 60 * 1000;
@@ -260,5 +261,4 @@ module.exports = {
     verifyEmail,
     verifyEmailResend,
     requestResetPassword,
-    verifyTokenParams
 }

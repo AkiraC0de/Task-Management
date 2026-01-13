@@ -19,6 +19,7 @@ const verifyToken = async (req, res, next) => {
     const validToken = await Token.findOne({token : hashedToken});
     if(!validToken) return res.status(403).json({success: false, message: 'Invalid or Expired Token'});
 
+    req.user = req.user || {};
     req.user.token = validToken;
     next();
   } catch (error) {
