@@ -9,65 +9,24 @@ const { generateSixDigitCode } = require('../utils/utils');
 const { generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
 const { sendEmail } = require('../utils/mailer');
 
+const {registerUser} = require('../services/Auth.services');
+
 const signUp = async (req, res) => {
     try {
-        if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
-
-        const { firstName, lastName, email, password, profileImage } = req.body;
-        if(!email || !password || !firstName || !lastName) return res.status(400).json({success: false, message: 'Missing data', reqBody: req.body});
-
-        // Validate the email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!emailRegex.test(email)) return res.status(400).json({success: false, message: `Invalid email format: ${email}`, errorAt: 'email'});
-
-        // Check for existing user
-        const existedUser = await User.findOne({ email });
-
-        // If there is an existing user, and it is an unverified account
-        // Delete the account and any token that has the user reference of that account.
-        if (existedUser) {
-            if (existedUser.isVerified) {
-                return res.status(400).json({ 
-                    success: false, 
-                    message: 'The email has already been registered', 
-                    errorAt: 'email' 
-                });
-            }
-
-            await Promise.all([
-                Token.deleteOne({ user: existedUser._id }),
-                existedUser.deleteOne()
-            ]);
-        }
-
-        // Create an unverified account
-        const newUser = await User.create({firstName, lastName, email, password, profileImage });
-
-        const otp = generateSixDigitCode().toString();
-        const token = crypto.randomBytes(12).toString('hex');
-        const hashedToken = crypto
-                            .createHash('sha256')
-                            .update(token)
-                            .digest('hex');
-
-        // Generate the token for email validation
-        await Token.create({ user : newUser._id, token: hashedToken, otp, type: "email_verify" });
-
-        const emailSubject = "Email Verification Code";
-        const emailHtml = generateCodeVerificationHTML(otp, firstName, lastName);
-        await sendEmail(email, emailSubject, emailHtml);
+        const result = await registerUser(req.body);
 
         res.status(201).json({
-            success: true, 
-            message: `The account (${email}) have successfully registered`,
-            token,
-            data: {
-                userId : newUser._id,
-                email: newUser.email
-            }
+            success: true,
+            message: result.message,
+            token: result.token,
+            user: result.user
         });
     } catch (error) {
-        res.status(500).json({success: false, message: `Server Error`});
+        res.status(error.status || 500).json({
+            success: false, 
+            field: error.field || 'server',
+            message: error.message || 'Server Error'
+        });
         console.log(error.message) // Should have an error handler
     }
 }
@@ -261,6 +220,10 @@ const verifyTokenController = (req, res) => {
   return res.status(200).json({
     success: true,
     message: 'Token is valid',
+    user: {
+        _id: req.user._id,
+        email: req.user.email
+    }
   });
 };
 
