@@ -9,7 +9,7 @@ const { generateSixDigitCode } = require('../utils/utils');
 const { generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
 const { sendEmail } = require('../utils/mailer');
 
-const {registerUser} = require('../services/Auth.services');
+const {registerUser, loginUser} = require('../services/Auth.services');
 
 const signUp = async (req, res) => {
     try {
@@ -33,55 +33,34 @@ const signUp = async (req, res) => {
 
 const logIn = async (req, res) => {
     try {
-        if(!req.body) return res.status(400).json({success: false, message: 'the request has no content'});
-
-        const { email, password} = req.body;
-        if(!email || !password) return res.status(400).json({success: false, message: 'Missing data'});
-
-        // Find the Email in the database
-        const user = await User.findOne({email}).select('+password');
-
-        if(!user) return res.status(404).json({success: false, message: 'The Email has not been registered yet.', errorAt: "email"});
-
-        // Verify if the account has been verified
-        if(!user.isVerified) return res.status(404).json({success: false, message: 'The Email has not been verified yet.'});
+        const result = await loginUser(req.body)
         
-        // Validate if the passoword matched    
-        const isMatched = await bcryptjs.compare(password, user.password);
-        if(!isMatched) return res.status(404).json({success: false, message: 'Incorrect password.', errorAt: "password"});
-
-        // Generate JWT token
-        const refreshToken = generateRefreshToken(user);
-        const accessToken = generateAccessToken(user);
-        
-        // Send the refresh token through cookie
-        // to avoid access of javascript add security
-        res.cookie('jwt', refreshToken, { 
+        res.status(200).cookie('gtask', result.refreshToken, { 
             httpOnly: true,
-            maxAge: 15 * 24 * 60 * 60 * 1000 // 15 days
-        })
-
-        res.status(200).json({
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+        }).json({
             success: true, 
             message: 'Success Login', 
-            data: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                profileImage: user.profileImage
+            user: {
+                firstName: result.firstName,
+                lastName: result.lastName,
+                email: result.email,
             },
-            token: accessToken
+            token: result.accessToken
         });
-
     } catch (error) {
-        res.status(500).json({success: false, message: `Server Error`});
+        res.status(error.status || 500).json({
+            success: false, 
+            field: error.field || 'server',
+            message: error.message || 'Server Error'
+        });
         console.log(error.message) // Should have an error handler
     }
 }
 
 const logout = async (req, res) => {
     try {
-        res.clearCookie('jwt');
+        res.clearCookie('gtask');
         res.status(200).json({success: true, message: `Logout`});
     } catch (error) {
         res.status(500).json({success: false, message: `Server Error`});

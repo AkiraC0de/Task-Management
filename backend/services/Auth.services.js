@@ -21,8 +21,8 @@ const {
 
 const { sendEmail } = require('../utils/mailer');
 
-const registerUser = async (payLoad) => {
-  const { firstName, lastName, email, password } = payLoad;
+const registerUser = async (payload) => {
+  const { firstName, lastName, email, password } = payload;
 
   if (!firstName || !lastName || !email || !password) {
     throw { status: 400, message: 'Missing data' };
@@ -76,6 +76,34 @@ const registerUser = async (payLoad) => {
   };
 }
 
+const loginUser = async ({ email, password }) => {
+  if (!email || !password) {
+    throw { status: 400, message: 'Missing data' };
+  }
+
+  const user = await User.findOne({email}).select('+password');
+
+  if(!user.isVerified) {
+    throw { status: 404, field: 'email', message: 'The Email has not been verified yet.' }
+  }
+
+  const isMatched = await bcryptjs.compare(password, user.password);
+  if (!isMatched) {
+    throw { status: 401, message: 'Incorrect password' };
+  }
+
+  return {
+    accessToken: generateAccessToken(user),
+    refreshToken: generateRefreshToken(user),
+    user: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    }
+  };
+}
+
 module.exports = {
-  registerUser
+  registerUser,
+  loginUser
 }

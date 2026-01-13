@@ -42,19 +42,14 @@ const LoginForm = () => {
     try {
       const {data} = await loginUser(cleanLoginData);
 
-      setUser(data.data);
+      setUser(data.user);
       setIsLogin(true);
-
       navigate(DASHBOARD_PAGE_LINK, {replace: true})
     } catch (error) {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);
 
-      if(errorAt){
-        setErrors({ [errorAt] : message });
-      } else {
-        setErrors({ server : message });
-      }
+      setErrors({ [errorAt] : message });
     } finally {  
       setIsLoading(false);
     }
