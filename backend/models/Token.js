@@ -22,10 +22,10 @@ const tokenSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: 600 // This is 10 minutes (in seconds)
+        expires: 900 // 15 minutes (in seconds)
     }
 });
 
 // This creates a TTL (Time To Live) index
-// MongoDB will automatically delete this document after 15 minutes!
+// this will automatically deleted after 15 minutes
 module.exports = mongoose.model('Token', tokenSchema);

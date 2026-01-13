@@ -264,6 +264,30 @@ const verifyTokenController = (req, res) => {
   });
 };
 
+const resetPassword = async (req, res) => {
+    try {
+        const token = req.token;
+        const userId = req.user._id;
+        const newPassword = req.body?.password;
+
+        if(!userId || !newPassword) return res.status(400).json({success: true, message: 'Missing data'});
+
+        const user = await User.findById(userId);
+
+        if (!user) return res.status(400).json({success: true, message: 'User Cannot Find'});
+
+        user.password = newPassword; 
+        await user.save(); 
+
+        await token.deleteOne();
+
+        res.status(200).json({success: true, message: `New password has been set to your account`});
+    } catch (error) {
+        res.status(500).json({success: false, message: `Server Error`});
+        console.log(error.message) // Should have an error handler
+    }
+}
+
 module.exports = {
     signUp,
     logIn,
@@ -272,5 +296,6 @@ module.exports = {
     verifyEmail,
     verifyEmailResend,
     requestResetPassword,
-    verifyTokenController
+    verifyTokenController,
+    resetPassword
 }

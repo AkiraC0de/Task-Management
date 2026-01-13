@@ -10,7 +10,8 @@ const {
   verifyEmail, 
   verifyEmailResend, 
   requestResetPassword,
-  verifyTokenController
+  verifyTokenController,
+  resetPassword
 } = require('../controllers/Auth.controller')
 const verifyAuth = require('../middlewares/verifyAuth');
 const verifyToken = require('../middlewares/verifyToken');
@@ -39,7 +40,7 @@ authRoute.get('/verify-email-resend', verifyToken, verifyEmailResend);
 // request reset password Route
 authRoute.post('/request-reset-password', requestResetPassword);
 
-// Verify Reset Password Token Route
-// authRoute.get('/reset-password', verifyAuth, verifyTokenParams);
+// request reset password Route
+authRoute.post('/reset-password', verifyToken, resetPassword);
 
 module.exports = authRoute;
