@@ -43,18 +43,14 @@ const SignupForm = () => {
       const {data} = await signupUser(CleanSignUpData);
       
       setSignUpData(SIGNUP_DATA_DEFAULT);
-      setUser({email: data.data.email});
+      setUser({email: data.user.email});
       
       navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.token}`, {replace: true})
     } catch (error) {
-      const errorAt = getErrorSource(error);
+      const field = getErrorSource(error);
       const message = getErrorMessage(error);
 
-      if(errorAt){
-        setErrors({ [errorAt] : message });
-      } else {
-        setErrors({ server : message });
-      }
+      setErrors({ [field] : message });
     } finally {
       setIsLoading(false);
     }
