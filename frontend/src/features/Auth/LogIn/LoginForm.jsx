@@ -34,7 +34,6 @@ const LoginForm = () => {
 
     const validation = validateFields(cleanLoginData);
     if(!validation.isValid){
-      console.log(validation)
       setErrors(validation.errors)
       return;
     } 

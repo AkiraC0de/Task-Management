@@ -46,7 +46,7 @@ const SignupForm = () => {
       setIsValidatingEmail(true);
       setUser({email: data.data.email});
       
-      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.accessToken}`, {replace: true})
+      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.token}`, {replace: true})
     } catch (error) {
       const errorAt = getErrorSource(error);
       const message = getErrorMessage(error);

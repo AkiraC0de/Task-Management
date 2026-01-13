@@ -30,7 +30,7 @@ const VerificationForm = ({setIsVerified}) => {
     setIsLoading(true);
     try {
       await validateUserEmail({
-        token : codeInput.code,
+        otp : codeInput.code,
       }, token);
 
       setIsVerified(true);

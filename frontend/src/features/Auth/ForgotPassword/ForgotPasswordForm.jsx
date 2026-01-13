@@ -7,7 +7,7 @@ import { LOGIN_PAGE_LINK } from "../../../constants/pageLinkConstant"
 import { useState } from "react"
 import { requestForgotPassword } from "../service"
 import Spinner from "../../../components/Spinner"
-import { trimObject, validateForgotPassword } from "../../../utils/formValidation"
+import { validateForgotPassword } from "../../../utils/formValidation"
 import { getErrorMessage } from "../../../utils/errorHandler"
 import useAuth from "../../../hooks/useAuth"
 
@@ -28,7 +28,8 @@ const ForgotPasswordForm = ({setIsPasswordSubmitted}) => {
     setError('');
 
     const cleanEmail = email.trim();
-
+    setEmail(cleanEmail);
+    
     const validation = validateForgotPassword(cleanEmail);
     if(!validation.isValid){
       setError(validation.message);

@@ -27,7 +27,7 @@ const ResendCode = ({countdownSec = 0, setIsLoading, isLoading}) => {
     try {
       const {data} = await emailValidationResendCode(token)
       setCountdown(countdownSec)
-      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.accessToken}`, {replace: true})
+      navigate(`${EMAIL_VERIFICATION_PAGE_LINK}/${data.token}`, {replace: true})
     } catch (error) {
       const message = getErrorMessage(error);
       console.log(message)
