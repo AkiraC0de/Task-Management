@@ -4,8 +4,9 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const crypto = require('crypto');
 
-const  { generateAccessToken, generateRefreshToken, generateVerificationAccessToken} = require('../utils/tokenJWT');
-const { generateSixDigitCode, generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/utils');
+const { generateAccessToken, generateRefreshToken } = require('../utils/tokenJWT');
+const { generateSixDigitCode } = require('../utils/utils');
+const { generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
 const { sendEmail } = require('../utils/mailer');
 
 const signUp = async (req, res) => {
@@ -166,8 +167,8 @@ const refresh = (req, res) => {
 const verifyEmail = async (req, res) => {
     try {
         const userOtpInput = req.body?.otp;
-        const token = req.user.token;
-        const userId = token.user;
+        const token = req.token;
+        const userId = req.user._id;
         if(!token || !userOtpInput) return res.status(400).json({success: false, message: 'Missing required data'});
 
         // Validate if the token from the DB is same as the users request
@@ -188,9 +189,11 @@ const verifyEmail = async (req, res) => {
 }
 
 const verifyEmailResend = async (req, res) => {
-    const prevToken = req.user.token;
-    const userId = prevToken.user;
-    if(!userId || !prevToken) return res.status(400).json({success: false, message: 'Missing required data'});
+    const prevToken = req.token;
+    const userId = req.user._id;
+    const userEmail = req.user.email;
+    console.log(req.user)
+    if(!userId || !prevToken || !userEmail) return res.status(400).json({success: false, message: 'Missing required data'});
 ;
     // Validate if the previous token has been sent 2 minutes ago before sending a new one
     // NEEDS TO BE UPDATED TO RATE LIMITER
@@ -215,11 +218,10 @@ const verifyEmailResend = async (req, res) => {
 
     // Send the Verification Code via email
     const emailSubject = "New email Verification Code";
-    const emailHtml = generateResendCodeHTML(generatedToken);
+    const emailHtml = generateResendCodeHTML(newVerificationCode);
     await sendEmail(userEmail, emailSubject, emailHtml);
 
     res.status(200).json({success: true, message: `New Code has been sent to your email (${userEmail})`, token: newToken})
-
 }
 
 const requestResetPassword = async (req, res) => {

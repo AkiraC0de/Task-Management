@@ -16,11 +16,11 @@ const verifyToken = async (req, res, next) => {
                           .update(token)
                           .digest('hex');
 
-    const validToken = await Token.findOne({token : hashedToken});
+    const validToken = await Token.findOne({token : hashedToken}).populate('user');
     if(!validToken) return res.status(403).json({success: false, message: 'Invalid or Expired Token'});
 
-    req.user = req.user || {};
-    req.user.token = validToken;
+    req.user = validToken.user;
+    req.token = validToken;
     next();
   } catch (error) {
     console.log(error.message);
