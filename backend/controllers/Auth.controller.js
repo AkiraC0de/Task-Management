@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Token = require('../models/Token');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
+const crypto = require('crypto');
 
 const  { generateAccessToken, generateRefreshToken, generateVerificationAccessToken} = require('../utils/tokenJWT');
 const { generateSixDigitCode, generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/utils');
@@ -40,21 +41,25 @@ const signUp = async (req, res) => {
 
         // Create an unverified account
         const newUser = await User.create({firstName, lastName, email, password, profileImage });
-        const verificationCode = generateSixDigitCode().toString();
+
+        const otp = generateSixDigitCode().toString();
+        const token = crypto.randomBytes(12).toString();
+        const hashedToken = crypto
+                            .createHash('sha256')
+                            .update(token)
+                            .digest('hex');
 
         // Generate the token for email validation
-        const newVerificationToken = await Token.create({ user : newUser._id, token: verificationCode });
+       await Token.create({ user : newUser._id, token: hashedToken, otp, type: "email_verify" });
 
         const emailSubject = "Email Verification Code";
         const emailHtml = generateCodeVerificationHTML(verificationCode, firstName, lastName);
         await sendEmail(email, emailSubject, emailHtml);
 
-        const accessToken = generateVerificationAccessToken(newUser, newVerificationToken._id);
-
         res.status(201).json({
             success: true, 
             message: `The account (${email}) have successfully registered`,
-            accessToken,
+            token,
             data: {
                 userId : newUser._id,
                 email: newUser.email
@@ -232,14 +237,26 @@ const requestResetPassword = async (req, res) => {
     if(!user) return res.status(400).json({success: false, message: 'We cannot find your email'});
 
     const accessToken = generateAccessToken(user);
+    await Token.create({user: user_id, token: accessToken});
 
-    const resetPasswordURL = `${process.env.FRONTEND_ORIGIN_URL}/reset-password/${accessToken}`
+    const resetPasswordURL = `${process.env.FRONTEND_ORIGIN_URL}/reset-password/${accessToken}`;
 
     const emailSubject = "Reset Password Verification";
     const emailHtml = generateForgotPasswordEmailHTML(resetPasswordURL, user.firstName);
     await sendEmail(userEmail, emailSubject, emailHtml);
 
     res.status(200).json({success: true, message: `Reset password link has been sent to your email (${userEmail})`})
+}
+
+// NEEDS REFACTORING
+const verifyToken = async (req, res) => {
+    const userId = req.user?._id;
+    if(!userId) res.status(401).json({success: false, message: "Invalid Session"});
+
+    const validToken = await Token.findOne({user: userId});
+    if(!validToken) res.status(401).json({success: false, message: "Invalid or Expired Access"});
+
+    res.status(200).json({success: true, message: "Access Granted"});
 }
 
 module.exports = {
@@ -249,5 +266,6 @@ module.exports = {
     refresh,
     verifyEmail,
     verifyEmailResend,
-    requestResetPassword
+    requestResetPassword,
+    verifyTokenParams
 }
