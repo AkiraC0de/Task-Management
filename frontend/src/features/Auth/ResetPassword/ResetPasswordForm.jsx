@@ -9,7 +9,7 @@ import { getErrorMessage } from "../../../utils/errorHandler";
 import { resetUserPassword } from "../service";
 import { useParams } from "react-router-dom";
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = ({setIsProcessDone}) => {
   const {token} = useParams();
 
   const [newPassword, setNewPassword] = useState(RESET_PASSWORD_DATA_DEFAULT);
@@ -31,9 +31,9 @@ const ResetPasswordForm = () => {
 
     setIsLoading(true);
     try {
-      const response = await resetUserPassword({password : newPassword.password}, token);
+      await resetUserPassword({password : newPassword.password}, token);
 
-      console.log(response)
+      setIsProcessDone(true)
     } catch (error) {
       const message = getErrorMessage(error);
       setErrors(message);
