@@ -83,8 +83,8 @@ const loginUser = async ({ email, password }) => {
 
   const user = await User.findOne({email}).select('+password');
 
-  if(!user.isVerified) {
-    throw { status: 404, field: 'email', message: 'The Email has not been verified yet.' }
+  if(!user || !user.isVerified) {
+    throw { status: 404, field: 'email', message: 'Email has not been registered yet.' }
   }
 
   const isMatched = await bcryptjs.compare(password, user.password);
@@ -103,7 +103,21 @@ const loginUser = async ({ email, password }) => {
   };
 }
 
+const verifyUserEmail = async (user, otp, token) => {
+  if (!token || !otp || !user) {
+    throw { status: 400, message: 'Missing data' };
+  }
+  
+  if(token.otp !== userOtpInput){
+    throw { status: 400, field: 'otp', message: 'Incorrect Code' };
+  }
+
+  await User.findByIdAndUpdate(user._id, { isVerified: true });
+  await token.deleteOne();
+}
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  verifyUserEmail
 }

@@ -1,15 +1,14 @@
 const User = require('../models/User');
 const Token = require('../models/Token');
 const jwt = require('jsonwebtoken');
-const bcryptjs = require('bcryptjs');
 const crypto = require('crypto');
 
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokenJWT');
 const { generateSixDigitCode } = require('../utils/utils');
-const { generateCodeVerificationHTML, generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
+const { generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
 const { sendEmail } = require('../utils/mailer');
 
-const {registerUser, loginUser} = require('../services/Auth.services');
+const {registerUser, loginUser, verifyUserEmail} = require('../services/Auth.services');
 
 const signUp = async (req, res) => {
     try {
@@ -37,15 +36,11 @@ const logIn = async (req, res) => {
         
         res.status(200).cookie('gtask', result.refreshToken, { 
             httpOnly: true,
-            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+            maxAge: 15 * 24 * 60 * 60 * 1000 // 15 days
         }).json({
             success: true, 
             message: 'Success Login', 
-            user: {
-                firstName: result.firstName,
-                lastName: result.lastName,
-                email: result.email,
-            },
+            user: result.user,
             token: result.accessToken
         });
     } catch (error) {
@@ -69,27 +64,19 @@ const logout = async (req, res) => {
 }
 
 const refresh = (req, res) => {
-    const cookie = req.cookies;
-    if(!cookie) return res.status(401).json({success: false, message: 'Unathorized'});
+    const cookie = req.cookies.gtask;
+    if(!cookie) return res.status(401).json({success: false, message: 'Unathorized'}); 
 
-    const refreshCookie = cookie.jwt;
-    jwt.verify(refreshCookie, process.env.JWT_ACCESSTOKEN, async (err, decoded) => {
+    jwt.verify(cookie, process.env.JWT_ACCESSTOKEN, async (err, decoded) => {
         if(err) return res.status(401).json({success: false, message: 'Unathorized'});
         
         const user = await User.findById(decoded._id);
         if(!user) return res.status(401).json({success: false, message: 'Unathorized'});
 
-        const generatedRefreshToken = generateRefreshToken(user);
-        const accessToken = generateAccessToken(user);
-
-        // Update the Refresh Token
-        res.cookie('jwt', generatedRefreshToken, {
+        res.status(200).cookie('gtask', generateRefreshToken(user), {
             httpOnly: true,
-            maxAge: 15 * 24 * 60 * 60 * 1000 // 15 days
-        });  
-
-        // Send a new access Token
-        res.status(200).json({
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 15 days
+        }).json({
             success: true, 
             message: 'Success Login', 
             data: {
@@ -97,31 +84,26 @@ const refresh = (req, res) => {
                 email: user.email,
                 profileImage: user.profileImage
             },
-            token: accessToken
+            token: generateAccessToken(user)
         });
     });
 }
 
 const verifyEmail = async (req, res) => {
     try {
-        const userOtpInput = req.body?.otp;
-        const token = req.token;
-        const userId = req.user._id;
-        if(!token || !userOtpInput) return res.status(400).json({success: false, message: 'Missing required data'});
+        await verifyUserEmail(req.user, req.body?.otp, req.token);
 
-        // Validate if the token from the DB is same as the users request
-        if(token.otp !== userOtpInput) return res.status(400).json({success: false, message: 'Incorrect Code'});
-
-        // Update the user data to verified and delete the token from the
-        const user = await User.findByIdAndUpdate(userId, { isVerified: true });
-        await token.deleteOne();
         res.status(200).json({
             success : true, 
-            message: `Success! ${user.firstName}, your account is now verified. Start organizing your group tasks and boosting your productivity today.`,
-            data : {email : user.email}
+            message: `Success! ${req.user.firstName}, your account is now verified. Start organizing your group tasks and boosting your productivity today.`,
+            user : {email : req.user.email}
         })
     } catch (error) {
-        res.status(500).json({success: false, message: `Server Error`});
+        res.status(error.status || 500).json({
+            success: false, 
+            field: error.field || 'server',
+            message: error.message || 'Server Error'
+        });
         console.log(error.message) // Should have an error handler
     }
 }
