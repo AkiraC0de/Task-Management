@@ -32,3 +32,11 @@ export const emailValidationResendCode = (token) => {
 export const requestForgotPassword = (credentials) => {
     return api.post('api/auth/request-reset-password', credentials)
 }
+
+export const verifyToken = (token) => {
+    return api.get('api/auth/verify-token', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}
