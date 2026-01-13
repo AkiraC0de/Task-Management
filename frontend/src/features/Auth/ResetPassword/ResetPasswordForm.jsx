@@ -5,13 +5,18 @@ import PrimaryButton from "../../../components/PrimaryButton";
 import Spinner from "../../../components/Spinner";
 import { trimObject, validateResetPasswordForm } from "../../../utils/formValidation";
 import { RESET_PASSWORD_DATA_DEFAULT } from "../../../constants/authConstant";
+import { getErrorMessage } from "../../../utils/errorHandler";
+import { resetUserPassword } from "../service";
+import { useParams } from "react-router-dom";
 
 const ResetPasswordForm = () => {
+  const {token} = useParams();
+
   const [newPassword, setNewPassword] = useState(RESET_PASSWORD_DATA_DEFAULT);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({})
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({})
 
@@ -21,12 +26,20 @@ const ResetPasswordForm = () => {
     const validation = validateResetPasswordForm(cleanPassword);
     if(!validation.isValid){
       setErrors(validation.errors)
-      console.log(errors)
       return
     }
 
-    console.log("SUBMITTED")
+    setIsLoading(true);
+    try {
+      const response = await resetUserPassword({password : newPassword.password}, token);
 
+      console.log(response)
+    } catch (error) {
+      const message = getErrorMessage(error);
+      setErrors(message);
+    } finally{
+      setIsLoading(false);
+    }
   }
 
   const handleOnChange = (e) => {
@@ -62,7 +75,7 @@ const ResetPasswordForm = () => {
       <PrimaryButton
         type="submit"
         disabled={isLoading}
-        className="w-full mt-2"
+        className="w-full mt-2 flex justify-center"
       >
         {isLoading ? <Spinner/> : "Submit"}
       </PrimaryButton>

@@ -47,7 +47,6 @@ const VerificationForm = ({setIsVerified}) => {
     if (isNaN(value)) return; // Only allow numbers
     if (value === " ") return // do not allow space
 
-    // Reset the errors 
     setError('')
 
     const newCode = [...code];

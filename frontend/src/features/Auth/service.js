@@ -40,3 +40,11 @@ export const verifyToken = (token) => {
         }
     })
 }
+
+export const resetUserPassword = (credentials ,token) => {
+    return api.post('api/auth/reset-password', credentials, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}

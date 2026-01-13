@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { verifyToken } from "../features/Auth/service";
 import useAuth from "../hooks/useAuth"
 import { HOME_PAGE_LINK } from "../constants/pageLinkConstant";
