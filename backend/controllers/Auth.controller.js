@@ -50,10 +50,10 @@ const signUp = async (req, res) => {
                             .digest('hex');
 
         // Generate the token for email validation
-       await Token.create({ user : newUser._id, token: hashedToken, otp, type: "email_verify" });
+        await Token.create({ user : newUser._id, token: hashedToken, otp, type: "email_verify" });
 
         const emailSubject = "Email Verification Code";
-        const emailHtml = generateCodeVerificationHTML(verificationCode, firstName, lastName);
+        const emailHtml = generateCodeVerificationHTML(otp, firstName, lastName);
         await sendEmail(email, emailSubject, emailHtml);
 
         res.status(201).json({
@@ -65,7 +65,6 @@ const signUp = async (req, res) => {
                 email: newUser.email
             }
         });
-
     } catch (error) {
         res.status(500).json({success: false, message: `Server Error`});
         console.log(error.message) // Should have an error handler
@@ -166,19 +165,13 @@ const refresh = (req, res) => {
 
 const verifyEmail = async (req, res) => {
     try {
-        if(!req.body) return res.status(400).json({success: false, message: 'The request has no content'});
-        
-        const userTokenInput = req.body?.token;
-        const userId = req.user._id;
-        const userVerificationTokenId = req.user.verificationTokenId;
-        if(!userId || !userTokenInput || !userVerificationTokenId) return res.status(400).json({success: false, message: 'Missing required data'});
-
-        // Validate if the token for the user does exist in the DB
-        const validToken = await Token.findById(userVerificationTokenId);
-        if(!validToken) return res.status(400).json({success: false, message: 'Code Expired'});
+        const userOtpInput = req.body?.otp;
+        const token = req.user.token;
+        const userId = token.user;
+        if(!token || !userOtpInput) return res.status(400).json({success: false, message: 'Missing required data'});
 
         // Validate if the token from the DB is same as the users request
-        if(validToken.token !== userTokenInput) return res.status(400).json({success: false, message: 'Incorrect Code'});
+        if(token.otp !== userOtpInput) return res.status(400).json({success: false, message: 'Incorrect Code'});
 
         // Update the user data to verified and delete the token from the
         const user = await User.findByIdAndUpdate(userId, { isVerified: true });
