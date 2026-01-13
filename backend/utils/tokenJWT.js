@@ -12,18 +12,6 @@ const generateAccessToken = (user) => {
     })
 }
 
-const generateVerificationAccessToken = (user, verificationTokenId) => {
-    return jwt.sign({
-        _id: user._id,
-        email: user.email,
-        verificationTokenId
-    }, 
-    process.env.JWT_ACCESSTOKEN,
-    {
-        expiresIn: '10m'
-    })
-}
-
 const generateRefreshToken = (user) => {
     return jwt.sign({
         _id: user._id,
@@ -37,5 +25,4 @@ const generateRefreshToken = (user) => {
 module.exports = { 
     generateAccessToken, 
     generateRefreshToken, 
-    generateVerificationAccessToken
 };
