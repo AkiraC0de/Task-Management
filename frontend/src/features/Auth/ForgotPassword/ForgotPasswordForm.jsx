@@ -11,10 +11,11 @@ import { validateForgotPassword } from "../../../utils/formValidation"
 import { getErrorMessage } from "../../../utils/errorHandler"
 import useAuth from "../../../hooks/useAuth"
 
-const ForgotPasswordForm = ({setIsPasswordSubmitted}) => {
+const ForgotPasswordForm = () => {
   const {setUser} = useAuth();
 
   const [email, setEmail] = useState("");
+  const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -26,6 +27,7 @@ const ForgotPasswordForm = ({setIsPasswordSubmitted}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setResponse('');  
 
     const cleanEmail = email.trim();
     setEmail(cleanEmail);
@@ -40,8 +42,8 @@ const ForgotPasswordForm = ({setIsPasswordSubmitted}) => {
     try {
       const {data} = await requestForgotPassword({email: cleanEmail});
 
-      setUser({email: cleanEmail});
-      setIsPasswordSubmitted(true);
+      setUser({email: cleanEmail });
+      setResponse(data?.message);
     } catch (error) {
       const message = getErrorMessage(error);
       setError(message);
@@ -66,6 +68,7 @@ const ForgotPasswordForm = ({setIsPasswordSubmitted}) => {
       />
 
       {error && <p className="text-red-400 text-xs pt-2 font-medium">{error}</p>}
+      {response && <p className="text-primary text-xs pt-2 font-medium">{response}</p>}
 
       <div className="mt-6">
         <PrimaryButton

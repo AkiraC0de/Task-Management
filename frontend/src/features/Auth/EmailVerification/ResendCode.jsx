@@ -23,6 +23,7 @@ const ResendCode = ({countdownSec = 0, setIsLoading, isLoading, setError}) => {
 
   const handleResetCode = useCallback(async () => {
     if(countdown > 0) return
+    setError("")
     setIsLoading(true);
     try {
       const {data} = await emailValidationResendCode(token)
