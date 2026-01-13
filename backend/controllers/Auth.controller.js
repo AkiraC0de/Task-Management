@@ -188,15 +188,10 @@ const verifyEmail = async (req, res) => {
 }
 
 const verifyEmailResend = async (req, res) => {
-    const userId = req.user._id;
-    const userEmail = req.user.email;
-    const userVerificationTokenId = req.user.verificationTokenId;
-    if(!userId || !userEmail || !userVerificationTokenId) return res.status(400).json({success: false, message: 'Missing required data'});
-
-    // Validate if the previous token does exist in the DB
-    const prevToken = await Token.findById(userVerificationTokenId);
-    if(!prevToken) return res.status(400).json({success: false, message: 'Session Expired'});
-
+    const prevToken = req.user.token;
+    const userId = prevToken.user;
+    if(!userId || !prevToken) return res.status(400).json({success: false, message: 'Missing required data'});
+;
     // Validate if the previous token has been sent 2 minutes ago before sending a new one
     // NEEDS TO BE UPDATED TO RATE LIMITER
     const currentTime = new Date();
@@ -209,17 +204,21 @@ const verifyEmailResend = async (req, res) => {
     // Delete the old Token
     await prevToken.deleteOne();
 
-    const generatedToken = generateSixDigitCode().toString();
-    const newVerificationToken = await Token.create({user: userId, token: generatedToken});
+    const newVerificationCode = generateSixDigitCode().toString();
+    const newToken = crypto.randomBytes(12).toString('hex');
+    const hashedToken = crypto
+                        .createHash('sha256')
+                        .update(newToken)
+                        .digest('hex');
+    
+    await Token.create({user: userId, token: hashedToken, otp : newVerificationCode, type : 'email_verify'});
 
     // Send the Verification Code via email
     const emailSubject = "New email Verification Code";
     const emailHtml = generateResendCodeHTML(generatedToken);
     await sendEmail(userEmail, emailSubject, emailHtml);
 
-    const newAccessToken = generateVerificationAccessToken(req.user, newVerificationToken._id);
-
-    res.status(200).json({success: true, message: `New Code has been sent to your email (${userEmail})`, accessToken: newAccessToken})
+    res.status(200).json({success: true, message: `New Code has been sent to your email (${userEmail})`, token: newToken})
 
 }
 
