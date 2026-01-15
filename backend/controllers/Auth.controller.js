@@ -13,6 +13,7 @@ const {
     verifyUserEmail, 
     verifyUserEmailResend,
     resetUserPassword,
+    requestResetUserPassword,
 } = require('../services/Auth.services');
 
 const signUp = async (req, res) => {
@@ -133,29 +134,18 @@ const verifyEmailResend = async (req, res) => {
 
 const requestResetPassword = async (req, res) => {
     try {
-        const userEmail = req.body?.email;
-        if(!userEmail) return res.status(400).json({success: false, message: 'Missing Required data: email'});
+        const result = await requestResetUserPassword(req.body?.email);
 
-        const user = await User.findOne({email : userEmail});
-        if(!user) return res.status(200).json({success: true, message: 'If the email exist. The Reset Link has been sent'});
-
-        const token = crypto.randomBytes(12).toString('hex');
-        const hashedToken = crypto
-                            .createHash('sha256')
-                            .update(token)
-                            .digest('hex')
-
-        await Token.create({user: user._id, token: hashedToken, type : 'password_reset'});
-
-        const resetPasswordURL = `${process.env.FRONTEND_ORIGIN_URL}/reset-password/${token}`;
-
-        const emailSubject = "Reset Password Verification";
-        const emailHtml = generateForgotPasswordEmailHTML(resetPasswordURL, user.firstName);
-        await sendEmail(userEmail, emailSubject, emailHtml);
-
-        res.status(200).json({success: true, message: `If the email exist. The Reset Link has been sent`})
+        res.status(200).json({
+            success: true, 
+            message: result.message
+        })
     } catch (error) {
-        res.status(500).json({success: false, message: `Server Error`});
+        res.status(error.status || 500).json({
+            success: false, 
+            field: error.field || 'server',
+            message: error.message || 'Server Error'
+        });
         console.log(error.message) // Should have an error handler
     }
 }

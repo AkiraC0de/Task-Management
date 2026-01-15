@@ -148,6 +148,38 @@ const verifyUserEmailResend = async (user, token) => {
   }
 }
 
+const requestResetUserPassword = async (email) => {
+  if(!email){
+    throw { status: 400, message: 'Missing required email' };
+  }
+
+  const user = await User.findOne({email});
+  if(!user){
+    return { message: 'If the email is registered, the reset link has been sent.' };
+  }
+
+  const token = crypto.randomBytes(12).toString('hex');
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const resetPasswordURL = `${process.env.FRONTEND_ORIGIN_URL}/reset-password/${token}`
+
+  const emailHtml = generateForgotPasswordEmailHTML(resetPasswordURL, user.firstName);
+
+  await Promise.all([
+    Token.create({
+      user,
+      token : hashedToken,
+      type: 'password_reset'
+    }),
+    sendEmail(user.email, 'Reset Password Verification', emailHtml)
+  ])
+
+  return {
+    token,
+    message: 'If the email is registered, the reset link has been sent.'
+  }
+}
+
 const resetUserPassword = async (user, token, newPassword) => {
   if (!token || !user || !newPassword) {
     throw { status: 400, message: 'Missing data' };
@@ -176,5 +208,6 @@ module.exports = {
   loginUser,
   verifyUserEmail,
   verifyUserEmailResend,
-  resetUserPassword
+  resetUserPassword,
+  requestResetUserPassword
 }
