@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 const generateSixDigitCode = () => {
-  return Math.floor(100000 + Math.random() * 900000);
+  return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 const isAuthorizedForNewToken = (prevTokenCreatedTime) => {

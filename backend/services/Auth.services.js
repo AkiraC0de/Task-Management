@@ -50,7 +50,7 @@ const registerUser = async ({ firstName, lastName, email, password }) => {
     password, 
   });
 
-  const otp = generateSixDigitCode().toString();
+  const otp = generateSixDigitCode();
   const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
 
   const rawToken = generateCryptoToken();
@@ -82,19 +82,19 @@ const registerUser = async ({ firstName, lastName, email, password }) => {
 
 
 const loginUser = async ({ email, password }) => {
-  if (!email || !password) {
+  if (!email.trim() || !password.trim()) {
     throw { status: 400, message: 'Missing data' };
   }
 
   const user = await User.findOne({email}).select('+password');
+  const isPasswordMatched = await user.comparePassword(password);
 
   if(!user || !user.isVerified) {
-    throw { status: 404, field: 'email', message: 'Email has not been registered yet.' }
+    throw { status: 401, field: 'email', message: 'Email is not registered' };
   }
 
-  const isMatched = await bcryptjs.compare(password, user.password);
-  if (!isMatched) {
-    throw { status: 401, message: 'Incorrect password' };
+  if(!isPasswordMatched){
+    throw { status: 401, field: 'password', message: 'Incorrect Password' };
   }
 
   return {
@@ -110,7 +110,7 @@ const loginUser = async ({ email, password }) => {
 
 
 const verifyUserEmail = async (user, otp, token) => {
-  if (!token || !otp || !user) {
+  if (!token || !otp.trim() || !user) {
     throw { status: 400, message: 'Missing data' };
   }
 
@@ -121,8 +121,8 @@ const verifyUserEmail = async (user, otp, token) => {
   }
 
   await Promise.all([
-   User.findByIdAndUpdate(user._id, { isVerified: true }),
-   token.deleteOne()
+    User.findByIdAndUpdate(user._id, { isVerified: true }),
+    token.deleteOne()
   ])
 }
 
@@ -137,10 +137,10 @@ const verifyUserEmailResend = async (user, token) => {
     throw { status: 400, message: 'Please wait a few moments before requesting a new token' };
   }
 
-  const newOtp = generateSixDigitCode().toString();
+  const newOtp = generateSixDigitCode();
   const hashedOtp = crypto.createHash('sha256').update(newOtp).digest('hex');
 
-  const newToken = crypto.randomBytes(12).toString('hex');
+  const newToken = generateCryptoToken();
   const hashedToken = crypto.createHash('sha256').update(newToken).digest('hex');
 
   await Token.findOneAndUpdate({ 
@@ -166,8 +166,8 @@ const verifyUserEmailResend = async (user, token) => {
 
 
 const requestResetUserPassword = async (email) => {
-  if(!email){
-    throw { status: 400, message: 'Missing required email' };
+  if(!email.trim()){
+    throw { status: 400, message: 'Missing data' };
   }
 
   const user = await User.findOne({email});
@@ -175,7 +175,7 @@ const requestResetUserPassword = async (email) => {
     return { message: 'If the email is registered, the reset link has been sent.' };
   }
 
-  const token = crypto.randomBytes(12).toString('hex');
+  const token = generateCryptoToken();
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
   await Token.create({
@@ -196,7 +196,7 @@ const requestResetUserPassword = async (email) => {
 
 
 const resetUserPassword = async (user, token, newPassword) => {
-  if (!token || !user || !newPassword) {
+  if (!token.trim() || !user.trim() || !newPassword.trim()) {
     throw { status: 400, message: 'Missing data' };
   }
 
