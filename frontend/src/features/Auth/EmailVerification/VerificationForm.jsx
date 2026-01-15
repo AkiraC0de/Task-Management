@@ -83,7 +83,7 @@ const VerificationForm = ({setIsVerified}) => {
         ))}
       </div>
       <div className="w-full flex flex-col items-center">
-        {error && <p className="text-red-400 text-xs pb-4 font-medium">{error}</p>}
+        {error && <p className="text-red-400 text-xs pb-4 text-center font-medium">{error}</p>}
         <PrimaryButton 
           className="w-50 flex pr-2 justify-center items-center gap-1"
           type="submit"

@@ -22,9 +22,7 @@ const {
 
 const { sendEmail } = require('../utils/mailer');
 
-const registerUser = async (payload) => {
-  const { firstName, lastName, email, password } = payload;
-
+const registerUser = async ({ firstName, lastName, email, password }) => {
   if (!firstName || !lastName || !email || !password) {
     throw { status: 400, message: 'Missing data' };
   }
@@ -146,7 +144,7 @@ const verifyUserEmailResend = async (user, token) => {
   
   return {
     token: newToken,
-    message: `New Code has been sent to your email (${userEmail})`
+    message: `New Code has been sent to your email (${user.email})`
   }
 }
 

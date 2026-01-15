@@ -7,7 +7,7 @@ const isAuthorizedForNewToken = (prevTokenCreatedTime) => {
 
   const timeDifference = new Date() - prevTokenCreatedTime; // Result is in milliseconds
 
-  return timeDifference > twoMinutesInMs;
+  return timeDifference > COOLDOWN_TIME_IN_MS;
 }
 
 module.exports = { 

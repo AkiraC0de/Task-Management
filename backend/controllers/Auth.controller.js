@@ -4,9 +4,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokenJWT');
-const { generateSixDigitCode } = require('../utils/utils');
-const { generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
-const { sendEmai } = require('../utils/mailer');
+const { generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
+const { sendEmail } = require('../utils/mailer');
 
 const {
     registerUser, 
