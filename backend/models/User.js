@@ -51,6 +51,10 @@ userSchema.index(
   }
 );
 
+userSchema.methods.comparePassword = async function(enteredPassword) {
+  return await bcryptjs.compare(enteredPassword, this.password);
+};
+
 // Security feature: 
 // Middleware to hash the password
 // before saving to the database
