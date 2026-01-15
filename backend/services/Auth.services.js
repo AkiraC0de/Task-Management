@@ -148,9 +148,33 @@ const verifyUserEmailResend = async (user, token) => {
   }
 }
 
+const resetUserPassword = async (user, token, newPassword) => {
+  if (!token || !user || !newPassword) {
+    throw { status: 400, message: 'Missing data' };
+  }
+
+  const userData = await User.findById(user._id);
+
+  if(!userData){
+    throw { status: 400, message: 'Cannot find the user' };
+  }
+
+  userData.password = newPassword; 
+
+  await Promise.all([
+      userData.save(),
+      token.deleteOne()
+  ]);
+
+  return {
+    message: `New password has been set to your account`
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
   verifyUserEmail,
-  verifyUserEmailResend
+  verifyUserEmailResend,
+  resetUserPassword
 }
