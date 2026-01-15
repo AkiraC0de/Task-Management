@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const generateSixDigitCode = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };
@@ -10,7 +12,14 @@ const isAuthorizedForNewToken = (prevTokenCreatedTime) => {
   return timeDifference > COOLDOWN_TIME_IN_MS;
 }
 
+const generateCryptoToken = () => {
+  const TOKEN_BYTES = 32; // 256 bits of entropy
+
+  return crypto.randomBytes(TOKEN_BYTES).toString('hex')
+}
+
 module.exports = { 
   generateSixDigitCode, 
-  isAuthorizedForNewToken
+  isAuthorizedForNewToken,
+  generateCryptoToken
 };

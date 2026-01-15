@@ -1,11 +1,10 @@
 const User = require('../models/User');
-const Token = require('../models/Token');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 
-const { generateAccessToken, generateRefreshToken } = require('../utils/tokenJWT');
-const { generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
-const { sendEmail } = require('../utils/mailer');
+const { 
+    generateAccessToken, 
+    generateRefreshToken 
+} = require('../utils/tokenJWT');
 
 const {
     registerUser, 

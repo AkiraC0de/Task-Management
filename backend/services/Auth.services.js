@@ -11,7 +11,8 @@ const {
 
 const {
   generateSixDigitCode,
-  isAuthorizedForNewToken
+  isAuthorizedForNewToken,
+  generateCryptoToken
 } = require('../utils/utils');
 
 const {
@@ -22,8 +23,9 @@ const {
 
 const { sendEmail } = require('../utils/mailer');
 
+
 const registerUser = async ({ firstName, lastName, email, password }) => {
-  if (!firstName || !lastName || !email || !password) {
+  if (!firstName.trim() || !lastName.trim() || !email.trim() || !password.trim()) {
     throw { status: 400, message: 'Missing data' };
   }
 
@@ -33,6 +35,7 @@ const registerUser = async ({ firstName, lastName, email, password }) => {
     throw { status: 400, field: 'email', message: 'Email Already Registered'};
   }
 
+  // NEEDS REFACTORING
   if (existingUser && !existingUser.isVerified) {
     await Promise.all([
       Token.deleteOne({ user: existingUser._id }),
@@ -48,15 +51,17 @@ const registerUser = async ({ firstName, lastName, email, password }) => {
   });
 
   const otp = generateSixDigitCode().toString();
-  const rawToken = crypto.randomBytes(12).toString('hex');
+  const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
+
+  const rawToken = generateCryptoToken();
   const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
 
   await Token.create({
-    user: user._id,
-    token: hashedToken,
-    otp,
-    type: 'email_verify'
-  })
+      user: user._id,
+      token: hashedToken,
+      otp: hashedOtp,
+      type: 'email_verify'
+  });
 
   const emailHtml = generateCodeVerificationHTML(
     otp,
@@ -74,6 +79,7 @@ const registerUser = async ({ firstName, lastName, email, password }) => {
       }
   };
 }
+
 
 const loginUser = async ({ email, password }) => {
   if (!email || !password) {
@@ -102,18 +108,24 @@ const loginUser = async ({ email, password }) => {
   };
 }
 
+
 const verifyUserEmail = async (user, otp, token) => {
   if (!token || !otp || !user) {
     throw { status: 400, message: 'Missing data' };
   }
+
+  const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
   
-  if(token.otp !== otp){
+  if(token.otp !== hashedOtp){
     throw { status: 400, field: 'otp', message: 'Incorrect Code' };
   }
 
-  await User.findByIdAndUpdate(user._id, { isVerified: true });
-  await token.deleteOne();
+  await Promise.all([
+   User.findByIdAndUpdate(user._id, { isVerified: true }),
+   token.deleteOne()
+  ])
 }
+
 
 const verifyUserEmailResend = async (user, token) => {
   if (!token || !user) {
@@ -125,28 +137,33 @@ const verifyUserEmailResend = async (user, token) => {
     throw { status: 400, message: 'Please wait a few moments before requesting a new token' };
   }
 
-  await token.deleteOne();
-
   const newOtp = generateSixDigitCode().toString();
+  const hashedOtp = crypto.createHash('sha256').update(newOtp).digest('hex');
+
   const newToken = crypto.randomBytes(12).toString('hex');
   const hashedToken = crypto.createHash('sha256').update(newToken).digest('hex');
 
-  await Token.create({
+  await Token.findOneAndUpdate({ 
     user: user._id, 
-    token: hashedToken, 
-    otp : newOtp, 
-    type : 'email_verify'
-  });
+    type: 'email_verify' }, { 
+      token: hashedToken,                     
+      otp: hashedOtp 
+    }, { 
+      upsert: true, 
+      new: true, 
+    }
+  );
 
   const emailHtml = generateResendCodeHTML(newOtp);
 
   await sendEmail(user.email, "New email Verification Code", emailHtml);
-  
+
   return {
     token: newToken,
     message: `New Code has been sent to your email (${user.email})`
   }
 }
+
 
 const requestResetUserPassword = async (email) => {
   if(!email){
@@ -161,24 +178,22 @@ const requestResetUserPassword = async (email) => {
   const token = crypto.randomBytes(12).toString('hex');
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-  const resetPasswordURL = `${process.env.FRONTEND_ORIGIN_URL}/reset-password/${token}`
-
-  const emailHtml = generateForgotPasswordEmailHTML(resetPasswordURL, user.firstName);
-
-  await Promise.all([
-    Token.create({
+  await Token.create({
       user,
       token : hashedToken,
       type: 'password_reset'
-    }),
-    sendEmail(user.email, 'Reset Password Verification', emailHtml)
-  ])
+  });
+
+  const resetPasswordURL = `${process.env.FRONTEND_ORIGIN_URL}/reset-password/${token}`
+  const emailHtml = generateForgotPasswordEmailHTML(resetPasswordURL, user.firstName);
+
+  await sendEmail(user.email, 'Reset Password Verification', emailHtml);
 
   return {
-    token,
     message: 'If the email is registered, the reset link has been sent.'
   }
 }
+
 
 const resetUserPassword = async (user, token, newPassword) => {
   if (!token || !user || !newPassword) {
