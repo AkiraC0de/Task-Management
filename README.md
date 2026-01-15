@@ -6,7 +6,8 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 ## CURRENT TASK
 | Category | Task | Status |
 | :--- | :--- | :---: |
-| **Frontend** | Established the dashboard page | On progress |
+| **Backend** | Attempt Counter for Tokens | On Progress |
+| **Frontend** | Established the dashboard page | Pending |
 | **Frontend** | Use URL Query to set as state when the verification process is done | Pending |
 | **Backend** | Centralized Global Error Handling Middleware | Pending |
 | **Backend** | Add Rate Limiter for routes | Pending |
@@ -38,6 +39,7 @@ This project is designed to be *scalable*, with future plans to incorporate coll
 | `GET` | `/api/auth/refresh` | Rotate access token using Refresh Token |
 | `POST` | `/api/auth/verify-email` | Validate account via email token (Protected with access token) |
 | `POST` | `/api/auth/resend-code` | Regenerate and resend verification code (Protected with access token) |
+| `GET` | `/api/auth/verify-token` | Verify the Users Token |
 
 ### **Task Module**
 | Method | Endpoint | Description |
