@@ -6,9 +6,14 @@ const crypto = require('crypto');
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokenJWT');
 const { generateSixDigitCode } = require('../utils/utils');
 const { generateResendCodeHTML, generateForgotPasswordEmailHTML } = require('../utils/emailHtml');
-const { sendEmail } = require('../utils/mailer');
+const { sendEmai } = require('../utils/mailer');
 
-const {registerUser, loginUser, verifyUserEmail} = require('../services/Auth.services');
+const {
+    registerUser, 
+    loginUser, 
+    verifyUserEmail, 
+    verifyUserEmailResend
+} = require('../services/Auth.services');
 
 const signUp = async (req, res) => {
     try {
@@ -110,40 +115,18 @@ const verifyEmail = async (req, res) => {
 
 const verifyEmailResend = async (req, res) => {
     try {
-        const prevToken = req.token;
-        const userId = req.user._id;
-        const userEmail = req.user.email;
-        if(!userId || !prevToken || !userEmail) return res.status(400).json({success: false, message: 'Missing required data'});
-    ;
-        // Validate if the previous token has been sent 2 minutes ago before sending a new one
-        // NEEDS TO BE UPDATED TO RATE LIMITER
-        const currentTime = new Date();
-        const timeDifference = currentTime - prevToken.createdAt; // Result is in milliseconds
-        const twoMinutesInMs = 2 * 60 * 1000;
-        const remainingSecs = Math.ceil((twoMinutesInMs - timeDifference) / 1000);
+        const result = await verifyUserEmailResend(req.user, req.token);
 
-        if(timeDifference < twoMinutesInMs) return res.status(400).json({success: false, message: `Please wait ${remainingSecs} seconds before requesting a new code.`});
-
-        // Delete the old Token
-        await prevToken.deleteOne();
-
-        const newVerificationCode = generateSixDigitCode().toString();
-        const newToken = crypto.randomBytes(12).toString('hex');
-        const hashedToken = crypto
-                            .createHash('sha256')
-                            .update(newToken)
-                            .digest('hex');
-        
-        await Token.create({user: userId, token: hashedToken, otp : newVerificationCode, type : 'email_verify'});
-
-        // Send the Verification Code via email
-        const emailSubject = "New email Verification Code";
-        const emailHtml = generateResendCodeHTML(newVerificationCode);
-        await sendEmail(userEmail, emailSubject, emailHtml);
-
-        res.status(200).json({success: true, message: `New Code has been sent to your email (${userEmail})`, token: newToken});
+        res.status(200).json({
+            message: result.message,
+            token: result.token
+        })
     } catch (error) {
-        res.status(500).json({success: false, message: `Server Error`});
+        res.status(error.status || 500).json({
+            success: false, 
+            field: error.field || 'server',
+            message: error.message || 'Server Error'
+        });
         console.log(error.message) // Should have an error handler
     }
 }

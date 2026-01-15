@@ -10,7 +10,8 @@ const {
 } = require('../utils/tokenJWT');
 
 const {
-  generateSixDigitCode
+  generateSixDigitCode,
+  isAuthorizedForNewToken
 } = require('../utils/utils');
 
 const {
@@ -108,7 +109,7 @@ const verifyUserEmail = async (user, otp, token) => {
     throw { status: 400, message: 'Missing data' };
   }
   
-  if(token.otp !== userOtpInput){
+  if(token.otp !== otp){
     throw { status: 400, field: 'otp', message: 'Incorrect Code' };
   }
 
@@ -116,8 +117,42 @@ const verifyUserEmail = async (user, otp, token) => {
   await token.deleteOne();
 }
 
+const verifyUserEmailResend = async (user, token) => {
+  if (!token || !user) {
+    throw { status: 400, message: 'Missing data' };
+  }
+
+  // NEEDS TO BE UPDATED TO RATE LIMITER
+  if(!isAuthorizedForNewToken(token.createdAt)){
+    throw { status: 400, message: 'Please wait a few moments before requesting a new token' };
+  }
+
+  await token.deleteOne();
+
+  const newOtp = generateSixDigitCode().toString();
+  const newToken = crypto.randomBytes(12).toString('hex');
+  const hashedToken = crypto.createHash('sha256').update(newToken).digest('hex');
+
+  await Token.create({
+    user: user._id, 
+    token: hashedToken, 
+    otp : newOtp, 
+    type : 'email_verify'
+  });
+
+  const emailHtml = generateResendCodeHTML(newOtp);
+
+  await sendEmail(user.email, "New email Verification Code", emailHtml);
+  
+  return {
+    token: newToken,
+    message: `New Code has been sent to your email (${userEmail})`
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
-  verifyUserEmail
+  verifyUserEmail,
+  verifyUserEmailResend
 }
